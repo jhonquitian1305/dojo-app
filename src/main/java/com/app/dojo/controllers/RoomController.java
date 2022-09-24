@@ -18,7 +18,7 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
     @PostMapping()
-    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO){
+    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO)throws Exception{
         RoomDTO roomDTOCreated= this.roomService.create(roomDTO);
         return ResponseEntity.status(201).body(roomDTOCreated);
     }
