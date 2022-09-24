@@ -32,9 +32,19 @@ public class RoomServiceImp implements RoomService {
     public RoomDTO findById(Long id) throws Exception {
         Optional<Room> roomFound= this.roomRepository.findById(id);
         if(!roomFound.isPresent()){
-            throw new NotFoundException("Doesn't exists a room with id %s".formatted(id));
+            throw new NotFoundException("Doesn't exists a room with that id  %s".formatted(id));
         }
         return MapperRoomDTO.mapperRoomDTO(roomFound.get());
     }
+
+    @Override
+    public RoomDTO findByName(RoomDTO roomDTO) throws NotFoundException {
+        Optional<Room> roomFound=this.roomRepository.findByRoomName(roomDTO.getRoomName());
+        if(!roomFound.isPresent()){
+            throw new NotFoundException("Doesn't exists a room with that name %s".formatted(roomDTO.getRoomName()));
+        }
+        return  MapperRoomDTO.mapperRoomDTO(roomFound.get());
+    }
+
 
 }
