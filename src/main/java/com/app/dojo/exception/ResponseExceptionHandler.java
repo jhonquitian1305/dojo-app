@@ -1,5 +1,7 @@
 package com.app.dojo.exception;
 
+import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,5 +25,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> handlerBadRequestException(BadRequest badRequest, WebRequest webRequest){
         ExceptionResponse exceptionResponse= new ExceptionResponse(LocalDateTime.now(), badRequest.getMessage(),webRequest.getDescription(false));
         return  new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handlerNotFoundException(NotFoundException notFoundException, WebRequest request){
+        ExceptionResponse  exceptionResponse= new ExceptionResponse(LocalDateTime.now(), notFoundException.getMessage(), request.getDescription(false));
+        return  new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 }
