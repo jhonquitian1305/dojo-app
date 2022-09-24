@@ -1,7 +1,8 @@
 package com.app.dojo.services.implementation;
 
 import com.app.dojo.dtos.RoomDTO;
-import com.app.dojo.exception.BadRequest;
+import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperRoom;
 import com.app.dojo.mappers.MapperRoomDTO;
 import com.app.dojo.models.Room;
@@ -26,4 +27,14 @@ public class RoomServiceImp implements RoomService {
         Room roomCreated=this.roomRepository.save(MapperRoom.mapperRoom(roomDTO));
         return MapperRoomDTO.mapperRoomDTO(roomCreated);
     }
+
+    @Override
+    public RoomDTO findById(Long id) throws Exception {
+        Optional<Room> roomFound= this.roomRepository.findById(id);
+        if(!roomFound.isPresent()){
+            throw new NotFoundException("Doesn't exists a room with id %s".formatted(id));
+        }
+        return MapperRoomDTO.mapperRoomDTO(roomFound.get());
+    }
+
 }
