@@ -11,7 +11,9 @@ import com.app.dojo.services.Interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImp implements RoomService {
@@ -44,6 +46,13 @@ public class RoomServiceImp implements RoomService {
             throw new NotFoundException("Doesn't exists a room with that name %s".formatted(roomDTO.getRoomName()));
         }
         return  MapperRoomDTO.mapperRoomDTO(roomFound.get());
+    }
+
+    @Override
+    public List<RoomDTO> findAll() {
+        List<Room> roomsFound=this.roomRepository.findAll();
+        List<RoomDTO> rooms=roomsFound.stream().map(room->MapperRoomDTO.mapperRoomDTO(room)).collect(Collectors.toList());
+        return rooms;
     }
 
 

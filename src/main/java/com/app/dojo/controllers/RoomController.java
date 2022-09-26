@@ -4,8 +4,11 @@ import com.app.dojo.dtos.RoomDTO;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.services.Interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.app.dojo.constants.EndPointsConstants.*;
 
@@ -18,7 +21,7 @@ public class RoomController {
     @PostMapping()
     public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO)throws Exception{
         RoomDTO roomDTOCreated= this.roomService.create(roomDTO);
-        return ResponseEntity.status(201).body(roomDTOCreated);
+        return new ResponseEntity(roomDTOCreated, HttpStatus.CREATED);
     }
 
     @GetMapping(ENDPOINT_ID)
@@ -31,5 +34,11 @@ public class RoomController {
     public ResponseEntity<RoomDTO> getByName(@RequestBody RoomDTO roomDTO)throws NotFoundException{
         RoomDTO roomFound = this.roomService.findByName(roomDTO);
         return ResponseEntity.ok(roomFound);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<RoomDTO>> finadAll(){
+        List<RoomDTO> rooms=this.roomService.findAll();
+        return ResponseEntity.ok(rooms);
     }
 }
