@@ -11,4 +11,5 @@ public interface RoomService {
     public RoomDTO findById(Long id) throws  Exception;
     public RoomDTO findByName(RoomDTO roomDTO) throws NotFoundException;
     public List<RoomDTO> findAll();
+    public void delete(Long id) throws Exception;
 }

@@ -55,5 +55,14 @@ public class RoomServiceImp implements RoomService {
         return rooms;
     }
 
+    @Override
+    public void delete(Long id) throws Exception {
+        Optional<Room> roomFound= this.roomRepository.findById(id);
+        if(!roomFound.isPresent()){
+            throw new NotFoundException("Doesn't exists a room with that id  %s".formatted(id));
+        }
+        this.roomRepository.deleteById(id);
+    }
+
 
 }

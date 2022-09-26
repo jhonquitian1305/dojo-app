@@ -41,4 +41,12 @@ public class RoomController {
         List<RoomDTO> rooms=this.roomService.findAll();
         return ResponseEntity.ok(rooms);
     }
+
+
+    @DeleteMapping(ENDPOINT_ID)
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws Exception {
+        this.roomService.delete(id);
+        return ResponseEntity.noContent().build();
+
+    }
 }
