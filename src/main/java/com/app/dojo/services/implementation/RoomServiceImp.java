@@ -1,6 +1,8 @@
 package com.app.dojo.services.implementation;
 
+import com.app.dojo.builders.builderDTO.RoomResponseBuilder;
 import com.app.dojo.dtos.RoomDTO;
+import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperRoom;
@@ -9,6 +11,9 @@ import com.app.dojo.models.Room;
 import com.app.dojo.repositories.RoomRepository;
 import com.app.dojo.services.Interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,10 +54,19 @@ public class RoomServiceImp implements RoomService {
     }
 
     @Override
-    public List<RoomDTO> findAll() {
-        List<Room> roomsFound=this.roomRepository.findAll();
-        List<RoomDTO> rooms=roomsFound.stream().map(room->MapperRoomDTO.mapperRoomDTO(room)).collect(Collectors.toList());
-        return rooms;
+    public RoomResponse findAll(int numberPage, int pageSize) {
+        Pageable pageable= PageRequest.of(numberPage,pageSize);
+        Page<Room> roomsFound=this.roomRepository.findAll(pageable);
+        List<Room> allRoomsFound=roomsFound.getContent();
+        List<RoomDTO> rooms=allRoomsFound.stream().map(room->MapperRoomDTO.mapperRoomDTO(room)).collect(Collectors.toList());
+        return  new RoomResponseBuilder()
+                .setContent(rooms)
+                .setNumberPage(roomsFound.getNumber())
+                .setSizePage(roomsFound.getSize())
+                .setTotalElements(roomsFound.getTotalElements())
+                .setTotalPages(roomsFound.getTotalPages())
+                .setLastOne(roomsFound.isLast())
+                .build();
     }
 
     @Override

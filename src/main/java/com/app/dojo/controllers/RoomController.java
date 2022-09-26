@@ -1,6 +1,8 @@
 package com.app.dojo.controllers;
 
+import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.RoomDTO;
+import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.services.Interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +39,12 @@ public class RoomController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<RoomDTO>> finadAll(){
-        List<RoomDTO> rooms=this.roomService.findAll();
-        return ResponseEntity.ok(rooms);
+    public ResponseEntity<RoomResponse> finadAll(
+            @RequestParam(value = "numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
+            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize
+
+    ){
+       return ResponseEntity.ok( this.roomService.findAll(numberPage,pageSize));
     }
 
 
