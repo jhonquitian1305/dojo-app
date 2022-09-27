@@ -1,6 +1,7 @@
 package com.app.dojo.services.implementation;
 
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.StudentDTOMapper;
 import com.app.dojo.mappers.StudentMapper;
 import com.app.dojo.models.Student;
@@ -35,14 +36,16 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public StudentDTO getStudentById(Long id){
+    public StudentDTO getStudentById(Long id) throws NotFoundException {
         Optional<Student> studentFound = studentRepository.findById(id);
-        //TODO: verificar que no sea nulo
+        if(studentFound.isEmpty()){
+            throw new NotFoundException(String.format("Student with id %s doesn't exists", id));
+        }
         return StudentDTOMapper.mapStudentDTO(studentFound.get());
     }
 
     @Override
-    public void deleteStudent(Long id) {
+    public void deleteStudent(Long id){
         StudentDTO studentFound = this.getStudentById(id);
         this.studentRepository.deleteById(studentFound.getId());
     }

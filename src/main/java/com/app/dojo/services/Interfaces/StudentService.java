@@ -10,6 +10,6 @@ import java.util.List;
 public interface StudentService {
     StudentDTO saveStudent(StudentDTO studentDTO);
     List<Student> getAllStudents();
-    StudentDTO getStudentById(Long id);
-    void deleteStudent(Long id);
+    StudentDTO getStudentById(Long id) throws Exception;
+    void deleteStudent(Long id) throws Exception;
 }

@@ -30,12 +30,12 @@ public class StudentController {
     }
 
     @GetMapping(ENDPOINT_ID)
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable("id") Long id){
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable("id") Long id) throws Exception {
         return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
     @DeleteMapping(ENDPOINT_ID)
-    public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id){
+    public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id) throws Exception {
         this.studentService.deleteStudent(id);
         return new ResponseEntity<>("Student Deleted", HttpStatus.OK);
     }
