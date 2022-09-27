@@ -10,4 +10,5 @@ import java.util.List;
 public interface StudentService {
     StudentDTO saveStudent(StudentDTO studentDTO);
     List<Student> getAllStudents();
+    StudentDTO getStudentById(Long id);
 }

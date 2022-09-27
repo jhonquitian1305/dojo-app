@@ -7,9 +7,13 @@ import com.app.dojo.models.Student;
 import com.app.dojo.repositories.StudentRepository;
 import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImp implements StudentService {
@@ -22,13 +26,18 @@ public class StudentServiceImp implements StudentService {
 
         Student studentSaved = studentRepository.save(student);
 
-        StudentDTO studentResponse = StudentDTOMapper.mapStudentDTO(studentSaved);
-
-        return studentResponse;
+        return StudentDTOMapper.mapStudentDTO(studentSaved);
     }
 
     @Override
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+
+    @Override
+    public StudentDTO getStudentById(Long id){
+        Optional<Student> studentFound = studentRepository.findById(id);
+        //TODO: verificar que no sea nulo
+        return StudentDTOMapper.mapStudentDTO(studentFound.get());
     }
 }
