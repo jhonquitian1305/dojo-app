@@ -9,4 +9,6 @@ public final class EndPointsConstants {
     public static final String ENDPOINT_ROOMS="/api/dojo-app/rooms";
     public static final String ENDPOINT_ROOM_BY_NAME="/name/";
 
+    // Students
+    public static final String ENDPOINT_STUDENTS="/api/dojo-app/students";
 }

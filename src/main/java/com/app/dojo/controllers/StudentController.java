@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_ID;
+import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_STUDENTS;
+
 @RestController
-@RequestMapping("/students")
+@RequestMapping(ENDPOINT_STUDENTS)
 public class StudentController {
     @Autowired
     private StudentService studentService;
@@ -26,12 +29,12 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ENDPOINT_ID)
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable("id") Long id){
         return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ENDPOINT_ID)
     public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id){
         this.studentService.deleteStudent(id);
         return new ResponseEntity<>("Student Deleted", HttpStatus.OK);
