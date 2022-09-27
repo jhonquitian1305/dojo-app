@@ -40,4 +40,10 @@ public class StudentServiceImp implements StudentService {
         //TODO: verificar que no sea nulo
         return StudentDTOMapper.mapStudentDTO(studentFound.get());
     }
+
+    @Override
+    public void deleteStudent(Long id) {
+        StudentDTO studentFound = this.getStudentById(id);
+        this.studentRepository.deleteById(studentFound.getId());
+    }
 }
