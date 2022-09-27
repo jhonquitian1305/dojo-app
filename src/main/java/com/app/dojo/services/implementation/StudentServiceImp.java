@@ -9,6 +9,8 @@ import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentServiceImp implements StudentService {
     @Autowired
@@ -23,5 +25,10 @@ public class StudentServiceImp implements StudentService {
         StudentDTO studentResponse = StudentDTOMapper.mapStudentDTO(studentSaved);
 
         return studentResponse;
+    }
+
+    @Override
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 }
