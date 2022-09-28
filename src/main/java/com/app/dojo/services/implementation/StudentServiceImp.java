@@ -31,7 +31,7 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     public StudentDTO saveStudent(StudentDTO studentDTO) {
-        StudentDTO studentFound = getStudentByDni(studentDTO);
+        Student studentFound = this.studentRepository.findStudentByDni(studentDTO.getDni());
         if(studentFound != null){
             throw new BadRequest("This student already exists");
         }
