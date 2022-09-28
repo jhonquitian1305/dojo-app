@@ -11,5 +11,6 @@ public interface StudentService {
     StudentDTO saveStudent(StudentDTO studentDTO);
     List<Student> getAllStudents();
     StudentDTO getStudentById(Long id) throws Exception;
+    StudentDTO getStudentByDni(StudentDTO studentDTO);
     void deleteStudent(Long id) throws Exception;
 }

@@ -1,6 +1,7 @@
 package com.app.dojo.services.implementation;
 
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.StudentDTOMapper;
 import com.app.dojo.mappers.StudentMapper;
@@ -23,6 +24,11 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     public StudentDTO saveStudent(StudentDTO studentDTO) {
+        StudentDTO studentFound = getStudentByDni(studentDTO);
+        if(studentFound != null){
+            throw new BadRequest("This student already exists");
+        }
+
         Student student = StudentMapper.mapStudent(studentDTO);
 
         Student studentSaved = studentRepository.save(student);
@@ -42,6 +48,15 @@ public class StudentServiceImp implements StudentService {
             throw new NotFoundException(String.format("Student with id %s doesn't exists", id));
         }
         return StudentDTOMapper.mapStudentDTO(studentFound.get());
+    }
+
+    @Override
+    public StudentDTO getStudentByDni(StudentDTO studentDTO) {
+        Student studentFound = studentRepository.findStudentByDni(studentDTO.getDni());
+        if(studentFound == null){
+            throw new NotFoundException(String.format("Student with dni %s doesn't exists", studentDTO.getDni()));
+        }
+        return StudentDTOMapper.mapStudentDTO(studentFound);
     }
 
     @Override
