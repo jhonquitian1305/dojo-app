@@ -1,6 +1,8 @@
 package com.app.dojo.controllers;
 
+import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.dtos.StudentResponse;
 import com.app.dojo.models.Student;
 import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents(){
-        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
+    public ResponseEntity<StudentResponse> getAllStudents(
+            @RequestParam(value = "pageNo", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
+            @RequestParam(value = "pageSize", defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = PaginationRequest.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = PaginationRequest.DEFAULT_SORT_DIR, required = false) String sortDir
+    ){
+        return new ResponseEntity<>(studentService.getAllStudents(numberPage, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     @GetMapping(ENDPOINT_ID)

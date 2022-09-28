@@ -1,6 +1,8 @@
 package com.app.dojo.services.implementation;
 
+import com.app.dojo.builders.builderDTO.StudentResponseBuilder;
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.dtos.StudentResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.StudentDTOMapper;
@@ -11,11 +13,16 @@ import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImp implements StudentService {
@@ -37,8 +44,23 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public StudentResponse getAllStudents(int numberPage, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(numberPage, pageSize, sort);
+
+        Page<Student> studentsFound = studentRepository.findAll(pageable);
+
+        List<Student> studentListFound = studentsFound.getContent();
+        List<StudentDTO> students = studentListFound.stream().map(StudentDTOMapper::mapStudentDTO).collect(Collectors.toList());
+
+        return new StudentResponseBuilder()
+                .setContent(students)
+                .setNumberPage(studentsFound.getNumber())
+                .setSizePage(studentsFound.getSize())
+                .setTotalElements(studentsFound.getTotalElements())
+                .setTotalPages(studentsFound.getTotalPages())
+                .setLastOne(studentsFound.isLast())
+                .build();
     }
 
     @Override
