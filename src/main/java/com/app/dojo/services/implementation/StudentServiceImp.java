@@ -31,10 +31,7 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     public StudentDTO saveStudent(StudentDTO studentDTO) {
-        Student studentFound = this.studentRepository.findStudentByDni(studentDTO.getDni());
-        if(studentFound != null){
-            throw new BadRequest("This student already exists");
-        }
+        findStudentByDni(studentDTO.getDni());
 
         Student student = StudentMapper.mapStudent(studentDTO);
 
@@ -85,5 +82,12 @@ public class StudentServiceImp implements StudentService {
     public void deleteStudent(Long id){
         StudentDTO studentFound = this.getStudentById(id);
         this.studentRepository.deleteById(studentFound.getId());
+    }
+
+    public void findStudentByDni(String dni){
+        Student studentFound = this.studentRepository.findStudentByDni(dni);
+        if(studentFound != null){
+            throw new BadRequest("This student already exists");
+        }
     }
 }
