@@ -22,7 +22,7 @@ public abstract class User {
     @Column(name = "birthday", nullable = false)
     private Date birthday;
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email", nullable = false, length = 50, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false, length = 50)
