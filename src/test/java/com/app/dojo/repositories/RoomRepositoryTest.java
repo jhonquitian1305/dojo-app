@@ -97,4 +97,16 @@ class RoomRepositoryTest {
         assertThat(roomFoundById.isEmpty()).isTrue();
     }
 
+    @Test
+    @DisplayName("Test Repository delete one room")
+    void delete(){
+        // given
+        Room roomSaved=roomRepository.save(room);
+        // when
+        this.roomRepository.deleteById(roomSaved.getId());
+        Optional<Room> roomFound=this.roomRepository.findById(roomSaved.getId());
+        // that
+        assertThat(roomFound.isEmpty()).isTrue();
+    }
+
 }
