@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +32,7 @@ class RoomRepositoryTest {
     }
 
     @Test
-    @DisplayName("Test Respository save one user in database")
+    @DisplayName("Test Respository save one room in database")
     void create(){
         Room roomSaved=this.roomRepository.save(room);
 
@@ -38,6 +40,17 @@ class RoomRepositoryTest {
         assertThat(roomSaved.getId()).isGreaterThan(0);
     }
 
+    @Test
+    @DisplayName("Test Repository find all rooms")
+    void getAll(){
+        // given
+            roomRepository.save(room);
+        // when
+            List<Room> allRooms=this.roomRepository.findAll();
+        // then
+            assertThat(allRooms).isNotNull();
+            assertThat(allRooms.size()).isGreaterThan(0);
+    }
 
 
 }
