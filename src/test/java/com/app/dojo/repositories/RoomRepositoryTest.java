@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,5 +53,22 @@ class RoomRepositoryTest {
             assertThat(allRooms.size()).isGreaterThan(0);
     }
 
-
+    @Test
+    @DisplayName("Test Repository find one room by its name and id")
+    void findOne(){
+        // given
+        roomRepository.save(room);
+        // when
+            // FindOneByRoomName
+            Optional<Room> roomFoundByName=this.roomRepository.findByRoomName("201");
+            // FindOneById
+            Optional<Room> roomFoundById=this.roomRepository.findById(1L);
+        // then
+            // FindByRoomName
+            assertThat(roomFoundByName.get()).isNotNull();
+            assertThat(roomFoundByName.get().getId()).isGreaterThan(0);
+            //FindById
+            assertThat(roomFoundById.get()).isNotNull();
+            assertThat(roomFoundById.get().getId()).isGreaterThan(0);
+    }
 }
