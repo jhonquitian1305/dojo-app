@@ -62,13 +62,31 @@ class RoomRepositoryTest {
             // FindOneByRoomName
             Optional<Room> roomFoundByName=this.roomRepository.findByRoomName("201");
             // FindOneById
-            Optional<Room> roomFoundById=this.roomRepository.findById(1L);
+            Optional<Room> roomFoundById=this.roomRepository.findById(3L);
         // then
             // FindByRoomName
             assertThat(roomFoundByName.get()).isNotNull();
             assertThat(roomFoundByName.get().getId()).isGreaterThan(0);
             //FindById
-            assertThat(roomFoundById.get()).isNotNull();
+            assertThat(roomFoundById.isEmpty()).isFalse();
             assertThat(roomFoundById.get().getId()).isGreaterThan(0);
     }
+
+    @Test
+    @DisplayName("Test Repository find one room which doesn't exist")
+    void findOneNotExist(){
+        // given
+        roomRepository.save(room);
+        // when
+        // FindOneByRoomName
+        Optional<Room> roomFoundByName=this.roomRepository.findByRoomName("204");
+        // FindOneById
+        Optional<Room> roomFoundById=this.roomRepository.findById(10L);
+        // then
+        // FindByRoomName
+        assertThat(roomFoundByName.isEmpty()).isTrue();
+        //FindById
+        assertThat(roomFoundById.isEmpty()).isTrue();
+    }
+
 }
