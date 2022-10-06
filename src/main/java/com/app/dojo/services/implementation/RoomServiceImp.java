@@ -6,7 +6,6 @@ import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperRoom;
-import com.app.dojo.mappers.MapperRoomDTO;
 import com.app.dojo.models.Room;
 import com.app.dojo.repositories.RoomRepository;
 import com.app.dojo.services.Interfaces.RoomService;
