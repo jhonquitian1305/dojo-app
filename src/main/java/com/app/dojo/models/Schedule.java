@@ -8,7 +8,8 @@ import java.util.List;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
+    @ElementCollection
     private List<String> hours=new ArrayList<String>();
     @ElementCollection
     private List<String> days = new ArrayList<String>();
@@ -17,17 +18,17 @@ public class Schedule {
     }
 
     public Schedule(Long id, List<String> hours, List<String> days) {
-        Id = id;
+        this.id = id;
         this.hours = hours;
         this.days = days;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public List<String> getHours() {
