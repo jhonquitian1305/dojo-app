@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RoomServiceTest {
@@ -141,5 +141,17 @@ class RoomServiceTest {
         assertEquals(0,response.getNumberPage());
         assertEquals(1,response.getTotalElements());
         assertThat(response.getContent().size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Test Service delete a room")
+    void delete() throws Exception {
+        //given
+        given(roomRepository.findById(anyLong())).willReturn(Optional.ofNullable(room));
+        willDoNothing().given(roomRepository).deleteById(anyLong());
+        // when
+        this.roomService.delete(anyLong());
+        //then
+        verify(roomRepository,times(1)).deleteById(anyLong());
     }
 }
