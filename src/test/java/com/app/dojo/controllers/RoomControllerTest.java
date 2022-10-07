@@ -93,4 +93,12 @@ class RoomControllerTest {
         assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
         assertEquals(204,exchange.getStatusCodeValue());
     }
+
+    @Test
+    void failDelete(){
+        ResponseEntity<Void> response=testRestTemplate.exchange(url+"/10", HttpMethod.DELETE,null,Void.class);
+        assertEquals(404,response.getStatusCodeValue());
+        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+    }
+
 }
