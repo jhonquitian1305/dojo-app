@@ -6,7 +6,6 @@ import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperRoom;
-import com.app.dojo.mappers.MapperRoomDTO;
 import com.app.dojo.models.Room;
 import com.app.dojo.repositories.RoomRepository;
 import com.app.dojo.services.Interfaces.RoomService;
@@ -25,14 +24,17 @@ public class RoomServiceImp implements RoomService {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private MapperRoom mapperRoom;
+
     @Override
     public RoomDTO create(RoomDTO roomDTO) throws BadRequest {
         Optional<Room> roomFound=this.roomRepository.findByRoomName(roomDTO.getRoomName());
         if(roomFound.isPresent()){
-            throw new BadRequest("These room already exists");
+            throw new BadRequest("Already exists one room with that name");
         }
-        Room roomCreated=this.roomRepository.save(MapperRoom.mapperRoom(roomDTO));
-        return MapperRoomDTO.mapperRoomDTO(roomCreated);
+        Room roomCreated=this.roomRepository.save(mapperRoom.mapperRoom(roomDTO));
+        return mapperRoom.mapperRoomDTO(roomCreated);
     }
 
     @Override
@@ -41,16 +43,16 @@ public class RoomServiceImp implements RoomService {
         if(!roomFound.isPresent()){
             throw new NotFoundException("Doesn't exists a room with that id  %s".formatted(id));
         }
-        return MapperRoomDTO.mapperRoomDTO(roomFound.get());
+        return mapperRoom.mapperRoomDTO(roomFound.get());
     }
 
     @Override
-    public RoomDTO findByName(RoomDTO roomDTO) throws NotFoundException {
-        Optional<Room> roomFound=this.roomRepository.findByRoomName(roomDTO.getRoomName());
+    public RoomDTO findByName(String roomName) throws NotFoundException {
+        Optional<Room> roomFound=this.roomRepository.findByRoomName(roomName);
         if(!roomFound.isPresent()){
-            throw new NotFoundException("Doesn't exists a room with that name %s".formatted(roomDTO.getRoomName()));
+            throw new NotFoundException("Doesn't exists a room with that name %s".formatted(roomName));
         }
-        return  MapperRoomDTO.mapperRoomDTO(roomFound.get());
+        return  mapperRoom.mapperRoomDTO(roomFound.get());
     }
 
     @Override
@@ -58,7 +60,7 @@ public class RoomServiceImp implements RoomService {
         Pageable pageable= PageRequest.of(numberPage,pageSize);
         Page<Room> roomsFound=this.roomRepository.findAll(pageable);
         List<Room> allRoomsFound=roomsFound.getContent();
-        List<RoomDTO> rooms=allRoomsFound.stream().map(room->MapperRoomDTO.mapperRoomDTO(room)).collect(Collectors.toList());
+        List<RoomDTO> rooms=allRoomsFound.stream().map(room->mapperRoom.mapperRoomDTO(room)).collect(Collectors.toList());
         return  new RoomResponseBuilder()
                 .setContent(rooms)
                 .setNumberPage(roomsFound.getNumber())
