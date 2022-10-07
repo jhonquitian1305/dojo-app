@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface StudentService {
     StudentDTO saveStudent(StudentDTO studentDTO);
     StudentResponse getAllStudents(int numberPage, int pageSize, String sortBy, String sortDir);
