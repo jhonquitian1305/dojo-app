@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.RoomDTOBuilder;
 import com.app.dojo.builders.builderModels.RoomBuilder;
 import com.app.dojo.dtos.RoomDTO;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperRoom;
 import com.app.dojo.models.Room;
 import com.app.dojo.repositories.RoomRepository;
@@ -103,4 +104,23 @@ class RoomServiceTest {
             assertNotNull(roomFoundByName);
             assertEquals(1L, roomFoundByName.getId());
     }
+
+    @Test
+    @DisplayName("Test Service find one room  which doesn't exist")
+    void failGetOne() throws Exception {
+        // give
+            given(this.roomRepository.findByRoomName(roomDTO.getRoomName())).willReturn(Optional.empty());
+            given(this.roomRepository.findById(anyLong())).willReturn(Optional.empty());
+        // when
+            //FindById
+            NotFoundException exceptionId=assertThrows(NotFoundException.class,()->this.roomService.findById(1L));
+            // FindByName
+            NotFoundException exceptionName=assertThrows(NotFoundException.class,()->this.roomService.findByName(roomDTO));
+        // Then
+             // FindById
+            assertEquals("Doesn't exists a room with that name %s".formatted(roomDTO.getRoomName()),exceptionName.getMessage());
+            //FindByName
+            assertEquals("Doesn't exists a room with that id  %s".formatted(1L),exceptionId.getMessage());
+    }
+
 }
