@@ -3,14 +3,26 @@ package com.app.dojo.services.implementation;
 import com.app.dojo.dtos.ScheduleDTO;
 import com.app.dojo.dtos.ScheduleResponse;
 import com.app.dojo.exception.errors.NotFoundException;
+import com.app.dojo.mappers.MapperSchedule;
+import com.app.dojo.models.Schedule;
+import com.app.dojo.repositories.ScheduleRepository;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ScheduleServiceImp implements ScheduleServcie {
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private MapperSchedule mapperSchedule;
+
     @Override
     public ScheduleDTO save(ScheduleDTO scheduleDTO) {
-        return null;
+        Schedule scheduleSaved= this.scheduleRepository.save(this.mapperSchedule.mapperSchedule(scheduleDTO));
+        return this.mapperSchedule.mapperScheduleDTO(scheduleSaved);
     }
 
     @Override
