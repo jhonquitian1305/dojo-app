@@ -33,8 +33,8 @@ public class RoomController {
     }
 
     @GetMapping(ENDPOINT_ROOM_BY_NAME)
-    public ResponseEntity<RoomDTO> getByName(@RequestBody RoomDTO roomDTO)throws NotFoundException{
-        RoomDTO roomFound = this.roomService.findByName(roomDTO);
+    public ResponseEntity<RoomDTO> getByName(@PathVariable("room") String room)throws NotFoundException{
+        RoomDTO roomFound = this.roomService.findByName(room);
         return ResponseEntity.ok(roomFound);
     }
 

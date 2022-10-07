@@ -7,7 +7,7 @@ public final class EndPointsConstants {
 
     // Rooms
     public static final String ENDPOINT_ROOMS="/api/dojo-app/rooms";
-    public static final String ENDPOINT_ROOM_BY_NAME="/name/";
+    public static final String ENDPOINT_ROOM_BY_NAME="/name/{room}";
 
     // Students
     public static final String ENDPOINT_STUDENTS="/api/dojo-app/students";

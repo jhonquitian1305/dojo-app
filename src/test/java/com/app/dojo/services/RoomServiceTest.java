@@ -99,7 +99,7 @@ class RoomServiceTest {
             //FindById
             RoomDTO roomFoundById=this.roomService.findById(1L);
             // FindByName
-            RoomDTO roomFoundByName=this.roomService.findByName(roomDTO);
+            RoomDTO roomFoundByName=this.roomService.findByName(roomDTO.getRoomName());
         // Then
 
             //FindById
@@ -120,7 +120,7 @@ class RoomServiceTest {
             //FindById
             NotFoundException exceptionId=assertThrows(NotFoundException.class,()->this.roomService.findById(1L));
             // FindByName
-            NotFoundException exceptionName=assertThrows(NotFoundException.class,()->this.roomService.findByName(roomDTO));
+            NotFoundException exceptionName=assertThrows(NotFoundException.class,()->this.roomService.findByName(roomDTO.getRoomName()));
         // Then
              // FindById
             assertEquals("Doesn't exists a room with that name %s".formatted(roomDTO.getRoomName()),exceptionName.getMessage());
