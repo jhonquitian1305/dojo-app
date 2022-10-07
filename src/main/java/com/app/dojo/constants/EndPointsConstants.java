@@ -12,4 +12,7 @@ public final class EndPointsConstants {
     // Students
     public static final String ENDPOINT_STUDENTS="/api/dojo-app/students";
     public static final String ENDPOINT_STUDENT_BY_DNI ="/dni/";
+
+    // Shedule
+    public static final String ENDPOINT_SCHEDULE="/api/dojo-app/schedules";
 }
