@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.RoomDTOBuilder;
 import com.app.dojo.builders.builderModels.RoomBuilder;
 import com.app.dojo.dtos.RoomDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperRoom;
 import com.app.dojo.models.Room;
 import com.app.dojo.repositories.RoomRepository;
@@ -20,6 +21,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class RoomServiceTest {
@@ -61,5 +64,19 @@ class RoomServiceTest {
         assertNotNull(roomCreated);
         assertEquals(1L,roomCreated.getId());
         assertEquals("201", roomCreated.getRoomName());
+    }
+
+    @Test
+    @DisplayName("Test Service create one room which already exists")
+    void failCreate(){
+        // give
+        given(this.roomRepository.findByRoomName(roomDTO.getRoomName())).willReturn(Optional.of(room));
+        // when
+        BadRequest exception=assertThrows(BadRequest.class,()->{
+                this.roomService.create(roomDTO);
+            });
+        // then
+        assertEquals("Already exists one room with that name",exception.getMessage());
+        verify(roomRepository, never()).save(any(Room.class));
     }
 }
