@@ -2,14 +2,21 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.RoomDTOBuilder;
 import com.app.dojo.dtos.RoomDTO;
+import com.app.dojo.dtos.RoomResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -44,5 +51,19 @@ class RoomControllerTest {
     void failCreate(){
         ResponseEntity<RoomDTO> response=testRestTemplate.postForEntity(url,roomDTO,RoomDTO.class);
         assertEquals(400,response.getStatusCodeValue());
+    }
+
+    @Test
+    void delete() throws Exception{
+        ResponseEntity<RoomResponse> response=testRestTemplate.getForEntity(url,RoomResponse.class);
+        assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+
+        Map<String,Long> pathVariables= new HashMap<>();
+        pathVariables.put("id",1L);
+
+        ResponseEntity<Void> exchange=testRestTemplate.exchange(url+"/1", HttpMethod.DELETE,null,Void.class,pathVariables);
+
+        assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
+        assertEquals(204,exchange.getStatusCodeValue());
     }
 }
