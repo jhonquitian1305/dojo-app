@@ -11,7 +11,7 @@ public class ScheduleDTOBuilder {
     private List<String> days = new ArrayList<String>();
 
     public ScheduleDTOBuilder setId(Long id) {
-        id = id;
+        this.id = id;
         return this;
     }
 
