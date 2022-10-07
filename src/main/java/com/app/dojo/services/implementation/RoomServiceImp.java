@@ -31,7 +31,7 @@ public class RoomServiceImp implements RoomService {
     public RoomDTO create(RoomDTO roomDTO) throws BadRequest {
         Optional<Room> roomFound=this.roomRepository.findByRoomName(roomDTO.getRoomName());
         if(roomFound.isPresent()){
-            throw new BadRequest("These room already exists");
+            throw new BadRequest("Already exists one room with that name");
         }
         Room roomCreated=this.roomRepository.save(mapperRoom.mapperRoom(roomDTO));
         return mapperRoom.mapperRoomDTO(roomCreated);
