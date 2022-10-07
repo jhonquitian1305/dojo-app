@@ -154,4 +154,15 @@ class RoomServiceTest {
         //then
         verify(roomRepository,times(1)).deleteById(anyLong());
     }
+
+    @Test
+    @DisplayName("Test Service delete a room that doesn't exist")
+    void failDelete() throws Exception {
+        //given
+        given(roomRepository.findById(1L)).willReturn(Optional.empty());
+        // when
+        NotFoundException exception=assertThrows(NotFoundException.class,()->this.roomService.delete(1L));
+        //then
+        assertEquals("Doesn't exists a room with that id  %s".formatted(1L),exception.getMessage());
+    }
 }
