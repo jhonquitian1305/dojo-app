@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -78,5 +79,28 @@ class RoomServiceTest {
         // then
         assertEquals("Already exists one room with that name",exception.getMessage());
         verify(roomRepository, never()).save(any(Room.class));
+    }
+
+    @Test
+    @DisplayName("Test Service find one room by its id and name")
+    void getOne() throws Exception {
+        // give
+        given(this.roomRepository.findByRoomName(roomDTO.getRoomName())).willReturn(Optional.of(room));
+        given(this.roomRepository.findById(anyLong())).willReturn(Optional.of(room));
+
+        given(this.mapperRoom.mapperRoomDTO(any(Room.class))).willReturn(roomDTO);
+        // when
+            //FindById
+            RoomDTO roomFoundById=this.roomService.findById(1L);
+            // FindByName
+            RoomDTO roomFoundByName=this.roomService.findByName(roomDTO);
+        // Then
+
+            //FindById
+            assertNotNull(roomFoundById);
+            assertEquals(1L, roomFoundById.getId());
+            //FindByName
+            assertNotNull(roomFoundByName);
+            assertEquals(1L, roomFoundByName.getId());
     }
 }
