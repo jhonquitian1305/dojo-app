@@ -81,6 +81,17 @@ class RoomControllerTest {
     }
 
     @Test
+    @Order(6)
+    void findOneByName(){
+        ResponseEntity<RoomDTO> response=this.testRestTemplate.getForEntity(url+"/name/202",RoomDTO.class);
+        assertEquals(200,response.getStatusCodeValue());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+        assertThat(response.getBody()).isNotNull();
+        assertEquals(1L,response.getBody().getId());
+        assertEquals("202",response.getBody().getRoomName());
+    }
+
+    @Test
     void delete() throws Exception{
         ResponseEntity<RoomResponse> response=testRestTemplate.getForEntity(url,RoomResponse.class);
         assertThat(response.getBody().getContent().size()).isGreaterThan(0);
