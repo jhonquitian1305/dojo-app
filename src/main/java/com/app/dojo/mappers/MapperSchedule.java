@@ -4,7 +4,9 @@ import com.app.dojo.builders.builderDTO.ScheduleDTOBuilder;
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
 import com.app.dojo.dtos.ScheduleDTO;
 import com.app.dojo.models.Schedule;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MapperSchedule {
 
     public Schedule mapperSchedule(ScheduleDTO scheduleDTO){
