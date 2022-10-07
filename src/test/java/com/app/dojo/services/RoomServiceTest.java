@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.RoomDTOBuilder;
 import com.app.dojo.builders.builderModels.RoomBuilder;
 import com.app.dojo.dtos.RoomDTO;
+import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperRoom;
@@ -16,9 +17,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -123,4 +128,18 @@ class RoomServiceTest {
             assertEquals("Doesn't exists a room with that id  %s".formatted(1L),exceptionId.getMessage());
     }
 
+    @Test
+    @DisplayName("Test Service find all rooms")
+    void getAll(){
+        // given
+        Page<Room> rooms=new PageImpl<>(List.of(room));
+        given(this.roomRepository.findAll(any(Pageable.class))).willReturn(rooms);
+        given(this.mapperRoom.mapperRoomDTO(any(Room.class))).willReturn(roomDTO);
+        // when
+        RoomResponse response=this.roomService.findAll(0,10);
+        // then
+        assertEquals(0,response.getNumberPage());
+        assertEquals(1,response.getTotalElements());
+        assertThat(response.getContent().size()).isEqualTo(1);
+    }
 }
