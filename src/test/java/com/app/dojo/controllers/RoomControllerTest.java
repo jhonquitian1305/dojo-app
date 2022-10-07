@@ -62,6 +62,14 @@ class RoomControllerTest {
         assertThat(response.getBody()).isNotNull();
         assertEquals(1L,response.getBody().getId());
     }
+
+    @Test
+    @Order(4)
+    void failFindById(){
+        ResponseEntity<RoomDTO> response=this.testRestTemplate.getForEntity(url+"/2",RoomDTO.class);
+        assertEquals(404,response.getStatusCodeValue());
+    }
+
     @Test
     void delete() throws Exception{
         ResponseEntity<RoomResponse> response=testRestTemplate.getForEntity(url,RoomResponse.class);
