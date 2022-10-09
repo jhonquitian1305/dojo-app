@@ -9,4 +9,7 @@ public final class Message {
 
     // Hour Service
     public static final String MESSAGE_NOT_FOUND_HOUR="Hour doesn' exist with that name %s";
+
+    //Day Service
+    public static final String MESSAGE_NOT_FOUND_DAY="Day doesn't exist with that name %s";
 }
