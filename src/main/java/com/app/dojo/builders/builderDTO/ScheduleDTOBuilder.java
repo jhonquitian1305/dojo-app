@@ -1,26 +1,28 @@
 package com.app.dojo.builders.builderDTO;
 
 import com.app.dojo.dtos.ScheduleDTO;
+import com.app.dojo.models.Day;
+import com.app.dojo.models.Hour;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleDTOBuilder {
     private Long id;
-    private List<String> hours=new ArrayList<String>();
-    private List<String> days = new ArrayList<String>();
+    private List<Hour> hours;
+    private List<Day> days;
 
     public ScheduleDTOBuilder setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public ScheduleDTOBuilder setHours(List<String> hours) {
+    public ScheduleDTOBuilder setHours(List<Hour> hours) {
         this.hours = hours;
         return this;
     }
 
-    public ScheduleDTOBuilder setDays(List<String> days) {
+    public ScheduleDTOBuilder setDays(List<Day> days) {
         this.days = days;
         return this;
     }

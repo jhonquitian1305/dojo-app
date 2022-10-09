@@ -1,5 +1,7 @@
 package com.app.dojo.builders.builderModels;
 
+import com.app.dojo.models.Day;
+import com.app.dojo.models.Hour;
 import com.app.dojo.models.Schedule;
 
 import java.util.ArrayList;
@@ -7,20 +9,20 @@ import java.util.List;
 
 public class ScheduleBuilder {
     private Long id;
-    private List<String> hours=new ArrayList<String>();
-    private List<String> days = new ArrayList<String>();
+    private List<Hour> hours;
+    private List<Day> days;
 
     public ScheduleBuilder setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public ScheduleBuilder setHours(List<String> hours) {
+    public ScheduleBuilder setHours(List<Hour> hours) {
         this.hours = hours;
         return this;
     }
 
-    public ScheduleBuilder setDays(List<String> days) {
+    public ScheduleBuilder setDays(List<Day> days) {
         this.days = days;
         return this;
     }

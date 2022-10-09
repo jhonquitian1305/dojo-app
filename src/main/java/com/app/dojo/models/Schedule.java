@@ -9,15 +9,15 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ElementCollection
-    private List<String> hours=new ArrayList<String>();
-    @ElementCollection
-    private List<String> days = new ArrayList<String>();
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = false)
+    private List<Hour> hours;
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = false)
+    private List<Day> days;
 
     public Schedule() {
     }
 
-    public Schedule(Long id, List<String> hours, List<String> days) {
+    public Schedule(Long id, List<Hour> hours, List<Day> days) {
         this.id = id;
         this.hours = hours;
         this.days = days;
@@ -31,19 +31,19 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<String> getHours() {
+    public List<Hour> getHours() {
         return hours;
     }
 
-    public void setHours(List<String> hours) {
+    public void setHours(List<Hour> hours) {
         this.hours = hours;
     }
 
-    public List<String> getDays() {
+    public List<Day> getDays() {
         return days;
     }
 
-    public void setDays(List<String> days) {
+    public void setDays(List<Day> days) {
         this.days = days;
     }
 }
