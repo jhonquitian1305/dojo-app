@@ -7,6 +7,8 @@ import com.app.dojo.services.Interfaces.HourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static com.app.dojo.constants.Message.*;
+
 @Service
 public class HourServiceImp implements HourService {
 
@@ -16,7 +18,7 @@ public class HourServiceImp implements HourService {
     public Hour findByName(String hour) throws NotFoundException {
         Hour hourFound=this.hourRepository.findByHour(hour);
         if(hourFound==null){
-            throw  new NotFoundException("Hour doesn' exist");
+            throw  new NotFoundException(MESSAGE_NOT_FOUND_HOUR.formatted(hour));
         }
         return  hourFound;
     }
