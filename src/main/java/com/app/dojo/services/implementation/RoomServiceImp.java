@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import static com.app.dojo.constants.Message.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class RoomServiceImp implements RoomService {
     public RoomDTO create(RoomDTO roomDTO) throws BadRequest {
         Optional<Room> roomFound=this.roomRepository.findByRoomName(roomDTO.getRoomName());
         if(roomFound.isPresent()){
-            throw new BadRequest("Already exists one room with that name");
+            throw new BadRequest(MESSAGE_BAD_REQUEST_CREATE_ROOM);
         }
         Room roomCreated=this.roomRepository.save(mapperRoom.mapperRoom(roomDTO));
         return mapperRoom.mapperRoomDTO(roomCreated);
@@ -41,7 +42,7 @@ public class RoomServiceImp implements RoomService {
     public RoomDTO findById(Long id) throws Exception {
         Optional<Room> roomFound= this.roomRepository.findById(id);
         if(!roomFound.isPresent()){
-            throw new NotFoundException("Doesn't exists a room with that id  %s".formatted(id));
+            throw new NotFoundException(MESSAGE_NOT_FOUND_ROOM_ID.formatted(id));
         }
         return mapperRoom.mapperRoomDTO(roomFound.get());
     }
@@ -50,7 +51,7 @@ public class RoomServiceImp implements RoomService {
     public RoomDTO findByName(String roomName) throws NotFoundException {
         Optional<Room> roomFound=this.roomRepository.findByRoomName(roomName);
         if(!roomFound.isPresent()){
-            throw new NotFoundException("Doesn't exists a room with that name %s".formatted(roomName));
+            throw new NotFoundException(MESSAGE_NOT_FOUND_ROOM_NAME.formatted(roomName));
         }
         return  mapperRoom.mapperRoomDTO(roomFound.get());
     }
@@ -75,7 +76,7 @@ public class RoomServiceImp implements RoomService {
     public void delete(Long id) throws Exception {
         Optional<Room> roomFound= this.roomRepository.findById(id);
         if(!roomFound.isPresent()){
-            throw new NotFoundException("Doesn't exists a room with that id  %s".formatted(id));
+            throw new NotFoundException(MESSAGE_NOT_FOUND_ROOM_ID.formatted(id));
         }
         this.roomRepository.deleteById(id);
     }
