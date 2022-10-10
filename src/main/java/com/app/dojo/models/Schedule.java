@@ -9,9 +9,19 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = false)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "hour_schedule",
+            joinColumns = {@JoinColumn(name = "schedule_id")},
+            inverseJoinColumns = {@JoinColumn(name = "hour_id")}
+    )
     private List<Hour> hours;
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = false)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "day_schedule",
+            joinColumns = {@JoinColumn(name = "schedule_id")},
+            inverseJoinColumns = {@JoinColumn(name = "day_id")}
+    )
     private List<Day> days;
 
     public Schedule() {
