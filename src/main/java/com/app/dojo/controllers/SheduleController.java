@@ -31,4 +31,10 @@ public class SheduleController {
     ){
         return ResponseEntity.ok(this.scheduleServcie.findAll(numberPage,pageSize));
     }
+
+    @GetMapping(ENDPOINT_ID)
+    public ResponseEntity<ScheduleDTO> getOne(@PathVariable("id") Long id){
+        ScheduleDTO scheduleDTO=this.scheduleServcie.findOne(id);
+        return ResponseEntity.ok(scheduleDTO);
+    }
 }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import static com.app.dojo.constants.Message.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +57,11 @@ public class ScheduleServiceImp implements ScheduleServcie {
 
     @Override
     public ScheduleDTO findOne(Long id) throws NotFoundException {
-        return null;
+        Optional<Schedule> scheduleFound=this.scheduleRepository.findById(id);
+        if(scheduleFound.isEmpty()){
+            throw  new NotFoundException(MESSAGE_NOT_FOUND_SCHEDULE_ID.formatted(id));
+        }
+        return mapperSchedule.mapperScheduleDTO(scheduleFound.get());
     }
 
     @Override
