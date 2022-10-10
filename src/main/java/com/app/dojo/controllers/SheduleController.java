@@ -37,4 +37,10 @@ public class SheduleController {
         ScheduleDTO scheduleDTO=this.scheduleServcie.findOne(id);
         return ResponseEntity.ok(scheduleDTO);
     }
+
+    @DeleteMapping(ENDPOINT_ID)
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id){
+        this.scheduleServcie.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

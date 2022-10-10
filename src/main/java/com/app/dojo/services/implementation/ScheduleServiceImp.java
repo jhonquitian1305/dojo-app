@@ -89,7 +89,13 @@ public class ScheduleServiceImp implements ScheduleServcie {
 
     @Override
     public void delete(Long id) {
-
+        Optional<Schedule> scheduleFound=this.scheduleRepository.findById(id);
+        if(scheduleFound.isEmpty()){
+            throw  new NotFoundException(MESSAGE_NOT_FOUND_SCHEDULE_ID.formatted(id));
+        }
+        scheduleFound.get().getHours().clear();
+        scheduleFound.get().getDays().clear();
+        this.scheduleRepository.delete(scheduleFound.get());
     }
 
     private List<Day> loadDays(List<String> days){
