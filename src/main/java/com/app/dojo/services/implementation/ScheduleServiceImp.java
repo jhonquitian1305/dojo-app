@@ -1,5 +1,6 @@
 package com.app.dojo.services.implementation;
 
+import com.app.dojo.builders.builderDTO.ScheduleResponseBuilder;
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
 import com.app.dojo.dtos.ScheduleDTO;
 import com.app.dojo.dtos.ScheduleRequest;
@@ -15,6 +16,9 @@ import com.app.dojo.services.Interfaces.DayServcie;
 import com.app.dojo.services.Interfaces.HourService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import static com.app.dojo.constants.Message.*;
@@ -56,8 +60,21 @@ public class ScheduleServiceImp implements ScheduleServcie {
     }
 
     @Override
-    public ScheduleResponse findAll() {
-        return null;
+    public ScheduleResponse findAll(int numberPage, int pageSize) {
+        Pageable pageable= PageRequest.of(numberPage,pageSize);
+        Page<Schedule> schedulesFound=this.scheduleRepository.findAll(pageable);
+        List<ScheduleDTO> allSchedules=schedulesFound.getContent()
+                .stream()
+                .map(schedule -> this.mapperSchedule.mapperScheduleDTO(schedule))
+                .collect(Collectors.toList());
+        return new ScheduleResponseBuilder()
+                .setContent(allSchedules)
+                .setNumberPage(schedulesFound.getNumber())
+                .setSizePage(schedulesFound.getSize())
+                .setTotalElements(schedulesFound.getTotalElements())
+                .setTotalPages(schedulesFound.getTotalPages())
+                .setLastOne(schedulesFound.isLast())
+                .build();
     }
 
     @Override
