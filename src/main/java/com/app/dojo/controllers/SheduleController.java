@@ -1,6 +1,7 @@
 package com.app.dojo.controllers;
 
 import com.app.dojo.dtos.ScheduleDTO;
+import com.app.dojo.dtos.ScheduleRequest;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,8 @@ public class SheduleController {
     @Autowired
     private ScheduleServcie scheduleServcie;
     @PostMapping
-    public ResponseEntity<ScheduleDTO> create(@RequestBody ScheduleDTO scheduleDTO){
-        ScheduleDTO scheduleSaved=this.scheduleServcie.save(scheduleDTO);
+    public ResponseEntity<ScheduleDTO> create(@RequestBody ScheduleRequest scheduleRequest){
+        ScheduleDTO scheduleSaved=this.scheduleServcie.save(scheduleRequest);
         return  new ResponseEntity<>(scheduleSaved, HttpStatus.CREATED);
     }
 }

@@ -12,4 +12,8 @@ public final class Message {
 
     //Day Service
     public static final String MESSAGE_NOT_FOUND_DAY="Day doesn't exist with that name %s";
+
+
+    // Schedule Service
+    public static final String MESSAGE_BAD_REQUEST_CREATE_SCHEDULE="\"That schedule already exists. Time %s and Day %s";
 }
