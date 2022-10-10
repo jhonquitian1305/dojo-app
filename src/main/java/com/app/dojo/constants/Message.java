@@ -15,6 +15,6 @@ public final class Message {
 
 
     // Schedule Service
-    public static final String MESSAGE_BAD_REQUEST_CREATE_SCHEDULE="\"That schedule already exists. Time %s and Day %s";
+    public static final String MESSAGE_BAD_REQUEST_CREATE_SCHEDULE="That schedule already exists.";
     public static final String MESSAGE_NOT_FOUND_SCHEDULE_ID="Doesn't exist a schedule with that id %s";
 }

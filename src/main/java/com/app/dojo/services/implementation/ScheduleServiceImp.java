@@ -46,7 +46,9 @@ public class ScheduleServiceImp implements ScheduleServcie {
     public ScheduleDTO save(ScheduleRequest scheduleRequest) {
         List<Day> days=loadDays(scheduleRequest.getDays());
         List<Hour> hours=loadHours(scheduleRequest.getHours());
-        verifySchedule(days,hours);
+        if(!verifySchedule(days,hours)){
+            throw  new BadRequest(MESSAGE_BAD_REQUEST_CREATE_SCHEDULE);
+        };
         Schedule scheduleToSave=new ScheduleBuilder()
                 .setDays(days)
                 .setHours(hours)
@@ -101,12 +103,15 @@ public class ScheduleServiceImp implements ScheduleServcie {
         return  hours.stream().map(hour->this.hourService.findByName(hour)).collect(Collectors.toList());
     }
 
-    private void verifySchedule(List<Day> days, List<Hour> hours){
-        days.stream().forEach(day->{
-            hours.stream().forEach(hour -> {
-                Boolean isExist=this.scheduleRepository.existsScheduleByDaysAndHours(day,hour);
-                if(isExist) throw new BadRequest(MESSAGE_BAD_REQUEST_CREATE_SCHEDULE.formatted(hour.getHour(),day.getDay()));
-            });
-        });
+    private boolean verifySchedule(List<Day> days, List<Hour> hours){
+       Integer contador=0;
+       for(Day day:days){
+           for (Hour hour: hours){
+               if(this.scheduleRepository.existsScheduleByDaysAndHours(day,hour)){
+                   contador+=1;
+               }
+           }
+       }
+       return contador!=(days.size()*hours.size())?true:false;
     }
 }
