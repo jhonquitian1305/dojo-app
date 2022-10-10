@@ -9,7 +9,6 @@ public interface ScheduleServcie {
     ScheduleDTO save(ScheduleRequest scheduleRequest);
     ScheduleDTO findOne(Long id) throws NotFoundException;
     ScheduleResponse findAll(int numberPage, int pageSize);
-    ScheduleDTO update(Long id, ScheduleDTO scheduleDTO);
     void delete(Long id);
 
 }

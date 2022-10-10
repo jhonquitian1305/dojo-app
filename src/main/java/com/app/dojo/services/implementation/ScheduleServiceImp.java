@@ -83,11 +83,6 @@ public class ScheduleServiceImp implements ScheduleServcie {
     }
 
     @Override
-    public ScheduleDTO update(Long id, ScheduleDTO scheduleDTO) {
-        return null;
-    }
-
-    @Override
     public void delete(Long id) {
         Optional<Schedule> scheduleFound=this.scheduleRepository.findById(id);
         if(scheduleFound.isEmpty()){
