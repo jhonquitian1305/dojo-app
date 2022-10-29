@@ -9,28 +9,16 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "hour_schedule",
-            joinColumns = {@JoinColumn(name = "schedule_id")},
-            inverseJoinColumns = {@JoinColumn(name = "hour_id")}
-    )
-    private List<Hour> hours;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "day_schedule",
-            joinColumns = {@JoinColumn(name = "schedule_id")},
-            inverseJoinColumns = {@JoinColumn(name = "day_id")}
-    )
-    private List<Day> days;
+    private String dayName;
+    private String hoursClass;
 
     public Schedule() {
     }
 
-    public Schedule(Long id, List<Hour> hours, List<Day> days) {
+    public Schedule(Long id, String dayName, String hoursClass) {
         this.id = id;
-        this.hours = hours;
-        this.days = days;
+        this.dayName = dayName;
+        this.hoursClass = hoursClass;
     }
 
     public Long getId() {
@@ -41,19 +29,19 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<Hour> getHours() {
-        return hours;
+    public String getDayName() {
+        return dayName;
     }
 
-    public void setHours(List<Hour> hours) {
-        this.hours = hours;
+    public void setDayName(String dayName) {
+        this.dayName = dayName;
     }
 
-    public List<Day> getDays() {
-        return days;
+    public String getHoursClass() {
+        return hoursClass;
     }
 
-    public void setDays(List<Day> days) {
-        this.days = days;
+    public void setHoursClass(String hoursClass) {
+        this.hoursClass = hoursClass;
     }
 }
