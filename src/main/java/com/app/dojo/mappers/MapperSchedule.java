@@ -12,16 +12,16 @@ public class MapperSchedule {
     public Schedule mapperSchedule(ScheduleDTO scheduleDTO){
         return  new ScheduleBuilder()
                 .setId(scheduleDTO.getId())
-                .setDays(scheduleDTO.getDays())
-                .setHours(scheduleDTO.getHours())
+                .setDayName(scheduleDTO.getDayName())
+                .setHoursClass(scheduleDTO.getHoursClass())
                 .build();
     }
 
     public ScheduleDTO mapperScheduleDTO(Schedule schedule){
         return  new ScheduleDTOBuilder()
                 .setId(schedule.getId())
-                .setDays(schedule.getDays())
-                .setHours(schedule.getHours())
+                .setDayName(schedule.getDayName())
+                .setHoursClass(schedule.getHoursClass())
                 .build();
     }
 
