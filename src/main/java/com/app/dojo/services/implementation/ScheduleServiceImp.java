@@ -46,7 +46,18 @@ public class ScheduleServiceImp implements ScheduleServcie {
 
     @Override
     public ScheduleResponse findAll(int numberPage, int pageSize) {
-        return null;
+        Pageable pagination=PageRequest.of(numberPage,pageSize);
+        Page<Schedule> allSchedules=this.scheduleRepository.findAll(pagination);
+        List<Schedule> schedulesFound=allSchedules.getContent();
+        List<ScheduleDTO> schedules=schedulesFound.stream().map(schedule->mapperSchedule.mapperScheduleDTO(schedule)).collect(Collectors.toList());
+        return  new ScheduleResponseBuilder()
+                .setContent(schedules)
+                .setNumberPage(allSchedules.getNumber())
+                .setSizePage(allSchedules.getSize())
+                .setLastOne(allSchedules.isLast())
+                .setTotalElements(allSchedules.getTotalElements())
+                .setTotalPages(allSchedules.getTotalPages())
+                .build();
     }
 
     @Override
