@@ -2,6 +2,7 @@ package com.app.dojo.dtos;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class ScheduleDTO {
@@ -13,6 +14,10 @@ public class ScheduleDTO {
     @NotEmpty(message = "Las horas de clase no puede ser vacío")
     @NotNull(message = "Las horas de clase no no puede ser nulo")
     @Size(max = 11)
+    @Pattern(
+            regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]-([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+            message = "La horas de clase deben tener el siguiente formato 8:00-10:00"
+    )
     private String hoursClass;
 
     public ScheduleDTO() {
