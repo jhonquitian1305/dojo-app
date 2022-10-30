@@ -39,7 +39,9 @@ public class ScheduleServiceImp implements ScheduleServcie {
 
     @Override
     public ScheduleDTO findOne(Long id) throws NotFoundException {
-        return null;
+        Optional<Schedule> scheduleFound=this.scheduleRepository.findById(id);
+        if(scheduleFound.isEmpty()) throw  new NotFoundException(MESSAGE_NOT_FOUND_SCHEDULE_ID.formatted(id));
+        return mapperSchedule.mapperScheduleDTO(scheduleFound.get());
     }
 
     @Override
