@@ -51,6 +51,7 @@ public class ScheduleServiceImp implements ScheduleServcie {
 
     @Override
     public void delete(Long id) {
-
+        this.findOne(id);
+        this.scheduleRepository.deleteById(id);
     }
 }
