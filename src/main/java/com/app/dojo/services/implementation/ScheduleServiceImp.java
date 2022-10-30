@@ -3,17 +3,12 @@ package com.app.dojo.services.implementation;
 import com.app.dojo.builders.builderDTO.ScheduleResponseBuilder;
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
 import com.app.dojo.dtos.ScheduleDTO;
-import com.app.dojo.dtos.ScheduleRequest;
 import com.app.dojo.dtos.ScheduleResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperSchedule;
-import com.app.dojo.models.Day;
-import com.app.dojo.models.Hour;
 import com.app.dojo.models.Schedule;
 import com.app.dojo.repositories.ScheduleRepository;
-import com.app.dojo.services.Interfaces.DayServcie;
-import com.app.dojo.services.Interfaces.HourService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,87 +26,43 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImp implements ScheduleServcie {
 
     @Autowired
-    private ScheduleRepository scheduleRepository;
-
+    private  ScheduleRepository scheduleRepository;
     @Autowired
     private MapperSchedule mapperSchedule;
-
-    @Autowired
-    private DayServcie dayServcie;
-
-    @Autowired
-    private HourService hourService;
-
     @Override
-    public ScheduleDTO save(ScheduleRequest scheduleRequest) {
-        List<Day> days=loadDays(scheduleRequest.getDays());
-        List<Hour> hours=loadHours(scheduleRequest.getHours());
-        if(!verifySchedule(days,hours)){
-            throw  new BadRequest(MESSAGE_BAD_REQUEST_CREATE_SCHEDULE);
-        };
-        Schedule scheduleToSave=new ScheduleBuilder()
-                .setDays(days)
-                .setHours(hours)
-                .build();
-        Schedule scheduleSaved= this.scheduleRepository.save(scheduleToSave);
-        return this.mapperSchedule.mapperScheduleDTO(scheduleSaved);
+    public ScheduleDTO save(ScheduleDTO scheduleDTO) {
+        Optional<Schedule> scheduleFound=this.scheduleRepository.findByDayNameAndHoursClass(scheduleDTO.getDayName(),scheduleDTO.getHoursClass());
+        if(scheduleFound.isPresent()) throw  new BadRequest(MESSAGE_BAD_REQUEST_CREATE_SCHEDULE);
+        Schedule scheduleSaved=this.scheduleRepository.save(mapperSchedule.mapperSchedule(scheduleDTO));
+        return mapperSchedule.mapperScheduleDTO(scheduleSaved);
     }
 
     @Override
     public ScheduleDTO findOne(Long id) throws NotFoundException {
         Optional<Schedule> scheduleFound=this.scheduleRepository.findById(id);
-        if(scheduleFound.isEmpty()){
-            throw  new NotFoundException(MESSAGE_NOT_FOUND_SCHEDULE_ID.formatted(id));
-        }
+        if(scheduleFound.isEmpty()) throw  new NotFoundException(MESSAGE_NOT_FOUND_SCHEDULE_ID.formatted(id));
         return mapperSchedule.mapperScheduleDTO(scheduleFound.get());
     }
 
     @Override
     public ScheduleResponse findAll(int numberPage, int pageSize) {
-        Pageable pageable= PageRequest.of(numberPage,pageSize);
-        Page<Schedule> schedulesFound=this.scheduleRepository.findAll(pageable);
-        List<ScheduleDTO> allSchedules=schedulesFound.getContent()
-                .stream()
-                .map(schedule -> this.mapperSchedule.mapperScheduleDTO(schedule))
-                .collect(Collectors.toList());
-        return new ScheduleResponseBuilder()
-                .setContent(allSchedules)
-                .setNumberPage(schedulesFound.getNumber())
-                .setSizePage(schedulesFound.getSize())
-                .setTotalElements(schedulesFound.getTotalElements())
-                .setTotalPages(schedulesFound.getTotalPages())
-                .setLastOne(schedulesFound.isLast())
+        Pageable pagination=PageRequest.of(numberPage,pageSize);
+        Page<Schedule> allSchedules=this.scheduleRepository.findAll(pagination);
+        List<Schedule> schedulesFound=allSchedules.getContent();
+        List<ScheduleDTO> schedules=schedulesFound.stream().map(schedule->mapperSchedule.mapperScheduleDTO(schedule)).collect(Collectors.toList());
+        return  new ScheduleResponseBuilder()
+                .setContent(schedules)
+                .setNumberPage(allSchedules.getNumber())
+                .setSizePage(allSchedules.getSize())
+                .setLastOne(allSchedules.isLast())
+                .setTotalElements(allSchedules.getTotalElements())
+                .setTotalPages(allSchedules.getTotalPages())
                 .build();
     }
 
     @Override
     public void delete(Long id) {
-        Optional<Schedule> scheduleFound=this.scheduleRepository.findById(id);
-        if(scheduleFound.isEmpty()){
-            throw  new NotFoundException(MESSAGE_NOT_FOUND_SCHEDULE_ID.formatted(id));
-        }
-        scheduleFound.get().getHours().clear();
-        scheduleFound.get().getDays().clear();
-        this.scheduleRepository.delete(scheduleFound.get());
-    }
-
-    private List<Day> loadDays(List<String> days){
-        return days.stream().map(day->this.dayServcie.findByName(day)).collect(Collectors.toList());
-    }
-
-    private List<Hour> loadHours(List<String> hours){
-        return  hours.stream().map(hour->this.hourService.findByName(hour)).collect(Collectors.toList());
-    }
-
-    private boolean verifySchedule(List<Day> days, List<Hour> hours){
-       Integer contador=0;
-       for(Day day:days){
-           for (Hour hour: hours){
-               if(this.scheduleRepository.existsScheduleByDaysAndHours(day,hour)){
-                   contador+=1;
-               }
-           }
-       }
-       return contador!=(days.size()*hours.size())?true:false;
+        this.findOne(id);
+        this.scheduleRepository.deleteById(id);
     }
 }
