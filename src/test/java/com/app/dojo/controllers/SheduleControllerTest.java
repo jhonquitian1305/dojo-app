@@ -66,10 +66,18 @@ class SheduleControllerTest {
   @DisplayName("Test Schedule Controller, find one Schedule")
   @Test
   void findOne(){
-    ResponseEntity<ScheduleDTO> response=this.testRestTemplate.getForEntity(url+"/2",ScheduleDTO.class);
+    ResponseEntity<ScheduleDTO> response=this.testRestTemplate.getForEntity(url+"/1",ScheduleDTO.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     assertThat(response.getBody()).isNotNull();
     assertEquals(1L,response.getBody().getId());
+  }
+
+  @Order(5)
+  @DisplayName("Test Schedule Controller, Verify Failure when trying to find a schedule that doesn't exist")
+  @Test
+  void failFinOne(){
+    ResponseEntity<ScheduleDTO> response=this.testRestTemplate.getForEntity(url+"/187",ScheduleDTO.class);
+    assertEquals(404,response.getStatusCodeValue());
   }
 }
