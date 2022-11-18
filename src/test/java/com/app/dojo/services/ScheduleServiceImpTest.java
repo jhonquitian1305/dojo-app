@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.ScheduleDTOBuilder;
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
 import com.app.dojo.dtos.ScheduleDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperSchedule;
 import com.app.dojo.models.Schedule;
 import com.app.dojo.repositories.ScheduleRepository;
@@ -22,6 +23,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -68,4 +71,17 @@ class ScheduleServiceImpTest {
     assertEquals("8:00-10:00",scheduleCreated.getHoursClass());
   }
 
+  @DisplayName("Schedule Service fail to try create a schedule")
+  @Test
+  void failCreate(){
+    //given
+    given(this.scheduleRepository.findByDayNameAndHoursClass(scheduleDTO.getDayName(),scheduleDTO.getHoursClass())).willReturn(Optional.of(schedule));
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->{
+      this.scheduleService.save(scheduleDTO);
+    });
+    //then
+    assertEquals("This schedule is already created",badRequest.getMessage());
+    verify(this.scheduleRepository,never()).save(any(Schedule.class));
+  }
 }
