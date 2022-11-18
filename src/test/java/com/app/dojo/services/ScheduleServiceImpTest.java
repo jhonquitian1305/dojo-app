@@ -28,10 +28,11 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -131,5 +132,16 @@ class ScheduleServiceImpTest {
     assertEquals(0,response.getNumberPage());
     assertEquals(1,response.getTotalElements());
     assertThat(response.getContent().size()).isGreaterThan(0);
+  }
+  @DisplayName("Schedule Service Delete a schedule")
+  @Test
+  void delete(){
+    //given
+    given(this.scheduleRepository.findById(any(Long.class))).willReturn(Optional.of(schedule));
+    willDoNothing().given(scheduleRepository).deleteById(any(Long.class));
+    //when
+    this.scheduleService.delete(anyLong());
+    //then
+    verify(scheduleRepository,times(1)).deleteById(anyLong());
   }
 }
