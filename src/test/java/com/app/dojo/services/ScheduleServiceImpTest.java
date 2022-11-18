@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.ScheduleDTOBuilder;
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
 import com.app.dojo.dtos.ScheduleDTO;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperSchedule;
 import com.app.dojo.models.Schedule;
 import com.app.dojo.repositories.ScheduleRepository;
@@ -96,5 +97,18 @@ class ScheduleServiceImpTest {
     //then
     assertNotNull(scheduleDTOFound);
     assertEquals(schedule.getId(), scheduleDTOFound.getId());
+  }
+
+  @DisplayName("Schedule Service fail to try find a schedule")
+  @Test
+  void failFindOne(){
+    //given
+    given(this.scheduleRepository.findById(any(Long.class))).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->{
+      this.scheduleService.findOne(1L);
+    });
+    //then
+    assertEquals("Doesn't exist a schedule with that id 1",exception.getMessage());
   }
 }
