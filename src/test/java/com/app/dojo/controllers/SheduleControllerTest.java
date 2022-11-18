@@ -61,4 +61,15 @@ class SheduleControllerTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getContent().size()).isGreaterThan(0);
   }
+
+  @Order(4)
+  @DisplayName("Test Schedule Controller, find one Schedule")
+  @Test
+  void findOne(){
+    ResponseEntity<ScheduleDTO> response=this.testRestTemplate.getForEntity(url+"/2",ScheduleDTO.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    assertThat(response.getBody()).isNotNull();
+    assertEquals(1L,response.getBody().getId());
+  }
 }
