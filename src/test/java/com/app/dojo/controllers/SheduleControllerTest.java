@@ -3,7 +3,9 @@ package com.app.dojo.controllers;
 import com.app.dojo.builders.builderDTO.ScheduleDTOBuilder;
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
 import com.app.dojo.dtos.RoomDTO;
+import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.dtos.ScheduleDTO;
+import com.app.dojo.dtos.ScheduleResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -46,5 +49,16 @@ class SheduleControllerTest {
   void failCreate(){
     ResponseEntity<ScheduleDTO> response=testRestTemplate.postForEntity(url,scheduleDTO,ScheduleDTO.class);
     assertEquals(400,response.getStatusCodeValue());
+  }
+
+  @Order(3)
+  @DisplayName("Test Schedule Controller, find all schedules")
+  @Test
+  void findAll(){
+    ResponseEntity<ScheduleResponse> response=this.testRestTemplate.getForEntity(url,ScheduleResponse.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getContent().size()).isGreaterThan(0);
   }
 }
