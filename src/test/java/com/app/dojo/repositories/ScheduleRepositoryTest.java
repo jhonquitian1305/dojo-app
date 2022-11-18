@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,4 +56,16 @@ class ScheduleRepositoryTest {
             assertNotNull(allSchedules);
     }
 
+    @Test
+    @DisplayName("Test Schedule Repository find a schedule")
+    void findOne(){
+        //given
+        Schedule scheduleSaved=this.scheduleRepository.save(schedule);
+        //when
+        Optional<Schedule> scheduleFound=this.scheduleRepository.findById(scheduleSaved.getId());
+        //then
+        assertFalse(scheduleFound.isEmpty());
+        assertNotNull(scheduleFound.get());
+        assertThat(scheduleFound.get().getId()).isGreaterThan(0);
+    }
 }
