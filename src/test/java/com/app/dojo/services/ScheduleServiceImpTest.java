@@ -84,4 +84,17 @@ class ScheduleServiceImpTest {
     assertEquals("This schedule is already created",badRequest.getMessage());
     verify(this.scheduleRepository,never()).save(any(Schedule.class));
   }
+
+  @DisplayName("Schedule Service find one a schedule")
+  @Test
+  void findOne(){
+    //given
+    given(this.scheduleRepository.findById(any(Long.class))).willReturn(Optional.of(schedule));
+    given(this.mapperSchedule.mapperScheduleDTO(any(Schedule.class))).willReturn(scheduleDTO);
+    //when
+    ScheduleDTO scheduleDTOFound=this.scheduleService.findOne(any(Long.class));
+    //then
+    assertNotNull(scheduleDTOFound);
+    assertEquals(schedule.getId(), scheduleDTOFound.getId());
+  }
 }
