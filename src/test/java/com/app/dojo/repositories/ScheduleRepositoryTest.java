@@ -1,6 +1,7 @@
 package com.app.dojo.repositories;
 
 import com.app.dojo.builders.builderModels.ScheduleBuilder;
+import com.app.dojo.models.Room;
 import com.app.dojo.models.Schedule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,5 +68,18 @@ class ScheduleRepositoryTest {
         assertFalse(scheduleFound.isEmpty());
         assertNotNull(scheduleFound.get());
         assertThat(scheduleFound.get().getId()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("Test Schedule Repository delete a schedule")
+    void delete(){
+        //given
+        Schedule scheduleSaved=this.scheduleRepository.save(schedule);
+        //when
+        Optional<Schedule> scheduleFound=this.scheduleRepository.findById(scheduleSaved.getId());
+        //then
+        this.scheduleRepository.deleteById(scheduleFound.get().getId());
+        scheduleFound=this.scheduleRepository.findById(scheduleFound.get().getId());
+        assertThat(scheduleFound.isEmpty()).isTrue();
     }
 }
