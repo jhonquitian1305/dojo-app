@@ -8,6 +8,6 @@ public final class Message {
     public static final String MESSAGE_NOT_FOUND_ROOM_NAME="Doesn't exists a room with that name %s";
 
     // Schedule Service
-    public static final String MESSAGE_BAD_REQUEST_CREATE_SCHEDULE="That schedule already created";
+    public static final String MESSAGE_BAD_REQUEST_CREATE_SCHEDULE="This schedule is already created";
     public static final String MESSAGE_NOT_FOUND_SCHEDULE_ID="Doesn't exist a schedule with that id %s";
 }
