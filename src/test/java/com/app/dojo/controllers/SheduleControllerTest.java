@@ -27,7 +27,7 @@ class SheduleControllerTest {
   void init(){
     this.scheduleDTO= new ScheduleDTOBuilder()
         .setDayName("Martes")
-        .setHoursClass("10:00-12:00")
+        .setHoursClass("12:00-14:00")
         .build();
   }
 
@@ -39,5 +39,12 @@ class SheduleControllerTest {
     assertEquals(201,response.getStatusCodeValue());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     assertNotNull(response.getBody());
+  }
+  @Order(2)
+  @DisplayName("Test schedule Controller, failure when trying to create a schedule that already exists")
+  @Test
+  void failCreate(){
+    ResponseEntity<ScheduleDTO> response=testRestTemplate.postForEntity(url,scheduleDTO,ScheduleDTO.class);
+    assertEquals(400,response.getStatusCodeValue());
   }
 }
