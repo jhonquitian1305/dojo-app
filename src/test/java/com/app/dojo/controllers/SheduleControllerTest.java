@@ -10,9 +10,14 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +35,7 @@ class SheduleControllerTest {
   void init(){
     this.scheduleDTO= new ScheduleDTOBuilder()
         .setDayName("Martes")
-        .setHoursClass("12:00-14:00")
+        .setHoursClass("16:00-18:00")
         .build();
   }
 
@@ -79,5 +84,20 @@ class SheduleControllerTest {
   void failFinOne(){
     ResponseEntity<ScheduleDTO> response=this.testRestTemplate.getForEntity(url+"/187",ScheduleDTO.class);
     assertEquals(404,response.getStatusCodeValue());
+  }
+  @Order(6)
+  @Test
+  @DisplayName("Test Schedule Controller, test to delete a schedule")
+  void delete() throws Exception{
+    ResponseEntity<ScheduleResponse> response=testRestTemplate.getForEntity(url,ScheduleResponse.class);
+    assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+
+    Map<String,Long> pathVariables= new HashMap<>();
+    pathVariables.put("id",1L);
+
+    ResponseEntity<Void> exchange=testRestTemplate.exchange(url+"/1", HttpMethod.DELETE,null,Void.class,pathVariables);
+
+    assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
+    assertEquals(204,exchange.getStatusCodeValue());
   }
 }
