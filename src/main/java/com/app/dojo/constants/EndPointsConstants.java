@@ -15,4 +15,7 @@ public final class EndPointsConstants {
 
     // Shedule
     public static final String ENDPOINT_SCHEDULE="/api/dojo-app/schedules";
+
+    // Levels
+    public static final String ENDPOINT_LEVELS="/api/dojo-app/levels";
 }
