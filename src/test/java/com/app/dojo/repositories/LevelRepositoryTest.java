@@ -53,4 +53,17 @@ class LevelRepositoryTest {
         assertEquals(levelSaved.getName(),levelFound.get().getName());
     }
 
+    @Test
+    @DisplayName("Test Repository level, test find a level")
+    void findByName(){
+        //given
+        Level levelSaved=this.levelRepository.save(level);
+        //when
+        Optional<Level> levelFound=this.levelRepository.findByName(levelSaved.getName());
+        //then
+        assertThat(levelFound.get()).isNotNull();
+        assertTrue(levelFound.isPresent());
+        assertEquals(levelSaved.getName(),levelFound.get().getName());
+    }
+
 }
