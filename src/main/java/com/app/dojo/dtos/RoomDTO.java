@@ -1,12 +1,14 @@
 package com.app.dojo.dtos;
 
+import com.app.dojo.constants.Message;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class RoomDTO {
     private Long id;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = Message.FIELD_NULL)
+    @NotEmpty(message = Message.FIELD_EMPTY)
     private String roomName;
 
     public RoomDTO() {
