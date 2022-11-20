@@ -38,4 +38,10 @@ public class LevelController {
         LevelDTO levelFound=this.levelService.getOne(id);
         return ResponseEntity.ok(levelFound);
     }
+
+    @DeleteMapping(EndPointsConstants.ENDPOINT_ID)
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        this.levelService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
