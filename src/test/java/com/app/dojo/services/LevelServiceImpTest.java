@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.LevelDTOBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
 import com.app.dojo.dtos.LevelDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperLevel;
 import com.app.dojo.models.Level;
 import com.app.dojo.repositories.LevelRepository;
@@ -23,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -63,5 +66,19 @@ class LevelServiceImpTest {
         assertNotNull(levelSaved);
         assertEquals(levelDTO.getName(),levelSaved.getName());
         assertThat(levelSaved.getId()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("Test LevelService,")
+    void failCreate(){
+        //given
+        given(this.levelRepository.findByName(any(String.class))).willReturn(Optional.of(level));
+        //when
+        BadRequest exception= assertThrows(BadRequest.class,()->{
+            this.levelService.create(levelDTO);
+        });
+        //then
+        assertEquals("There is already a saved level with that name: %s".formatted(level.getName()),exception.getMessage());
+        verify(this.levelRepository,never()).save(any(Level.class));
     }
 }
