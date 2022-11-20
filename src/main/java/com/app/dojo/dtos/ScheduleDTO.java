@@ -18,7 +18,7 @@ public class ScheduleDTO {
     @Size(max = 11)
     @Pattern(
             regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]-([01]?[0-9]|2[0-3]):[0-5][0-9]$",
-            message = "La horas de clase deben tener el siguiente formato 8:00-10:00"
+            message =Message.SCHEDULE_HOUR_FORMAT
     )
     private String hoursClass;
 

@@ -20,4 +20,7 @@ public final class Message {
 
     //Level
     public static final String LEVEL_NAME_SIZE="El nombre del nivel debe ser mínimo de 5 letras";
+
+    //Schedule
+    public static final String SCHEDULE_HOUR_FORMAT="La horas de clase deben tener el siguiente formato 8:00-10:00";
 }
