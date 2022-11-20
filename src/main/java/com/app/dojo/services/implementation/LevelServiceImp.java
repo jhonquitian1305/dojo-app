@@ -41,4 +41,9 @@ public class LevelServiceImp implements LevelService {
     public LevelDTO getOne(Long id) {
         return null;
     }
+
+    @Override
+    public void delete(Long id) {
+
+    }
 }

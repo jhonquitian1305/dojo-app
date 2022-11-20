@@ -7,4 +7,5 @@ public interface LevelService {
     LevelDTO create(LevelDTO levelDTO);
     LevelResponse getAll();
     LevelDTO getOne(Long id);
+    void delete(Long id);
 }
