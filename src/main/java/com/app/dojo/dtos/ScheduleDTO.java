@@ -1,5 +1,7 @@
 package com.app.dojo.dtos;
 
+import com.app.dojo.constants.Message;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -7,12 +9,12 @@ import javax.validation.constraints.Size;
 
 public class ScheduleDTO {
     private Long id;
-    @NotEmpty(message = "El día no puede ser vacío")
-    @NotNull(message = "El día no puede ser nulo")
+    @NotEmpty(message = Message.FIELD_EMPTY)
+    @NotNull(message = Message.FIELD_NULL)
     @Size(max =9 )
     private String dayName;
-    @NotEmpty(message = "Las horas de clase no puede ser vacío")
-    @NotNull(message = "Las horas de clase no no puede ser nulo")
+    @NotEmpty(message = Message.FIELD_EMPTY)
+    @NotNull(message = Message.FIELD_NULL)
     @Size(max = 11)
     @Pattern(
             regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]-([01]?[0-9]|2[0-3]):[0-5][0-9]$",
