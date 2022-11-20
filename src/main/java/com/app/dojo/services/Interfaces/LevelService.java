@@ -5,7 +5,7 @@ import com.app.dojo.dtos.LevelResponse;
 
 public interface LevelService {
     LevelDTO create(LevelDTO levelDTO);
-    LevelResponse getAll();
+    LevelResponse getAll(int numberPage, int pageSize);
     LevelDTO getOne(Long id);
     void delete(Long id);
 }
