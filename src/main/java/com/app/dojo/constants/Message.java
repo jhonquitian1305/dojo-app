@@ -10,4 +10,7 @@ public final class Message {
     // Schedule Service
     public static final String MESSAGE_BAD_REQUEST_CREATE_SCHEDULE="This schedule is already created";
     public static final String MESSAGE_NOT_FOUND_SCHEDULE_ID="Doesn't exist a schedule with that id %s";
+
+    //Level Service
+    public static  final String MESSAGE_BAD_REQUEST_CREATE_LEVEL="There is already a saved level with that name: %s";
 }
