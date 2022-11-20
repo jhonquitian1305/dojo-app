@@ -32,4 +32,10 @@ public class LevelController {
     ){
         return ResponseEntity.ok(this.levelService.getAll(numberPage,pageSize));
     }
+
+    @GetMapping(EndPointsConstants.ENDPOINT_ID)
+    public ResponseEntity<LevelDTO> getOne(@PathVariable("id") Long id){
+        LevelDTO levelFound=this.levelService.getOne(id);
+        return ResponseEntity.ok(levelFound);
+    }
 }

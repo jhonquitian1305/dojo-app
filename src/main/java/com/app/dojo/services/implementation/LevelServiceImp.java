@@ -5,6 +5,7 @@ import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.LevelDTO;
 import com.app.dojo.dtos.LevelResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperLevel;
 import com.app.dojo.models.Level;
 import com.app.dojo.repositories.LevelRepository;
@@ -55,7 +56,9 @@ public class LevelServiceImp implements LevelService {
 
     @Override
     public LevelDTO getOne(Long id) {
-        return null;
+        Optional<Level> levelFound=this.levelRepository.findById(id);
+        if(levelFound.isEmpty()) throw  new NotFoundException("Doesn't exist level whit that id %s".formatted(id));
+        return mapperLevel.mapperLevelDTO(levelFound.get());
     }
 
     @Override
