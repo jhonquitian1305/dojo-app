@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,6 +38,19 @@ class LevelRepositoryTest {
 
         assertNotNull(levelSaved);
         assertThat(levelSaved.getId()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("Test Repository level, test find a level")
+    void getOne(){
+        //given
+        Level levelSaved=this.levelRepository.save(level);
+        //when
+        Optional<Level> levelFound=this.levelRepository.findById(levelSaved.getId());
+        //then
+        assertThat(levelFound.get()).isNotNull();
+        assertTrue(levelFound.isPresent());
+        assertEquals(levelSaved.getName(),levelFound.get().getName());
     }
 
 }
