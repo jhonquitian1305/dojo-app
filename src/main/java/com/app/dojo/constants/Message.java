@@ -17,6 +17,7 @@ public final class Message {
 
     //Level Service
     public static  final String MESSAGE_BAD_REQUEST_CREATE_LEVEL="There is already a saved level with that name: %s";
+    public static final String MESSAGE_NOT_FOUND_LEVEL_ID="There is no level with this identification %s";
 
     //Level
     public static final String LEVEL_NAME_SIZE="El nombre del nivel debe ser mínimo de 5 letras";

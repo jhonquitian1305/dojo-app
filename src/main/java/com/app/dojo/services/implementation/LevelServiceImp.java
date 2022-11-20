@@ -57,7 +57,7 @@ public class LevelServiceImp implements LevelService {
     @Override
     public LevelDTO getOne(Long id) {
         Optional<Level> levelFound=this.levelRepository.findById(id);
-        if(levelFound.isEmpty()) throw  new NotFoundException("Doesn't exist level whit that id %s".formatted(id));
+        if(levelFound.isEmpty()) throw  new NotFoundException(Message.MESSAGE_NOT_FOUND_LEVEL_ID.formatted(id));
         return mapperLevel.mapperLevelDTO(levelFound.get());
     }
 
