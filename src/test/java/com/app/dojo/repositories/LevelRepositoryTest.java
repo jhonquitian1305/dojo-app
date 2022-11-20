@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,4 +67,15 @@ class LevelRepositoryTest {
         assertEquals(levelSaved.getName(),levelFound.get().getName());
     }
 
+    @Test
+    @DisplayName("Test Repository Level, find all levels")
+    void getAll(){
+        //given
+        this.levelRepository.save(level);
+        //when
+        List<Level> allLevels=this.levelRepository.findAll();
+        //then
+        assertThat(allLevels.size()).isGreaterThan(0);
+        assertNotNull(allLevels);
+    }
 }
