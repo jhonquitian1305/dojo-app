@@ -78,4 +78,16 @@ class LevelRepositoryTest {
         assertThat(allLevels.size()).isGreaterThan(0);
         assertNotNull(allLevels);
     }
+
+    @Test
+    @DisplayName("Test Repository Level, delete a level")
+    void delete(){
+        //given
+        Level levelSaved=this.levelRepository.save(level);
+        //when
+        this.levelRepository.deleteById(levelSaved.getId());
+        //then
+        Optional<Level> levelFound=this.levelRepository.findById(levelSaved.getId());
+        assertThat(levelFound.isEmpty()).isTrue();
+    }
 }
