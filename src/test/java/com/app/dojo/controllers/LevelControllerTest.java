@@ -7,10 +7,14 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,5 +86,20 @@ class LevelControllerTest {
     void failFindOne(){
         ResponseEntity<LevelDTO> response=this.testRestTemplate.getForEntity(url+"/1878", LevelDTO.class);
         assertEquals(404,response.getStatusCodeValue());
+    }
+
+    @Order(6)
+    @Test
+    @DisplayName("Test LevelController, test to delete a level by its day")
+    void delete(){
+        ResponseEntity<LevelResponse> response=this.testRestTemplate.getForEntity(url,LevelResponse.class);
+        assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+
+        Map<String,Long> pathVariables= new HashMap<>();
+        pathVariables.put("id",1L);
+
+        ResponseEntity<Void> exchange=this.testRestTemplate.exchange(url+"/1", HttpMethod.DELETE,null, Void.class,pathVariables);
+        assertEquals(204,exchange.getStatusCodeValue());
+        assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
     }
 }
