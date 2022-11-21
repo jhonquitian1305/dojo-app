@@ -63,4 +63,16 @@ class LevelControllerTest {
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
         assertThat(response.getBody().getContent().size()).isGreaterThan(0);
     }
+
+    @Order(4)
+    @Test
+    @DisplayName("Test LevelController, Test to find a level by its id")
+    void findOne(){
+        ResponseEntity<LevelDTO> response=this.testRestTemplate.getForEntity(url+"/1", LevelDTO.class);
+        assertEquals(200,response.getStatusCodeValue());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        assertThat(response.getBody()).isNotNull();
+        assertEquals(1L,response.getBody().getId());
+    }
 }
