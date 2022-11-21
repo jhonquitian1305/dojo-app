@@ -54,7 +54,7 @@ class LevelControllerTest {
 
     @Order(3)
     @Test
-    @DisplayName("TEst LevelController, test to find all levels")
+    @DisplayName("Test LevelController, test to find all levels")
     void getAll(){
         ResponseEntity<LevelResponse> response=this.testRestTemplate.getForEntity(url,LevelResponse.class);
         assertEquals(200,response.getStatusCodeValue());
