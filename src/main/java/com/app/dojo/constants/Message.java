@@ -24,4 +24,7 @@ public final class Message {
 
     //Schedule
     public static final String SCHEDULE_HOUR_FORMAT="La horas de clase deben tener el siguiente formato 8:00-10:00";
+
+    //Courses
+    public static final String COURSES_PRICE="El precio del curso debe ser mayor a 0";
 }
