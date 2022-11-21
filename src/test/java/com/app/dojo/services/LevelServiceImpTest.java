@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
@@ -99,5 +100,19 @@ class LevelServiceImpTest {
         assertEquals(0,response.getNumberPage());
         assertEquals(1,response.getTotalElements());
         assertThat(response.getContent().size()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("Test LevelService, test to find a level")
+    void getOne(){
+        //given
+        given(this.levelRepository.findById(anyLong())).willReturn(Optional.of(level));
+        given(this.mapperLevel.mapperLevelDTO(any(Level.class))).willReturn(levelDTO);
+        //when
+        LevelDTO levelFound=this.levelService.getOne(level.getId());
+        // then
+        assertNotNull(levelFound);
+        assertEquals(level.getId(),levelFound.getId());
+        assertEquals(level.getName(),levelFound.getName());
     }
 }
