@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.LevelBuilder;
 import com.app.dojo.dtos.LevelDTO;
 import com.app.dojo.dtos.LevelResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperLevel;
 import com.app.dojo.models.Level;
 import com.app.dojo.repositories.LevelRepository;
@@ -114,5 +115,18 @@ class LevelServiceImpTest {
         assertNotNull(levelFound);
         assertEquals(level.getId(),levelFound.getId());
         assertEquals(level.getName(),levelFound.getName());
+    }
+
+    @Test
+    @DisplayName("Test LevelService, Test to verify failure when trying to find a level that doesn't exist")
+    void failFindOne(){
+        //given
+        given(this.levelRepository.findById(anyLong())).willReturn(Optional.empty());
+        //when
+        NotFoundException exception=assertThrows(NotFoundException.class,()->{
+           this.levelService.getOne(1L);
+        });
+        //then
+        assertEquals("There is no level with this identification %s".formatted(1L),exception.getMessage());
     }
 }
