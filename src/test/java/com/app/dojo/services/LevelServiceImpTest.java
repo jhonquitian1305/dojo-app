@@ -8,7 +8,6 @@ import com.app.dojo.mappers.MapperLevel;
 import com.app.dojo.models.Level;
 import com.app.dojo.repositories.LevelRepository;
 import com.app.dojo.services.implementation.LevelServiceImp;
-import com.app.dojo.services.implementation.ScheduleServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,7 +68,7 @@ class LevelServiceImpTest {
     }
 
     @Test
-    @DisplayName("Test LevelService,")
+    @DisplayName("Test LevelService, failure when trying to save a level that is already saved")
     void failCreate(){
         //given
         given(this.levelRepository.findByName(any(String.class))).willReturn(Optional.of(level));
