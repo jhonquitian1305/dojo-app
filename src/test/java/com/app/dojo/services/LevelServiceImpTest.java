@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.LevelDTOBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
 import com.app.dojo.dtos.LevelDTO;
+import com.app.dojo.dtos.LevelResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperLevel;
 import com.app.dojo.models.Level;
@@ -15,8 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,5 +84,20 @@ class LevelServiceImpTest {
         //then
         assertEquals("There is already a saved level with that name: %s".formatted(level.getName()),exception.getMessage());
         verify(this.levelRepository,never()).save(any(Level.class));
+    }
+
+    @Test
+    @DisplayName("Test LevelService, find all levels")
+    void getAll(){
+        //given
+        Page<Level> levels= new PageImpl<>(List.of(level));
+        given(this.levelRepository.findAll(any(Pageable.class))).willReturn(levels);
+        given(this.mapperLevel.mapperLevelDTO(any(Level.class))).willReturn(levelDTO);
+        //when
+        LevelResponse response=this.levelService.getAll(0,10);
+        //then
+        assertEquals(0,response.getNumberPage());
+        assertEquals(1,response.getTotalElements());
+        assertThat(response.getContent().size()).isGreaterThan(0);
     }
 }
