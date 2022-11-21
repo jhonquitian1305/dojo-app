@@ -30,8 +30,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -128,5 +128,18 @@ class LevelServiceImpTest {
         });
         //then
         assertEquals("There is no level with this identification %s".formatted(1L),exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Test LevelService, delete a level")
+    void delete(){
+        //given
+        given(this.levelRepository.findById(anyLong())).willReturn(Optional.of(level));
+        given(this.mapperLevel.mapperLevelDTO(any(Level.class))).willReturn(levelDTO);
+        willDoNothing().given(this.levelRepository).deleteById(anyLong());
+        //when
+        this.levelService.delete(anyLong());
+        //then
+        verify(levelRepository,times(1)).deleteById(anyLong());
     }
 }
