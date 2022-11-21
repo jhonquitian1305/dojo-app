@@ -29,4 +29,5 @@ public final class Message {
     public static final String COURSES_PRICE="El precio del curso debe ser mayor a 0";
     public static final String COURSES_LEVEL="El curo debe tener asignado un sólo nivel";
     public static final String COURSES_ROOM="El curso debe tener asignado mínimo un salón";
+    public static final String COURSES_SCHEDULE="El curso debe tener asignado mínimo un horario";
 }
