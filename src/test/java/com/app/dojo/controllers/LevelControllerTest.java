@@ -40,4 +40,13 @@ class LevelControllerTest {
         assertNotNull(response.getBody());
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     }
+
+    @Order(2)
+    @Test
+    @DisplayName("Test LevelController, verify failure when trying to create a level that is already saved")
+    void fialCreate(){
+        ResponseEntity<LevelDTO> response=this.testRestTemplate.postForEntity(url, levelDTO, LevelDTO.class);
+        assertEquals(400,response.getStatusCodeValue());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 }
