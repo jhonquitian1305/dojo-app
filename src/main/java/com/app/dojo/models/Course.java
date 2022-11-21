@@ -27,8 +27,15 @@ public class Course {
       inverseJoinColumns = @JoinColumn(name = "room_id")
   )
   private List<Room> rooms;
+  @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.MERGE})
+  @JoinTable(
+      name = "courses_schedules",
+      joinColumns = @JoinColumn(name ="course_id"),
+      inverseJoinColumns = @JoinColumn(name = "schedule_id")
+  )
+  private List<Schedule> schedules;
 
-  public Course(Long id, String name, Double price, Date startDate, Date finishDate,List<Level> levels,List<Room> rooms) {
+  public Course(Long id, String name, Double price, Date startDate, Date finishDate,List<Level> levels,List<Room> rooms,List<Schedule> schedules) {
     this.id = id;
     this.name = name;
     this.price = price;
@@ -36,6 +43,7 @@ public class Course {
     this.finishDate = finishDate;
     this.levels=levels;
     this.rooms=rooms;
+    this.schedules=schedules;
   }
 
   public Course() {
@@ -95,5 +103,13 @@ public class Course {
 
   public void setRooms(List<Room> rooms) {
     this.rooms = rooms;
+  }
+
+  public List<Schedule> getSchedules() {
+    return schedules;
+  }
+
+  public void setSchedules(List<Schedule> schedules) {
+    this.schedules = schedules;
   }
 }

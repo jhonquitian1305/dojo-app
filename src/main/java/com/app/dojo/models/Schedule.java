@@ -11,6 +11,8 @@ public class Schedule {
     private Long id;
     private String dayName;
     private String hoursClass;
+    @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    private List<Course> courses;
 
     public Schedule() {
     }
