@@ -75,4 +75,12 @@ class LevelControllerTest {
         assertThat(response.getBody()).isNotNull();
         assertEquals(1L,response.getBody().getId());
     }
+
+    @Order(5)
+    @Test
+    @DisplayName("Test LevelController, test to verify the failure when trying to find a level that doesn't exist")
+    void failFindOne(){
+        ResponseEntity<LevelDTO> response=this.testRestTemplate.getForEntity(url+"/1878", LevelDTO.class);
+        assertEquals(404,response.getStatusCodeValue());
+    }
 }
