@@ -2,6 +2,7 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.LevelDTOBuilder;
 import com.app.dojo.dtos.LevelDTO;
+import com.app.dojo.dtos.LevelResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = "test")
@@ -48,5 +50,17 @@ class LevelControllerTest {
         ResponseEntity<LevelDTO> response=this.testRestTemplate.postForEntity(url, levelDTO, LevelDTO.class);
         assertEquals(400,response.getStatusCodeValue());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Order(3)
+    @Test
+    @DisplayName("TEst LevelController, test to find all levels")
+    void getAll(){
+        ResponseEntity<LevelResponse> response=this.testRestTemplate.getForEntity(url,LevelResponse.class);
+        assertEquals(200,response.getStatusCodeValue());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+        assertThat(response.getBody().getContent().size()).isGreaterThan(0);
     }
 }
