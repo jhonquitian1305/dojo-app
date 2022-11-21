@@ -20,14 +20,22 @@ public class Course {
       inverseJoinColumns = @JoinColumn(name = "level_id")
   )
   private List<Level> levels;
+  @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.MERGE})
+  @JoinTable(
+      name = "courses_rooms",
+      joinColumns = @JoinColumn(name ="course_id"),
+      inverseJoinColumns = @JoinColumn(name = "room_id")
+  )
+  private List<Room> rooms;
 
-  public Course(Long id, String name, Double price, Date startDate, Date finishDate,List<Level> levels) {
+  public Course(Long id, String name, Double price, Date startDate, Date finishDate,List<Level> levels,List<Room> rooms) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.startDate = startDate;
     this.finishDate = finishDate;
     this.levels=levels;
+    this.rooms=rooms;
   }
 
   public Course() {
@@ -79,5 +87,13 @@ public class Course {
 
   public void setLevels(List<Level> levels) {
     this.levels = levels;
+  }
+
+  public List<Room> getRooms() {
+    return rooms;
+  }
+
+  public void setRooms(List<Room> rooms) {
+    this.rooms = rooms;
   }
 }

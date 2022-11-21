@@ -1,6 +1,7 @@
 package com.app.dojo.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -10,6 +11,8 @@ public class Room {
     private Long id;
     @Column(nullable = false, unique = true)
     private String roomName;
+    @ManyToMany(mappedBy = "rooms",fetch = FetchType.LAZY)
+    private List<Course> courses;
 
     public Room() {
     }
@@ -33,5 +36,13 @@ public class Room {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 }
