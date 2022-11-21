@@ -1,15 +1,41 @@
 package com.app.dojo.dtos;
 
+import com.app.dojo.constants.Message;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
 public class CourseDTO {
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
   private String name;
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
+  @Positive(message = Message.COURSES_PRICE)
   private Double price;
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date startDate;
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date finishDate;
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
+  @Size(min = 1, max = 1, message = Message.COURSES_LEVEL)
   private List<Long> levels;
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
+  @Size(min = 1,message = Message.COURSES_ROOM)
   private List<Long> rooms;
+  @NotNull(message = Message.FIELD_NULL)
+  @NotNull(message = Message.FIELD_EMPTY)
+  @Size(min = 1,message = Message.COURSES_SCHEDULE)
   private List<Long> schedules;
 
   public CourseDTO(String name, Double price, Date startDate, Date finishDate, List<Long> levels, List<Long> rooms, List<Long> schedules) {
