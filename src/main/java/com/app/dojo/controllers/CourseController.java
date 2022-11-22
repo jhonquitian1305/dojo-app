@@ -39,4 +39,10 @@ public class CourseController {
         return ResponseEntity.ok(this.courseService.getAll(numberPage,pageSize));
     }
 
+    @GetMapping(EndPointsConstants.ENDPOINT_ID)
+    public ResponseEntity<CourseDTOResponse> getOne(@PathVariable("id") Long id){
+        Course courseFound=this.courseService.getOne(id);
+        return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseFound));
+    }
+
 }

@@ -6,6 +6,7 @@ import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
 import com.app.dojo.models.Room;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +67,9 @@ public class CourseServiceImp  implements CourseService {
 
     @Override
     public Course getOne(Long id) {
-        return null;
+        Optional<Course> courseFound=this.courseRepository.findById(id);
+        if(courseFound.isEmpty()) throw new NotFoundException(Message.MESSAGE_NOT_FOUND_BY_ID_COURSES.formatted(id));
+        return courseFound.get();
     }
 
     @Override
