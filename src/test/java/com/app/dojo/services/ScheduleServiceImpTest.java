@@ -68,10 +68,10 @@ class ScheduleServiceImpTest {
     given(this.scheduleRepository.save(any(Schedule.class))).willReturn(schedule);
     given(this.scheduleRepository.findByDayNameAndHoursClass(scheduleDTO.getDayName(),scheduleDTO.getHoursClass())).willReturn(Optional.empty());
 
-    given(this.mapperSchedule.mapperScheduleDTO(any(Schedule.class))).willReturn(scheduleDTO);
+
     given(this.mapperSchedule.mapperSchedule(any(ScheduleDTO.class))).willReturn(schedule);
     //when
-    ScheduleDTO scheduleCreated=this.scheduleService.save(scheduleDTO);
+    Schedule scheduleCreated=this.scheduleService.save(scheduleDTO);
     //then
     assertNotNull(scheduleCreated);
     assertEquals(1L,scheduleCreated.getId());
@@ -98,9 +98,8 @@ class ScheduleServiceImpTest {
   void findOne(){
     //given
     given(this.scheduleRepository.findById(any(Long.class))).willReturn(Optional.of(schedule));
-    given(this.mapperSchedule.mapperScheduleDTO(any(Schedule.class))).willReturn(scheduleDTO);
     //when
-    ScheduleDTO scheduleDTOFound=this.scheduleService.findOne(any(Long.class));
+    Schedule scheduleDTOFound=this.scheduleService.findOne(any(Long.class));
     //then
     assertNotNull(scheduleDTOFound);
     assertEquals(schedule.getId(), scheduleDTOFound.getId());
