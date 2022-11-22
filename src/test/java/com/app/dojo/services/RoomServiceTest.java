@@ -64,9 +64,8 @@ class RoomServiceTest {
             given(this.roomRepository.findByRoomName(roomDTO.getRoomName())).willReturn(Optional.empty());
 
             given(this.mapperRoom.mapperRoom(any(RoomDTO.class))).willReturn(room);
-            given(this.mapperRoom.mapperRoomDTO(any(Room.class))).willReturn(roomDTO);
         // when
-            RoomDTO roomCreated=this.roomService.create(roomDTO);
+            Room roomCreated=this.roomService.create(roomDTO);
         // then
         assertNotNull(roomCreated);
         assertEquals(1L,roomCreated.getId());
@@ -94,12 +93,11 @@ class RoomServiceTest {
         given(this.roomRepository.findByRoomName(roomDTO.getRoomName())).willReturn(Optional.of(room));
         given(this.roomRepository.findById(anyLong())).willReturn(Optional.of(room));
 
-        given(this.mapperRoom.mapperRoomDTO(any(Room.class))).willReturn(roomDTO);
         // when
             //FindById
-            RoomDTO roomFoundById=this.roomService.findById(1L);
+            Room roomFoundById=this.roomService.findById(1L);
             // FindByName
-            RoomDTO roomFoundByName=this.roomService.findByName(roomDTO.getRoomName());
+            Room roomFoundByName=this.roomService.findByName(roomDTO.getRoomName());
         // Then
 
             //FindById
