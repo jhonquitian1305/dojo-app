@@ -8,38 +8,43 @@ import com.app.dojo.models.Schedule;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class GroupClassDTO {
     @NotNull(message = Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
+    @Size(min = 7,max = 7, message = Message.GROUP_CLASSES_CODE)
     private String code;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
+    @Size(min = 3,message = Message.GROUP_CLASSES_NAME)
     private String nameClass;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
-    @Positive
+    @Positive(message = Message.POSITIVE_VALUE)
     private Long totalHours;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
-    @Positive
+    @Positive(message = Message.POSITIVE_VALUE)
     private Long weeks;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
-    @Positive
+    @Positive(message = Message.POSITIVE_VALUE)
     private Long hoursPerWeek;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
-    private Course course;
+    private Long course;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
-    private List<Integer> rooms;
+    @Size(min = 1,message = Message.GROUP_CLASSES_ROOM)
+    private List<Long> rooms;
     @NotNull(message =Message.FIELD_NULL)
     @NotNull(message = Message.FIELD_EMPTY)
-    private List<Integer> schedules;
+    @Size(min = 1,message = Message.GROUP_CLASSES_SCHEDULE)
+    private List<Long> schedules;
 
-    public GroupClassDTO(String code, String nameClass, Long totalHours, Long weeks, Long hoursPerWeek, Course course, List<Integer> rooms, List<Integer> schedules) {
+    public GroupClassDTO(String code, String nameClass, Long totalHours, Long weeks, Long hoursPerWeek, Long course, List<Long> rooms, List<Long> schedules) {
         this.code = code;
         this.nameClass = nameClass;
         this.totalHours = totalHours;
@@ -92,27 +97,27 @@ public class GroupClassDTO {
         this.hoursPerWeek = hoursPerWeek;
     }
 
-    public Course getCourse() {
+    public Long getCourse() {
         return course;
     }
 
-    public void setCourse(Course course) {
+    public void setCourse(Long course) {
         this.course = course;
     }
 
-    public List<Integer> getRooms() {
+    public List<Long> getRooms() {
         return rooms;
     }
 
-    public void setRooms(List<Integer> rooms) {
+    public void setRooms(List<Long> rooms) {
         this.rooms = rooms;
     }
 
-    public List<Integer> getSchedules() {
+    public List<Long> getSchedules() {
         return schedules;
     }
 
-    public void setSchedules(List<Integer> schedules) {
+    public void setSchedules(List<Long> schedules) {
         this.schedules = schedules;
     }
 }
