@@ -46,4 +46,12 @@ public class Schedule {
     public void setHoursClass(String hoursClass) {
         this.hoursClass = hoursClass;
     }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 }
