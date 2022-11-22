@@ -7,6 +7,7 @@ import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
+import com.app.dojo.mappers.MapperCourse;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
 import com.app.dojo.models.Room;
@@ -35,14 +36,12 @@ public class CourseServiceImp  implements CourseService {
     @Autowired
     private LevelService levelService;
     @Autowired
-    private ScheduleServcie scheduleServcie;
-    @Autowired
-    private RoomService roomService;
+    private MapperCourse mapperCourse;
 
     @Override
     public Course create(CourseDTO courseDTO) throws Exception {
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
-        if(courseRepository.existsCourseByName(courseDTO.getName())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        if(courseRepository.existsCourseByName(courseDTO.getName().toUpperCase())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
        return this.courseRepository.save(
                 new CourseBuilder()
@@ -78,7 +77,13 @@ public class CourseServiceImp  implements CourseService {
 
     @Override
     public Course update(Long id, CourseDTO courseDTO) {
-        return null;
+        Course courseFound=getOne(id);
+
+        if(courseRepository.existsCourseByName(courseDTO.getName().toUpperCase())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
+
+        Level levelFound=this.levelService.getOne(courseDTO.getLevel());
+        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound));
     }
 
     @Override

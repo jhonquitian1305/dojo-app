@@ -45,4 +45,11 @@ public class CourseController {
         return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseFound));
     }
 
+
+    @PutMapping(EndPointsConstants.ENDPOINT_ID)
+    public  ResponseEntity<CourseDTOResponse> update(@PathVariable("id") Long id, @RequestBody() CourseDTO courseDTO){
+        Course courseUpdated=this.courseService.update(id, courseDTO);
+        return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseUpdated));
+    }
+
 }
