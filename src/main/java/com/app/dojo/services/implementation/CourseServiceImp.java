@@ -87,6 +87,22 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
+    public CourseResponse findByLevel(Long idLevel, int numberPage, int pageSize) {
+        Level levelFound=levelService.getOne(idLevel);
+        Pageable pageable= PageRequest.of(numberPage,pageSize);
+        Page<Course> coursesFound=this.courseRepository.findByLevel(levelFound,pageable);
+        if (coursesFound.getContent().size()==0) throw new NotFoundException(Message.MESSAGE_BAD_REQUEST_COURSES_BY_LEVEL.formatted(levelFound.getName()));
+        return new CourseResponseBuilder()
+                .setContent(coursesFound.getContent())
+                .setTotalPages(coursesFound.getTotalPages())
+                .setTotalElements(coursesFound.getTotalElements())
+                .setNumberPage(coursesFound.getNumber())
+                .setSizePage(coursesFound.getSize())
+                .setLastOne(coursesFound.isLast())
+                .build();
+    }
+
+    @Override
     public void delete(Long id) {
         getOne(id);
         this.courseRepository.deleteById(id);
