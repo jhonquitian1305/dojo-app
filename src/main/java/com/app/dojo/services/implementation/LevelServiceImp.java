@@ -30,12 +30,11 @@ public class LevelServiceImp implements LevelService {
     private MapperLevel mapperLevel;
 
     @Override
-    public LevelDTO create(LevelDTO levelDTO) {
+    public Level create(LevelDTO levelDTO) {
         Optional<Level> levelFound=this.levelRepository.findByName(levelDTO.getName().toUpperCase());
         if(levelFound.isPresent()) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_CREATE_LEVEL.formatted(levelDTO.getName()));
         levelDTO.setName(levelDTO.getName().toUpperCase());
-        Level levelSaved=this.levelRepository.save(mapperLevel.mapperLevel(levelDTO));
-        return mapperLevel.mapperLevelDTO(levelSaved);
+        return this.levelRepository.save(mapperLevel.mapperLevel(levelDTO));
     }
 
     @Override
@@ -55,10 +54,10 @@ public class LevelServiceImp implements LevelService {
     }
 
     @Override
-    public LevelDTO getOne(Long id) {
+    public Level getOne(Long id) {
         Optional<Level> levelFound=this.levelRepository.findById(id);
         if(levelFound.isEmpty()) throw  new NotFoundException(Message.MESSAGE_NOT_FOUND_LEVEL_ID.formatted(id));
-        return mapperLevel.mapperLevelDTO(levelFound.get());
+        return levelFound.get();
     }
 
     @Override
