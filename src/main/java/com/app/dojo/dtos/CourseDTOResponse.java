@@ -14,18 +14,14 @@ public class CourseDTOResponse {
     private Date startDate;
     private Date finishDate;
     private Level level;
-    private List<Room> rooms;
-    private List<Schedule> schedules;
 
-    public CourseDTOResponse(Long id, String name, Double price, Date startDate, Date finishDate, Level level, List<Room> rooms, List<Schedule> schedules) {
+    public CourseDTOResponse(Long id, String name, Double price, Date startDate, Date finishDate, Level level) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.level = level;
-        this.rooms = rooms;
-        this.schedules = schedules;
     }
 
     public CourseDTOResponse() {
@@ -77,21 +73,5 @@ public class CourseDTOResponse {
 
     public void setLevel(Level level) {
         this.level = level;
-    }
-
-    public List<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
-    }
-
-    public List<Schedule> getSchedules() {
-        return schedules;
-    }
-
-    public void setSchedules(List<Schedule> schedules) {
-        this.schedules = schedules;
     }
 }
