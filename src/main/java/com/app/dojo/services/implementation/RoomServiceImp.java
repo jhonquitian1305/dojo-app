@@ -29,31 +29,30 @@ public class RoomServiceImp implements RoomService {
     private MapperRoom mapperRoom;
 
     @Override
-    public RoomDTO create(RoomDTO roomDTO) throws BadRequest {
+    public Room create(RoomDTO roomDTO) throws BadRequest {
         Optional<Room> roomFound=this.roomRepository.findByRoomName(roomDTO.getRoomName());
         if(roomFound.isPresent()){
             throw new BadRequest(MESSAGE_BAD_REQUEST_CREATE_ROOM);
         }
-        Room roomCreated=this.roomRepository.save(mapperRoom.mapperRoom(roomDTO));
-        return mapperRoom.mapperRoomDTO(roomCreated);
+        return this.roomRepository.save(mapperRoom.mapperRoom(roomDTO));
     }
 
     @Override
-    public RoomDTO findById(Long id) throws Exception {
+    public Room findById(Long id) throws Exception {
         Optional<Room> roomFound= this.roomRepository.findById(id);
         if(!roomFound.isPresent()){
             throw new NotFoundException(MESSAGE_NOT_FOUND_ROOM_ID.formatted(id));
         }
-        return mapperRoom.mapperRoomDTO(roomFound.get());
+        return roomFound.get();
     }
 
     @Override
-    public RoomDTO findByName(String roomName) throws NotFoundException {
+    public Room findByName(String roomName) throws NotFoundException {
         Optional<Room> roomFound=this.roomRepository.findByRoomName(roomName);
         if(!roomFound.isPresent()){
             throw new NotFoundException(MESSAGE_NOT_FOUND_ROOM_NAME.formatted(roomName));
         }
-        return  mapperRoom.mapperRoomDTO(roomFound.get());
+        return  roomFound.get();
     }
 
     @Override
