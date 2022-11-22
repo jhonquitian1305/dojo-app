@@ -1,5 +1,6 @@
 package com.app.dojo.services.implementation;
 
+import com.app.dojo.builders.builderDTO.CourseResponseBuilder;
 import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.CourseDTO;
@@ -15,6 +16,9 @@ import com.app.dojo.services.Interfaces.LevelService;
 import com.app.dojo.services.Interfaces.RoomService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,8 +74,17 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
-    public CourseResponse getAll() {
-        return null;
+    public CourseResponse getAll(int numberPage, int pageSize) {
+        Pageable pageable= PageRequest.of(numberPage,pageSize);
+        Page<Course> coursesFound=this.courseRepository.findAll(pageable);
+        return new CourseResponseBuilder()
+                .setContent(coursesFound.getContent())
+                .setLastOne(coursesFound.isLast())
+                .setSizePage(coursesFound.getSize())
+                .setTotalElements(coursesFound.getTotalElements())
+                .setNumberPage(coursesFound.getNumber())
+                .setTotalPages(coursesFound.getTotalPages())
+                .build();
     }
 
     @Override
