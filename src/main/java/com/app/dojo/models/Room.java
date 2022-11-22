@@ -1,5 +1,7 @@
 package com.app.dojo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class Room {
     @Column(nullable = false, unique = true)
     private String roomName;
     @ManyToMany(mappedBy = "rooms",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Course> courses;
 
     public Room() {

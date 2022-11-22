@@ -1,5 +1,7 @@
 package com.app.dojo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,6 +12,7 @@ public class Level {
   private Long id;
   private String name;
   @ManyToMany(mappedBy = "levels",fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<Course> courses;
 
   public Level(Long id, String name) {

@@ -1,5 +1,7 @@
 package com.app.dojo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Schedule {
     private String dayName;
     private String hoursClass;
     @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Course> courses;
 
     public Schedule() {
