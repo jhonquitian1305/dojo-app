@@ -8,9 +8,9 @@ import com.app.dojo.models.Room;
 import java.util.List;
 
 public interface RoomService {
-    public RoomDTO create(RoomDTO roomDTO)throws Exception;
-    public RoomDTO findById(Long id) throws  Exception;
-    public RoomDTO findByName(String roomName) throws NotFoundException;
+    public Room create(RoomDTO roomDTO)throws Exception;
+    public Room findById(Long id) throws  Exception;
+    public Room findByName(String roomName) throws NotFoundException;
     public RoomResponse findAll(int numberPage, int pageSize);
     public void delete(Long id) throws Exception;
 }
