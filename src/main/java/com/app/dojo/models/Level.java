@@ -11,7 +11,8 @@ public class Level {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
-  @ManyToMany(mappedBy = "levels",fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.MERGE,CascadeType.PERSIST})
+  @JoinColumn(name = "level_id")
   @JsonIgnore
   private List<Course> courses;
 
