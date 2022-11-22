@@ -18,4 +18,7 @@ public final class EndPointsConstants {
 
     // Levels
     public static final String ENDPOINT_LEVELS="/api/dojo-app/levels";
+
+    // Courses
+    public static final String ENDPOINT_COURSES="/api/dojo-app/courses";
 }
