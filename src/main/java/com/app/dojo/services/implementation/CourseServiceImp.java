@@ -43,24 +43,14 @@ public class CourseServiceImp  implements CourseService {
     public Course create(CourseDTO courseDTO) throws Exception {
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
         if(courseRepository.existsCourseByName(courseDTO.getName())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
-
-        courseDTO.setRooms(courseDTO.getRooms().stream().distinct().collect(Collectors.toList()));
-        courseDTO.setSchedules(courseDTO.getSchedules().stream().distinct().collect(Collectors.toList()));
-
-        Level levelFound=this.findLevel(courseDTO.getLevel());
-        List<Room> roomsFound=this.findRooms(courseDTO.getRooms());
-        List<Schedule> schedulesFound=this.findSchedule(courseDTO.getSchedules());
-        hasCourseWithSimilarInformation(levelFound,roomsFound,schedulesFound);
-
-        return this.courseRepository.save(
+        Level levelFound=this.levelService.getOne(courseDTO.getLevel());
+       return this.courseRepository.save(
                 new CourseBuilder()
                         .setPrice(courseDTO.getPrice())
                         .setName(courseDTO.getName().toUpperCase())
                         .setStartDate(courseDTO.getStartDate())
                         .setFinishDate(courseDTO.getFinishDate())
                         .setLevel(levelFound)
-                        .setRooms(roomsFound)
-                        .setSchedules(schedulesFound)
                         .build()
         );
     }
@@ -95,32 +85,5 @@ public class CourseServiceImp  implements CourseService {
     public void delete(Long id) {
 
     }
-    protected Level findLevel(Long id){
-        return this.levelService.getOne(id);
-    }
 
-    protected List<Room> findRooms(List<Long> rooms)throws Exception{
-        List<Room> roomsFound=new ArrayList<>();
-        for (Long room:rooms){
-            roomsFound.add(this.roomService.findById(room));
-        }
-        return roomsFound;
-    }
-
-    protected List<Schedule> findSchedule(List<Long> schedules){
-        List<Schedule> schedulesFound=new ArrayList<>();
-        for(Long schedule:schedules){
-            schedulesFound.add(this.scheduleServcie.findOne(schedule));
-        }
-        return schedulesFound;
-    }
-
-    protected void hasCourseWithSimilarInformation(Level level,List<Room> rooms, List<Schedule> schedules){
-        for(Room room:rooms){
-            for (Schedule schedule: schedules){
-                boolean isPresent=this.courseRepository.existsCourseByLevelAndRoomsAndSchedules(level,room,schedule);
-                if (isPresent) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_SIMILAR_SCHEDULE.formatted(level.getName(),room.getRoomName(),schedule.getDayName(), schedule.getHoursClass()));
-            }
-        }
-    }
 }
