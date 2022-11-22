@@ -16,8 +16,6 @@ public class MapperCourse {
                 .setStartDate(course.getStartDate())
                 .setFinishDate(course.getFinishDate())
                 .setLevel(course.getLevel())
-                .setRooms(course.getRooms())
-                .setSchedules(course.getSchedules())
                 .build();
     }
 }
