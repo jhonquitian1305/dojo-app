@@ -4,6 +4,7 @@ import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.RoomDTO;
 import com.app.dojo.dtos.RoomResponse;
 import com.app.dojo.exception.errors.NotFoundException;
+import com.app.dojo.mappers.MapperRoom;
 import com.app.dojo.services.Interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,21 +21,23 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private MapperRoom mapperRoom;
     @PostMapping()
     public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO)throws Exception{
-        RoomDTO roomDTOCreated= this.roomService.create(roomDTO);
+        RoomDTO roomDTOCreated= mapperRoom.mapperRoomDTO(this.roomService.create(roomDTO));
         return new ResponseEntity(roomDTOCreated, HttpStatus.CREATED);
     }
 
     @GetMapping(ENDPOINT_ID)
     public ResponseEntity<RoomDTO> getById(@PathVariable Long id) throws Exception{
-        RoomDTO roomFound = this.roomService.findById(id);
+        RoomDTO roomFound = mapperRoom.mapperRoomDTO(this.roomService.findById(id));
         return ResponseEntity.ok(roomFound);
     }
 
     @GetMapping(ENDPOINT_ROOM_BY_NAME)
     public ResponseEntity<RoomDTO> getByName(@PathVariable("room") String room)throws NotFoundException{
-        RoomDTO roomFound = this.roomService.findByName(room);
+        RoomDTO roomFound = mapperRoom.mapperRoomDTO(this.roomService.findByName(room));
         return ResponseEntity.ok(roomFound);
     }
 
