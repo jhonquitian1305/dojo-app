@@ -29,23 +29,13 @@ public class CourseDTO {
   @NotNull(message = Message.FIELD_EMPTY)
   @Positive()
   private Long level;
-  @NotNull(message = Message.FIELD_NULL)
-  @NotNull(message = Message.FIELD_EMPTY)
-  @Size(min = 1,message = Message.COURSES_ROOM)
-  private List<Long> rooms;
-  @NotNull(message = Message.FIELD_NULL)
-  @NotNull(message = Message.FIELD_EMPTY)
-  @Size(min = 1,message = Message.COURSES_SCHEDULE)
-  private List<Long> schedules;
 
-  public CourseDTO(String name, Double price, Date startDate, Date finishDate, Long level, List<Long> rooms, List<Long> schedules) {
+  public CourseDTO(String name, Double price, Date startDate, Date finishDate, Long level) {
     this.name = name;
     this.price = price;
     this.startDate = startDate;
     this.finishDate = finishDate;
     this.level = level;
-    this.rooms = rooms;
-    this.schedules = schedules;
   }
 
   public CourseDTO() {
@@ -89,21 +79,5 @@ public class CourseDTO {
 
   public void setLevel(Long level) {
     this.level = level;
-  }
-
-  public List<Long> getRooms() {
-    return rooms;
-  }
-
-  public void setRooms(List<Long> rooms) {
-    this.rooms = rooms;
-  }
-
-  public List<Long> getSchedules() {
-    return schedules;
-  }
-
-  public void setSchedules(List<Long> schedules) {
-    this.schedules = schedules;
   }
 }
