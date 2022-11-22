@@ -73,11 +73,6 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
-    public Course getByName(String name) {
-        return null;
-    }
-
-    @Override
     public CourseResponse getAll(int numberPage, int pageSize) {
         Pageable pageable= PageRequest.of(numberPage,pageSize);
         Page<Course> coursesFound=this.courseRepository.findAll(pageable);
