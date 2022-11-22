@@ -61,6 +61,6 @@ public class CourseBuilder {
     return this;
   }
   public Course build(){
-    return  new Course(id,name,price,startDate,finishDate,level,rooms,schedules);
+    return  new Course(id,name,price,startDate,finishDate,level);
   }
 }
