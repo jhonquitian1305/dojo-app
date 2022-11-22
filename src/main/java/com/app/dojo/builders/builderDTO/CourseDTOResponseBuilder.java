@@ -1,0 +1,67 @@
+package com.app.dojo.builders.builderDTO;
+
+import com.app.dojo.dtos.CourseDTOResponse;
+import com.app.dojo.models.Level;
+import com.app.dojo.models.Room;
+import com.app.dojo.models.Schedule;
+
+import java.util.Date;
+import java.util.List;
+
+public class CourseDTOResponseBuilder {
+    private Long id;
+    private String name;
+    private Double price;
+    private Date startDate;
+    private Date finishDate;
+    private Level level;
+    private List<Room> rooms;
+    private List<Schedule> schedules;
+
+    public CourseDTOResponseBuilder() {
+    }
+
+    public CourseDTOResponseBuilder setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setPrice(Double price) {
+        this.price = price;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setStartDate(Date startDate) {
+        this.startDate = startDate;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setLevel(Level level) {
+        this.level = level;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+        return this;
+    }
+
+    public CourseDTOResponseBuilder setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+        return this;
+    }
+
+    public CourseDTOResponse build(){
+        return  new CourseDTOResponse(id,name,price,startDate,finishDate,level,rooms,schedules);
+    }
+}
