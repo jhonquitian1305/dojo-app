@@ -11,7 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Long> {
-    Optional<Course> findByName(String name);
     boolean existsCourseByName(String name);
-    boolean existsCourseByLevelAndRoomsAndSchedules(Level level, Room room, Schedule schedule);
 }
