@@ -3,7 +3,6 @@ package com.app.dojo.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +14,7 @@ public class Schedule {
     private String hoursClass;
     @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Course> courses;
+    private List<GroupClass> groupClasses;
 
     public Schedule() {
     }
@@ -50,11 +49,11 @@ public class Schedule {
         this.hoursClass = hoursClass;
     }
 
-    public List<Course> getCourses() {
-        return courses;
+    public List<GroupClass> getGroups() {
+        return groupClasses;
     }
 
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
+    public void setGroups(List<GroupClass> groupClasses) {
+        this.groupClasses = groupClasses;
     }
 }
