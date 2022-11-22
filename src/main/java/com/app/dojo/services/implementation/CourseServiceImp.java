@@ -88,7 +88,8 @@ public class CourseServiceImp  implements CourseService {
 
     @Override
     public void delete(Long id) {
-
+        getOne(id);
+        this.courseRepository.deleteById(id);
     }
 
 }

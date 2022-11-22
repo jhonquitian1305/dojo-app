@@ -52,4 +52,10 @@ public class CourseController {
         return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseUpdated));
     }
 
+    @DeleteMapping(EndPointsConstants.ENDPOINT_ID)
+    public ResponseEntity<Void> delete(@PathVariable("id")Long id){
+        this.courseService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
