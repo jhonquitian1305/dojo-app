@@ -1,5 +1,7 @@
 package com.app.dojo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -16,30 +18,20 @@ public class Course {
   @ManyToOne()
   @JoinColumn(name = "level_id")
   private Level level;
-  @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.MERGE})
-  @JoinTable(
-      name = "courses_rooms",
-      joinColumns = @JoinColumn(name ="course_id"),
-      inverseJoinColumns = @JoinColumn(name = "room_id")
-  )
-  private List<Room> rooms;
-  @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.MERGE})
-  @JoinTable(
-      name = "courses_schedules",
-      joinColumns = @JoinColumn(name ="course_id"),
-      inverseJoinColumns = @JoinColumn(name = "schedule_id")
-  )
-  private List<Schedule> schedules;
 
-  public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level,List<Room> rooms,List<Schedule> schedules) {
+  @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.MERGE,CascadeType.PERSIST})
+  @JoinColumn(name = "course_id")
+  @JsonIgnore
+  private List<GroupClass> groupClasses;
+
+
+  public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.startDate = startDate;
     this.finishDate = finishDate;
     this.level=level;
-    this.rooms=rooms;
-    this.schedules=schedules;
   }
 
   public Course() {
@@ -91,21 +83,5 @@ public class Course {
 
   public void setLevel(Level level) {
     this.level = level;
-  }
-
-  public List<Room> getRooms() {
-    return rooms;
-  }
-
-  public void setRooms(List<Room> rooms) {
-    this.rooms = rooms;
-  }
-
-  public List<Schedule> getSchedules() {
-    return schedules;
-  }
-
-  public void setSchedules(List<Schedule> schedules) {
-    this.schedules = schedules;
   }
 }
