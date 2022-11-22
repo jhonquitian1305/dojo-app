@@ -4,6 +4,7 @@ import com.app.dojo.constants.EndPointsConstants;
 import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.LevelDTO;
 import com.app.dojo.dtos.LevelResponse;
+import com.app.dojo.mappers.MapperLevel;
 import com.app.dojo.services.Interfaces.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,12 @@ import javax.validation.Valid;
 public class LevelController {
     @Autowired
     private LevelService levelService;
+    @Autowired
+    private MapperLevel mapperLevel;
 
     @PostMapping()
     public ResponseEntity<LevelDTO> create(@Valid @RequestBody() LevelDTO levelDTO) throws Exception{
-        LevelDTO levelSaved=this.levelService.create(levelDTO);
+        LevelDTO levelSaved=mapperLevel.mapperLevelDTO(this.levelService.create(levelDTO));
         return new ResponseEntity<>(levelSaved, HttpStatus.CREATED);
     }
 
@@ -35,7 +38,7 @@ public class LevelController {
 
     @GetMapping(EndPointsConstants.ENDPOINT_ID)
     public ResponseEntity<LevelDTO> getOne(@PathVariable("id") Long id){
-        LevelDTO levelFound=this.levelService.getOne(id);
+        LevelDTO levelFound=mapperLevel.mapperLevelDTO(this.levelService.getOne(id));
         return ResponseEntity.ok(levelFound);
     }
 
