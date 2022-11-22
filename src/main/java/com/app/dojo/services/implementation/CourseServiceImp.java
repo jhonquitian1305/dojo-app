@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImp  implements CourseService {
@@ -37,6 +38,9 @@ public class CourseServiceImp  implements CourseService {
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
         if(courseRepository.existsCourseByName(courseDTO.getName())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
 
+        courseDTO.setRooms(courseDTO.getRooms().stream().distinct().collect(Collectors.toList()));
+        courseDTO.setSchedules(courseDTO.getSchedules().stream().distinct().collect(Collectors.toList()));
+
         Level levelFound=this.findLevel(courseDTO.getLevel());
         List<Room> roomsFound=this.findRooms(courseDTO.getRooms());
         List<Schedule> schedulesFound=this.findSchedule(courseDTO.getSchedules());
@@ -45,7 +49,7 @@ public class CourseServiceImp  implements CourseService {
         return this.courseRepository.save(
                 new CourseBuilder()
                         .setPrice(courseDTO.getPrice())
-                        .setName(courseDTO.getName())
+                        .setName(courseDTO.getName().toUpperCase())
                         .setStartDate(courseDTO.getStartDate())
                         .setFinishDate(courseDTO.getFinishDate())
                         .setLevel(levelFound)

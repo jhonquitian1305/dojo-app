@@ -2,6 +2,8 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.constants.EndPointsConstants;
 import com.app.dojo.dtos.CourseDTO;
+import com.app.dojo.dtos.CourseDTOResponse;
+import com.app.dojo.mappers.MapperCourse;
 import com.app.dojo.models.Course;
 import com.app.dojo.services.Interfaces.CourseService;
 import org.apache.catalina.connector.Response;
@@ -21,9 +23,13 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private MapperCourse mapperCourse;
+
     @PostMapping()
-    public ResponseEntity<Course> create(@Valid @RequestBody CourseDTO courseDTO) throws Exception {
-        return new ResponseEntity<>(this.courseService.create(courseDTO), HttpStatus.CREATED);
+    public ResponseEntity<CourseDTOResponse> create(@Valid @RequestBody CourseDTO courseDTO) throws Exception {
+        CourseDTOResponse courseSaved=this.mapperCourse.mapperCourseDTOResponse(this.courseService.create(courseDTO));
+        return new ResponseEntity<>(courseSaved, HttpStatus.CREATED);
     }
 
 }
