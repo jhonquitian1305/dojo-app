@@ -3,8 +3,9 @@ package com.app.dojo.constants;
 public final class Message {
 
 
-    public static final String FIELD_NULL="El campo no puede ser nulo";
-    public static final String FIELD_EMPTY="El campo  no puede ser vacío";
+    public static final String FIELD_NULL="The field cannot be null";
+    public static final String FIELD_EMPTY="The field cannot be empty";
+    public static final String POSITIVE_VALUE="Field value must be greater than 0";
 
     // Room Service
     public static final String MESSAGE_BAD_REQUEST_CREATE_ROOM="Already exists one room with that name";
@@ -20,20 +21,23 @@ public final class Message {
     public static final String MESSAGE_NOT_FOUND_LEVEL_ID="There is no level with this identification %s";
 
     //Level
-    public static final String LEVEL_NAME_SIZE="El nombre del nivel debe ser mínimo de 5 letras";
+    public static final String LEVEL_NAME_SIZE="The name of the level must be at least 5 letters long.";
 
     //Schedule
-    public static final String SCHEDULE_HOUR_FORMAT="La horas de clase deben tener el siguiente formato 8:00-10:00";
+    public static final String SCHEDULE_HOUR_FORMAT="Classroom hours should be in the following format 08:00-10:00";
 
     //Courses
-    public static final String COURSES_PRICE="El precio del curso debe ser mayor a 0";
-    public static final String COURSES_LEVEL="El curo debe tener asignado un sólo nivel";
-    public static final String COURSES_ROOM="El curso debe tener asignado mínimo un salón";
-    public static final String COURSES_SCHEDULE="El curso debe tener asignado mínimo un horario";
+    public static final String COURSES_PRICE="The course fee must be greater than 0";
 
     //Course Service
     public static final String MESSAGE_BAD_REQUEST_COURSES_DATE="The end date of the course must be after the start date.";
     public static final String MESSAGE_BAD_REQUEST_COURSES_NAME="There is already a course saved under that name";
     public static final String MESSAGE_BAD_REQUEST_COURSES_BY_LEVEL="There aren't courses saved with level %s";
     public static final String MESSAGE_NOT_FOUND_BY_ID_COURSES="There is no course saved with that id %s";
+
+    // Group classes
+    public static final String GROUP_CLASSES_ROOM="The group must be assigned a minimum of one room";
+    public static final String GROUP_CLASSES_SCHEDULE="The group must be assigned a minimum of one schedule";
+    public static final String GROUP_CLASSES_NAME="The group name must be at least 3 characters long.";
+    public static final String GROUP_CLASSES_CODE="The code must be 7 characters in size";
 }
