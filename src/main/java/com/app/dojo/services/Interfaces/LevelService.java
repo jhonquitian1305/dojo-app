@@ -2,10 +2,11 @@ package com.app.dojo.services.Interfaces;
 
 import com.app.dojo.dtos.LevelDTO;
 import com.app.dojo.dtos.LevelResponse;
+import com.app.dojo.models.Level;
 
 public interface LevelService {
-    LevelDTO create(LevelDTO levelDTO);
+    Level create(LevelDTO levelDTO);
     LevelResponse getAll(int numberPage, int pageSize);
-    LevelDTO getOne(Long id);
+    Level getOne(Long id);
     void delete(Long id);
 }
