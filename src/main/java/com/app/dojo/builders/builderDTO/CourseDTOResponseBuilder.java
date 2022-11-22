@@ -15,8 +15,6 @@ public class CourseDTOResponseBuilder {
     private Date startDate;
     private Date finishDate;
     private Level level;
-    private List<Room> rooms;
-    private List<Schedule> schedules;
 
     public CourseDTOResponseBuilder() {
     }
@@ -51,17 +49,8 @@ public class CourseDTOResponseBuilder {
         return this;
     }
 
-    public CourseDTOResponseBuilder setRooms(List<Room> rooms) {
-        this.rooms = rooms;
-        return this;
-    }
-
-    public CourseDTOResponseBuilder setSchedules(List<Schedule> schedules) {
-        this.schedules = schedules;
-        return this;
-    }
 
     public CourseDTOResponse build(){
-        return  new CourseDTOResponse(id,name,price,startDate,finishDate,level,rooms,schedules);
+        return  new CourseDTOResponse(id,name,price,startDate,finishDate,level);
     }
 }
