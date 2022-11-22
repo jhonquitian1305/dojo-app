@@ -35,4 +35,5 @@ public final class Message {
     public static final String MESSAGE_BAD_REQUEST_COURSES_DATE="The end date of the course must be after the start date.";
     public static final String MESSAGE_BAD_REQUEST_COURSES_NAME="There is already a course saved under that name";
     public static final String MESSAGE_BAD_REQUEST_COURSES_SIMILAR_SCHEDULE="There is already a course regsitrated with the level %s, in the classroom %s with class on %s with the following schedule %s";
+    public static final String MESSAGE_NOT_FOUND_BY_ID_COURSES="There is no course saved with that id %s";
 }
