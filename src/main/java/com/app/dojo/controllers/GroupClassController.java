@@ -9,10 +9,7 @@ import com.app.dojo.services.Interfaces.GroupClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,5 +26,10 @@ public class GroupClassController {
     public ResponseEntity<GroupClassDTOResponse> create(@Valid @RequestBody()GroupClassDTO groupClassDTO) throws Exception {
         GroupClass groupSaved=this.groupClassService.create(groupClassDTO);
         return new ResponseEntity<>(mapperGroupClass.mapperGroupClassDTOResponse(groupSaved), HttpStatus.CREATED);
+    }
+    @GetMapping(EndPointsConstants.ENDPOINT_ID)
+    public ResponseEntity<GroupClassDTOResponse> getOne(@PathVariable("id") Long id){
+        GroupClass groupClassFound=this.groupClassService.getOne(id);
+        return ResponseEntity.ok(mapperGroupClass.mapperGroupClassDTOResponse(groupClassFound));
     }
 }

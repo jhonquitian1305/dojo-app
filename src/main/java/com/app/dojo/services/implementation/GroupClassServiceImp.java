@@ -5,6 +5,7 @@ import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.GroupClassDTO;
 import com.app.dojo.dtos.GroupClassResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.GroupClass;
 import com.app.dojo.models.Room;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +67,9 @@ public class GroupClassServiceImp implements GroupClassService {
 
     @Override
     public GroupClass getOne(Long id) {
-        return null;
+        Optional<GroupClass> groupFound=this.groupClassRepository.findById(id);
+        if(groupFound.isEmpty()) throw new NotFoundException("");
+        return groupFound.get();
     }
 
     @Override
