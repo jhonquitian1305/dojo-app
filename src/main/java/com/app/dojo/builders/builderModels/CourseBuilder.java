@@ -15,8 +15,6 @@ public class CourseBuilder {
   private Date startDate;
   private Date finishDate;
   private Level level;
-  private List<Room> rooms;
-  private List<Schedule> schedules;
 
   public CourseBuilder() {
   }
@@ -51,15 +49,6 @@ public class CourseBuilder {
     return this;
   }
 
-  public CourseBuilder setRooms(List<Room> rooms) {
-    this.rooms = rooms;
-    return this;
-  }
-
-  public CourseBuilder setSchedules(List<Schedule> schedules) {
-    this.schedules = schedules;
-    return this;
-  }
   public Course build(){
     return  new Course(id,name,price,startDate,finishDate,level);
   }
