@@ -1,8 +1,10 @@
 package com.app.dojo.controllers;
 
 import com.app.dojo.constants.EndPointsConstants;
+import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.GroupClassDTO;
 import com.app.dojo.dtos.GroupClassDTOResponse;
+import com.app.dojo.dtos.GroupClassResponse;
 import com.app.dojo.mappers.MapperGroupClass;
 import com.app.dojo.models.GroupClass;
 import com.app.dojo.services.Interfaces.GroupClassService;
@@ -26,6 +28,14 @@ public class GroupClassController {
     public ResponseEntity<GroupClassDTOResponse> create(@Valid @RequestBody()GroupClassDTO groupClassDTO) throws Exception {
         GroupClass groupSaved=this.groupClassService.create(groupClassDTO);
         return new ResponseEntity<>(mapperGroupClass.mapperGroupClassDTOResponse(groupSaved), HttpStatus.CREATED);
+    }
+
+    @GetMapping()
+    public  ResponseEntity<GroupClassResponse> getAll(
+            @RequestParam(value = "numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
+            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize
+    ){
+        return ResponseEntity.ok(this.groupClassService.getAll(numberPage,pageSize));
     }
     @GetMapping(EndPointsConstants.ENDPOINT_ID)
     public ResponseEntity<GroupClassDTOResponse> getOne(@PathVariable("id") Long id){

@@ -1,5 +1,6 @@
 package com.app.dojo.services.implementation;
 
+import com.app.dojo.builders.builderDTO.GroupClassResponseBuilder;
 import com.app.dojo.builders.builderModels.GroupClassBuilder;
 import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.GroupClassDTO;
@@ -16,6 +17,9 @@ import com.app.dojo.services.Interfaces.GroupClassService;
 import com.app.dojo.services.Interfaces.RoomService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -74,7 +78,17 @@ public class GroupClassServiceImp implements GroupClassService {
 
     @Override
     public GroupClassResponse getAll(int numberPage, int pageSize) {
-        return null;
+        Pageable pageable= PageRequest.of(numberPage,pageSize);
+        Page<GroupClass> allGroupClasses=this.groupClassRepository.findAll(pageable);
+        if(allGroupClasses.getContent().size()==0) throw new NotFoundException("");
+        return new GroupClassResponseBuilder()
+                .setContent(allGroupClasses.getContent())
+                .setLastOne(allGroupClasses.isLast())
+                .setNumberPage(allGroupClasses.getNumber())
+                .setSizePage(allGroupClasses.getSize())
+                .setTotalElements(allGroupClasses.getTotalElements())
+                .setTotalPages(allGroupClasses.getTotalPages())
+                .build();
     }
 
     @Override
