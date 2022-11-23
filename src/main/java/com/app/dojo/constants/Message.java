@@ -40,4 +40,10 @@ public final class Message {
     public static final String GROUP_CLASSES_SCHEDULE="The group must be assigned a minimum of one schedule";
     public static final String GROUP_CLASSES_NAME="The group name must be at least 3 characters long.";
     public static final String GROUP_CLASSES_CODE="The code must be 7 characters in size";
+
+    // GroupClass Service
+    public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_NAME="There is already a group saved with that name %s";
+    public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_HOURS="Hours per week do not coincide with the hours set in the schedule.";
+    public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_TOTAL_HOURS="Total hours do not match weeks entered and hours per week";
+    public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_ROOM_SCHEDULE="The %s room has already been assigned the %s schedule  on %s day";
 }
