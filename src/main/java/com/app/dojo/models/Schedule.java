@@ -14,7 +14,7 @@ public class Schedule {
     private String hoursClass;
     @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<GroupClass> groupClasses;
+    private List<GroupClass> groups;
 
     public Schedule() {
     }
@@ -50,10 +50,10 @@ public class Schedule {
     }
 
     public List<GroupClass> getGroups() {
-        return groupClasses;
+        return groups;
     }
 
     public void setGroups(List<GroupClass> groupClasses) {
-        this.groupClasses = groupClasses;
+        this.groups = groupClasses;
     }
 }

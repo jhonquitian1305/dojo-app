@@ -15,7 +15,7 @@ public class Room {
     private String roomName;
     @ManyToMany(mappedBy = "rooms",fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<GroupClass> groupClasses;
+    private List<GroupClass> groups;
 
     public Room() {
     }
@@ -42,10 +42,10 @@ public class Room {
     }
 
     public List<GroupClass> getGroups() {
-        return groupClasses;
+        return groups;
     }
 
     public void setGroups(List<GroupClass> groupClasses) {
-        this.groupClasses = groupClasses;
+        this.groups = groupClasses;
     }
 }
