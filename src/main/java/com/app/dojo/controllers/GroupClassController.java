@@ -2,6 +2,8 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.constants.EndPointsConstants;
 import com.app.dojo.dtos.GroupClassDTO;
+import com.app.dojo.dtos.GroupClassDTOResponse;
+import com.app.dojo.mappers.MapperGroupClass;
 import com.app.dojo.models.GroupClass;
 import com.app.dojo.services.Interfaces.GroupClassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,12 @@ public class GroupClassController {
 
     @Autowired
     private GroupClassService groupClassService;
+    @Autowired
+    private MapperGroupClass mapperGroupClass;
 
     @PostMapping()
-    public ResponseEntity<GroupClass> create(@Valid @RequestBody()GroupClassDTO groupClassDTO) throws Exception {
-        return new ResponseEntity<>(this.groupClassService.create(groupClassDTO), HttpStatus.CREATED);
+    public ResponseEntity<GroupClassDTOResponse> create(@Valid @RequestBody()GroupClassDTO groupClassDTO) throws Exception {
+        GroupClass groupSaved=this.groupClassService.create(groupClassDTO);
+        return new ResponseEntity<>(mapperGroupClass.mapperGroupClassDTOResponse(groupSaved), HttpStatus.CREATED);
     }
 }
