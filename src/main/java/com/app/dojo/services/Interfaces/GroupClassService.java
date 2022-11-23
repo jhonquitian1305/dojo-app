@@ -5,7 +5,7 @@ import com.app.dojo.dtos.GroupClassResponse;
 import com.app.dojo.models.GroupClass;
 
 public interface GroupClassService {
-    GroupClass create(GroupClassDTO groupClassDTO);
+    GroupClass create(GroupClassDTO groupClassDTO) throws Exception;
     GroupClass getOne(Long id);
     GroupClassResponse getAll(int numberPage, int pageSize);
     GroupClassResponse getByCourse(Long idCourse, int numberPage, int pageSize);
