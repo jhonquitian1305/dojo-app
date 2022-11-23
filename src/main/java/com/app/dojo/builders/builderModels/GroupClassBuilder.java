@@ -1,6 +1,7 @@
 package com.app.dojo.builders.builderModels;
 
 import com.app.dojo.models.Course;
+import com.app.dojo.models.GroupClass;
 import com.app.dojo.models.Room;
 import com.app.dojo.models.Schedule;
 
@@ -64,5 +65,9 @@ public class GroupClassBuilder {
     public GroupClassBuilder setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
         return this;
+    }
+
+    public GroupClass build(){
+        return new GroupClass(id,code,nameClass,totalHours,weeks,hoursPerWeek,course,rooms,schedules);
     }
 }
