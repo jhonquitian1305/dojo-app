@@ -46,4 +46,6 @@ public final class Message {
     public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_HOURS="Hours per week do not coincide with the hours set in the schedule.";
     public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_TOTAL_HOURS="Total hours do not match weeks entered and hours per week";
     public static final String MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_ROOM_SCHEDULE="The %s room has already been assigned the %s schedule  on %s day";
+    public static final String MESSAGE_NOT_FOUND_GET_ONE_GROUP_CLASS="There isn't a group saved with that id %s";
+    public static final String MESSAGE_NOT_FOUND_GET_All_GROUPS="There aren't groups saved";
 }
