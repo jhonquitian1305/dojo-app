@@ -72,7 +72,7 @@ public class GroupClassServiceImp implements GroupClassService {
     @Override
     public GroupClass getOne(Long id) {
         Optional<GroupClass> groupFound=this.groupClassRepository.findById(id);
-        if(groupFound.isEmpty()) throw new NotFoundException("");
+        if(groupFound.isEmpty()) throw new NotFoundException(Message.MESSAGE_NOT_FOUND_GET_ONE_GROUP_CLASS.formatted(id));
         return groupFound.get();
     }
 
@@ -80,7 +80,7 @@ public class GroupClassServiceImp implements GroupClassService {
     public GroupClassResponse getAll(int numberPage, int pageSize) {
         Pageable pageable= PageRequest.of(numberPage,pageSize);
         Page<GroupClass> allGroupClasses=this.groupClassRepository.findAll(pageable);
-        if(allGroupClasses.getContent().size()==0) throw new NotFoundException("");
+       if(allGroupClasses.getContent().size()==0) throw new NotFoundException(Message.MESSAGE_NOT_FOUND_GET_All_GROUPS);
         return new GroupClassResponseBuilder()
                 .setContent(allGroupClasses.getContent())
                 .setLastOne(allGroupClasses.isLast())
