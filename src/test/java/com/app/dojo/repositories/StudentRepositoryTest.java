@@ -74,4 +74,14 @@ public class StudentRepositoryTest  {
         assertNotNull(listStudents);
         assertEquals(2, listStudents.size());
     }
+
+    @DisplayName("Test repository to get a student by id")
+    @Test
+    void getOneById(){
+        this.studentRepository.save(student);
+
+        Student studentFound = this.studentRepository.findById(student.getId()).get();
+
+        assertNotNull(studentFound);
+    }
 }
