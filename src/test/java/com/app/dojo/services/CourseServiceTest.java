@@ -1,14 +1,19 @@
 package com.app.dojo.services;
 
+import com.app.dojo.builders.builderDTO.CourseDTOBuilder;
 import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
+import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.mappers.MapperCourse;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
 import com.app.dojo.repositories.CourseRepository;
 import com.app.dojo.services.Interfaces.LevelService;
+import com.app.dojo.services.implementation.CourseServiceImp;
 import com.app.dojo.services.strategyCourses.CoursesContext;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,10 +26,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
 class CourseServiceTest {
-  @InjectMocks
+  @Mock
   private LevelService levelService;
   @Mock
   private MapperCourse mapperCourse;
@@ -32,8 +40,11 @@ class CourseServiceTest {
   private CoursesContext coursesContext;
   @Mock
   private CourseRepository courseRepository;
+  @InjectMocks
+  private CourseServiceImp courseService;
   private Course course;
   private Level level;
+  private CourseDTO courseDTO;
 
   @BeforeEach
   void init() throws ParseException {
@@ -53,7 +64,27 @@ class CourseServiceTest {
         .setPrice(200000.0)
         .setLevel(level)
         .build();
+
+    courseDTO=new CourseDTOBuilder()
+        .setName("CINTA NEGRA PRINCIPIANTES")
+        .setStartDate(startDate)
+        .setFinishDate(finishDate)
+        .setPrice(200000.0)
+        .setLevel(1L)
+        .build();
   }
 
+  @Test
+  @DisplayName("Test CourseService, create a course")
+  void create() throws Exception {
+    //given
+    given(this.courseRepository.existsCourseByName(anyString())).willReturn(false);
+    given(this.courseRepository.save(any(Course.class))).willReturn(course);
+    given(this.levelService.getOne(anyLong())).willReturn(level);
+    //when
+    Course courseSaved=this.courseService.create(courseDTO);
+    //then
+    assertNotNull(courseSaved);
+  }
 
 }
