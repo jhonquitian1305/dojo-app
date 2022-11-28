@@ -19,7 +19,7 @@ public class GroupsContext {
     @Autowired
     private ScheduleServcie scheduleServcie;
 
-    public GroupsStrategy LoadStrategy(String modelCondition){
+    public GroupsStrategy loadStrategy(String modelCondition){
         switch (modelCondition){
             case "ROOM":
                 strategy= new GroupsRoom(groupClassRepository,roomService);
