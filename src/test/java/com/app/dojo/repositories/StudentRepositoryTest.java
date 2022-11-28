@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,5 +106,16 @@ public class StudentRepositoryTest  {
 
         assertNotNull(studentFound);
         assertEquals(student.getEmail(), studentFound.getEmail());
+    }
+
+    @DisplayName("Test repository to delete a student")
+    @Test
+    void deleteOne(){
+        this.studentRepository.save(student);
+
+        this.studentRepository.deleteById(student.getId());
+        Optional<Student> studentDeleted = this.studentRepository.findById(student.getId());
+
+        assertThat(studentDeleted).isEmpty();
     }
 }
