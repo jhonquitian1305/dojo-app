@@ -10,6 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -33,16 +36,16 @@ class CourseRepositoryTest {
   private static Level level;
 
   @BeforeEach
-  void  init() throws ParseException {
+  void init() throws ParseException {
     // Format Date
-    SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-    Date startDate=format.parse("2022-06-01");
-    Date finishDate=format.parse("2022-06-30");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    Date startDate = format.parse("2022-06-01");
+    Date finishDate = format.parse("2022-06-30");
 
-    level= new LevelBuilder()
+    level = new LevelBuilder()
         .setName("CINTA NEGRA")
         .build();
-    course=new CourseBuilder()
+    course = new CourseBuilder()
         .setId(1L)
         .setName("CINTA NEGRA PRINCIPIANTES")
         .setStartDate(startDate)
@@ -53,12 +56,12 @@ class CourseRepositoryTest {
 
   @Test
   @DisplayName("Test CourseRepository, create a course")
-  void create(){
+  void create() {
     //given
-    Level levelSaved=this.levelRepository.save(level);
+    Level levelSaved = this.levelRepository.save(level);
     //when
     course.setLevel(levelSaved);
-    Course courseSaved=this.courseRepository.save(course);
+    Course courseSaved = this.courseRepository.save(course);
     //then
     assertNotNull(courseSaved);
     assertThat(courseSaved.getId()).isGreaterThan(0);
@@ -66,40 +69,57 @@ class CourseRepositoryTest {
 
   @Test
   @DisplayName("Test CourseRepository, find a course")
-  void findOne(){
+  void findOne() {
     //given
-    Level levelSaved=this.levelRepository.save(level);
+    Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
-    Course courseSaved=this.courseRepository.save(course);
+    Course courseSaved = this.courseRepository.save(course);
     //when
-    Optional<Course> courseFound=this.courseRepository.findById(courseSaved.getId());
+    Optional<Course> courseFound = this.courseRepository.findById(courseSaved.getId());
     //then
     assertTrue(courseFound.isPresent());
-    assertEquals(course.getName(),courseFound.get().getName());
+    assertEquals(course.getName(), courseFound.get().getName());
   }
 
   @Test
   @DisplayName("Test CourseRepository, verify if a course exists by name")
-  void existsCourseByName(){
+  void existsCourseByName() {
     //given
-    Level levelSaved=this.levelRepository.save(level);
+    Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
-    Course courseSaved=this.courseRepository.save(course);
+    Course courseSaved = this.courseRepository.save(course);
     //when
-    boolean isExist=this.courseRepository.existsCourseByName(courseSaved.getName());
+    boolean isExist = this.courseRepository.existsCourseByName(courseSaved.getName());
     //then
     assertTrue(isExist);
   }
 
   @Test
-  @DisplayName("Test CourseRepository, find all courses")
-  void getAll(){
+  @DisplayName("Test CourseRepository, find all courses by level")
+  void findByLevel() {
     //given
-    Level levelSaved=this.levelRepository.save(level);
+    Level levelSaved = this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+    Course courseSaved = this.courseRepository.save(course);
+    //when
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Course> coursesFound = this.courseRepository.findByLevel(levelSaved, pageable);
+    //then
+    assertThat(coursesFound.getContent().size()).isGreaterThan(0);
+    assertTrue(coursesFound.isLast());
+    assertThat(coursesFound.getTotalElements()).isEqualTo(1);
+  }
+
+
+  @Test
+  @DisplayName("Test CourseRepository, find all courses")
+  void getAll() {
+    //given
+    Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
     this.courseRepository.save(course);
     //when
-    List<Course> coursesFound=this.courseRepository.findAll();
+    List<Course> coursesFound = this.courseRepository.findAll();
     //then
     assertNotNull(coursesFound);
     assertThat(coursesFound.size()).isGreaterThan(0);
