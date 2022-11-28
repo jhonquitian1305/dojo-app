@@ -95,4 +95,15 @@ public class StudentRepositoryTest  {
         assertNotNull(studentFound);
         assertEquals(student.getDni(), studentFound.getDni());
     }
+
+    @DisplayName("Test repository to get a student by email")
+    @Test
+    void getOneByEmail(){
+        this.studentRepository.save(student);
+
+        Student studentFound = this.studentRepository.findStudentByEmail(student.getEmail());
+
+        assertNotNull(studentFound);
+        assertEquals(student.getEmail(), studentFound.getEmail());
+    }
 }
