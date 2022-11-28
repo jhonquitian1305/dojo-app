@@ -33,9 +33,11 @@ public class GroupClassController {
     @GetMapping()
     public  ResponseEntity<GroupClassResponse> getAll(
             @RequestParam(value = "numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
-            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize
-    ){
-        return ResponseEntity.ok(this.groupClassService.getAll(numberPage,pageSize));
+            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize,
+            @RequestParam(value="id",defaultValue = PaginationRequest.DEFAULT_ID,required = false) Long id,
+            @RequestParam(value="model",defaultValue =PaginationRequest.DEFAULT_MODEL,required = false) String model
+    ) throws Exception {
+        return ResponseEntity.ok(this.groupClassService.getAll(numberPage,pageSize,id,model));
     }
     @GetMapping(EndPointsConstants.ENDPOINT_ID)
     public ResponseEntity<GroupClassDTOResponse> getOne(@PathVariable("id") Long id){

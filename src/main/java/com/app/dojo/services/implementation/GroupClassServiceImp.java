@@ -16,6 +16,8 @@ import com.app.dojo.services.Interfaces.CourseService;
 import com.app.dojo.services.Interfaces.GroupClassService;
 import com.app.dojo.services.Interfaces.RoomService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
+import com.app.dojo.services.strategyGroups.GroupsContext;
+import com.app.dojo.services.strategyGroups.GroupsStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +40,8 @@ public class GroupClassServiceImp implements GroupClassService {
     private RoomService roomService;
     @Autowired
     private ScheduleServcie scheduleServcie;
+    @Autowired
+    private GroupsContext groupsContext;
 
     @Override
     public GroupClass create(GroupClassDTO groupClassDTO) throws Exception {
@@ -77,10 +81,14 @@ public class GroupClassServiceImp implements GroupClassService {
     }
 
     @Override
-    public GroupClassResponse getAll(int numberPage, int pageSize) {
-        Pageable pageable= PageRequest.of(numberPage,pageSize);
-        Page<GroupClass> allGroupClasses=this.groupClassRepository.findAll(pageable);
-       if(allGroupClasses.getContent().size()==0) throw new NotFoundException(Message.MESSAGE_NOT_FOUND_GET_All_GROUPS);
+    public GroupClassResponse getAll(int numberPage, int pageSize,Long idCondition, String modelCondition) throws Exception {
+
+        GroupsStrategy groupsStrategy=this.groupsContext.LoadStrategy(modelCondition.toUpperCase());
+        Pageable pageable=PageRequest.of(numberPage,pageSize);
+        Page<GroupClass> allGroupClasses=groupsStrategy.findGroups(pageable,idCondition);
+
+        if(allGroupClasses.getContent().size()==0) throw new NotFoundException(Message.MESSAGE_NOT_FOUND_GET_All_GROUPS);
+
         return new GroupClassResponseBuilder()
                 .setContent(allGroupClasses.getContent())
                 .setLastOne(allGroupClasses.isLast())
