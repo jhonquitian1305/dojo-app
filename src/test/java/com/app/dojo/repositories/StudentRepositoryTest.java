@@ -108,6 +108,20 @@ public class StudentRepositoryTest  {
         assertEquals(student.getEmail(), studentFound.getEmail());
     }
 
+    @DisplayName("Test repository when to search a student that not exists")
+    @Test
+    void studentNotFound(){
+        this.studentRepository.save(student);
+
+        Optional<Student> studentFoundId = this.studentRepository.findById(10L);
+        Student studentFoundDni = this.studentRepository.findStudentByDni("135792468");
+        Student studentFoundEmail = this.studentRepository.findStudentByEmail("jairomontoya@mail.com");
+
+        assertThat(studentFoundId.isEmpty()).isTrue();
+        assertNull(studentFoundDni);
+        assertNull(studentFoundEmail);
+    }
+
     @DisplayName("Test repository to delete a student")
     @Test
     void deleteOne(){
