@@ -77,6 +77,20 @@ class CourseRepositoryTest {
     assertTrue(courseFound.isPresent());
     assertEquals(course.getName(),courseFound.get().getName());
   }
+
+  @Test
+  @DisplayName("Test CourseRepository, verify if a course exists by name")
+  void existsCourseByName(){
+    //given
+    Level levelSaved=this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+    Course courseSaved=this.courseRepository.save(course);
+    //when
+    boolean isExist=this.courseRepository.existsCourseByName(courseSaved.getName());
+    //then
+    assertTrue(isExist);
+  }
+
   @Test
   @DisplayName("Test CourseRepository, find all courses")
   void getAll(){
