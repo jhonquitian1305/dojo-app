@@ -7,6 +7,7 @@ import com.app.dojo.dtos.GroupClassDTO;
 import com.app.dojo.dtos.GroupClassResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
+import com.app.dojo.mappers.MapperGroupClass;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.GroupClass;
 import com.app.dojo.models.Room;
@@ -42,6 +43,8 @@ public class GroupClassServiceImp implements GroupClassService {
     private ScheduleServcie scheduleServcie;
     @Autowired
     private GroupsContext groupsContext;
+    @Autowired
+    private MapperGroupClass mapperGroupClass;
 
     @Override
     public GroupClass create(GroupClassDTO groupClassDTO) throws Exception {
@@ -100,8 +103,23 @@ public class GroupClassServiceImp implements GroupClassService {
     }
 
     @Override
-    public GroupClass update(Long id, GroupClassDTO groupClassDTO) {
-        return null;
+    public GroupClass update(Long id, GroupClassDTO groupClassDTO) throws Exception {
+        GroupClass groupFound=this.getOne(id);
+        groupFound.setNameClass(verifySimilarName(groupFound.getNameClass(),groupClassDTO.getNameClass()));
+
+        groupClassDTO.setSchedules(uniqueValues(groupClassDTO.getSchedules()));
+        List<Schedule> schedulesFound=loadSchedules(groupClassDTO.getSchedules());
+
+        verifyHoursPerWeek(schedulesFound,groupClassDTO.getHoursPerWeek());
+        verifyTotalHours(groupClassDTO.getTotalHours(),groupClassDTO.getHoursPerWeek(),groupClassDTO.getWeeks());
+
+        groupClassDTO.setRooms(uniqueValues(groupClassDTO.getRooms()));
+        List<Room>roomsFound=loadRooms(groupClassDTO.getRooms());
+
+        verifyNewScheduleAndRoom(schedulesFound,roomsFound,id);
+        Course courseFound=this.courseService.getOne(groupClassDTO.getCourse());
+
+        return this.groupClassRepository.save(mapperGroupClass.updateInformation(groupFound,groupClassDTO,schedulesFound,roomsFound,courseFound));
     }
 
     @Override
@@ -147,6 +165,18 @@ public class GroupClassServiceImp implements GroupClassService {
         for (Schedule schedule:schedules){
             for (Room room:rooms){
                 if(groupClassRepository.existsGroupClassByRoomsAndSchedules(room,schedule))throw new BadRequest(Message.MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_ROOM_SCHEDULE.formatted(room.getRoomName(),schedule.getHoursClass(),schedule.getDayName()));
+            }
+        }
+    }
+    protected  String verifySimilarName(String oldName,String newName){
+        if(oldName.equalsIgnoreCase(newName)) return oldName;
+        if(this.groupClassRepository.existsGroupClassByNameClass(newName)) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_NAME.formatted(newName));
+        return  newName;
+    }
+    protected  void  verifyNewScheduleAndRoom(List<Schedule> schedules, List<Room> rooms,Long id){
+        for (Schedule schedule:schedules){
+            for (Room room:rooms){
+                if(this.groupClassRepository.existsGroupClassByRoomsAndSchedulesAndIdNot(room,schedule,id))throw new BadRequest(Message.MESSAGE_BAD_REQUEST_CREATE_GROUP_CLASS_ROOM_SCHEDULE.formatted(room.getRoomName(),schedule.getHoursClass(),schedule.getDayName()));
             }
         }
     }

@@ -45,6 +45,12 @@ public class GroupClassController {
         return ResponseEntity.ok(mapperGroupClass.mapperGroupClassDTOResponse(groupClassFound));
     }
 
+    @PutMapping(EndPointsConstants.ENDPOINT_ID)
+    public ResponseEntity<GroupClassDTOResponse> update(@PathVariable("id") Long id, @RequestBody() GroupClassDTO groupClassDTO) throws Exception {
+        GroupClass groupUpdated=this.groupClassService.update(id,groupClassDTO);
+        return ResponseEntity.ok(this.mapperGroupClass.mapperGroupClassDTOResponse(groupUpdated));
+    }
+
     @DeleteMapping(EndPointsConstants.ENDPOINT_ID)
     public  ResponseEntity<Void> delete(@PathVariable("id") Long id){
         this.groupClassService.delete(id);
