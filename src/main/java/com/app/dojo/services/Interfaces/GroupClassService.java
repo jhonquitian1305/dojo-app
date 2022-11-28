@@ -7,7 +7,7 @@ import com.app.dojo.models.GroupClass;
 public interface GroupClassService {
     GroupClass create(GroupClassDTO groupClassDTO) throws Exception;
     GroupClass getOne(Long id);
-    GroupClassResponse getAll(int numberPage, int pageSize);
+    GroupClassResponse getAll(int numberPage, int pageSize,Long idCondition, String modelCondition) throws Exception;
     GroupClassResponse getByCourse(Long idCourse, int numberPage, int pageSize);
     GroupClassResponse getByRoom(Long idRoom,int numberPage, int pageSize);
     GroupClassResponse getBySchedule(Long idSchedule, int numberPage, int pageSize);
