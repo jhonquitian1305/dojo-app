@@ -106,7 +106,8 @@ public class GroupClassServiceImp implements GroupClassService {
 
     @Override
     public void delete(Long id) {
-
+        GroupClass groupFound=this.getOne(id);
+        this.groupClassRepository.delete(groupFound);
     }
 
     protected List<Long> uniqueValues(List<Long> values){

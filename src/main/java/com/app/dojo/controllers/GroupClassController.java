@@ -44,4 +44,10 @@ public class GroupClassController {
         GroupClass groupClassFound=this.groupClassService.getOne(id);
         return ResponseEntity.ok(mapperGroupClass.mapperGroupClassDTOResponse(groupClassFound));
     }
+
+    @DeleteMapping(EndPointsConstants.ENDPOINT_ID)
+    public  ResponseEntity<Void> delete(@PathVariable("id") Long id){
+        this.groupClassService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
