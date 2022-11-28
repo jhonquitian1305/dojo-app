@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -75,5 +76,18 @@ class CourseRepositoryTest {
     //then
     assertTrue(courseFound.isPresent());
     assertEquals(course.getName(),courseFound.get().getName());
+  }
+  @Test
+  @DisplayName("Test CourseRepository, find all courses")
+  void getAll(){
+    //given
+    Level levelSaved=this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+    this.courseRepository.save(course);
+    //when
+    List<Course> coursesFound=this.courseRepository.findAll();
+    //then
+    assertNotNull(coursesFound);
+    assertThat(coursesFound.size()).isGreaterThan(0);
   }
 }
