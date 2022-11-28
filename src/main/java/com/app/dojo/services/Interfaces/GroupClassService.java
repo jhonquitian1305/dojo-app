@@ -8,7 +8,7 @@ public interface GroupClassService {
     GroupClass create(GroupClassDTO groupClassDTO) throws Exception;
     GroupClass getOne(Long id);
     GroupClassResponse getAll(int numberPage, int pageSize,Long idCondition, String modelCondition) throws Exception;
-    GroupClass update(Long id, GroupClassDTO groupClassDTO);
+    GroupClass update(Long id, GroupClassDTO groupClassDTO) throws Exception;
     void delete(Long id);
 
 }
