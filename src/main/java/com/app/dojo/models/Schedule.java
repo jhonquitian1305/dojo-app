@@ -1,7 +1,8 @@
 package com.app.dojo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,6 +12,9 @@ public class Schedule {
     private Long id;
     private String dayName;
     private String hoursClass;
+    @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<GroupClass> groups;
 
     public Schedule() {
     }
@@ -43,5 +47,13 @@ public class Schedule {
 
     public void setHoursClass(String hoursClass) {
         this.hoursClass = hoursClass;
+    }
+
+    public List<GroupClass> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<GroupClass> groupClasses) {
+        this.groups = groupClasses;
     }
 }

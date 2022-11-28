@@ -1,6 +1,9 @@
 package com.app.dojo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -10,6 +13,9 @@ public class Room {
     private Long id;
     @Column(nullable = false, unique = true)
     private String roomName;
+    @ManyToMany(mappedBy = "rooms",fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<GroupClass> groups;
 
     public Room() {
     }
@@ -33,5 +39,13 @@ public class Room {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public List<GroupClass> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<GroupClass> groupClasses) {
+        this.groups = groupClasses;
     }
 }

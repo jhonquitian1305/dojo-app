@@ -3,6 +3,7 @@ package com.app.dojo.controllers;
 import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.ScheduleDTO;
 import com.app.dojo.dtos.ScheduleResponse;
+import com.app.dojo.mappers.MapperSchedule;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,11 @@ public class SheduleController {
 
     @Autowired
     private ScheduleServcie scheduleServcie;
+    @Autowired
+    private MapperSchedule mapperSchedule;
     @PostMapping
     public ResponseEntity<ScheduleDTO> create(@Valid @RequestBody ScheduleDTO scheduleDTO ){
-        ScheduleDTO scheduleSaved=this.scheduleServcie.save(scheduleDTO);
+        ScheduleDTO scheduleSaved=mapperSchedule.mapperScheduleDTO(this.scheduleServcie.save(scheduleDTO));
         return  new ResponseEntity<>(scheduleSaved, HttpStatus.CREATED);
     }
 
@@ -35,7 +38,7 @@ public class SheduleController {
 
     @GetMapping(ENDPOINT_ID)
     public ResponseEntity<ScheduleDTO> getOne(@PathVariable("id") Long id){
-        ScheduleDTO scheduleDTO=this.scheduleServcie.findOne(id);
+        ScheduleDTO scheduleDTO=mapperSchedule.mapperScheduleDTO(this.scheduleServcie.findOne(id));
         return ResponseEntity.ok(scheduleDTO);
     }
 

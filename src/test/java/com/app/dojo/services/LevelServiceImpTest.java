@@ -65,9 +65,8 @@ class LevelServiceImpTest {
         given(this.levelRepository.save(any(Level.class))).willReturn(level);
 
         given(this.mapperLevel.mapperLevel(any(LevelDTO.class))).willReturn(level);
-        given(this.mapperLevel.mapperLevelDTO(any(Level.class))).willReturn(levelDTO);
         //when
-        LevelDTO levelSaved=this.levelService.create(levelDTO);
+        Level levelSaved=this.levelService.create(levelDTO);
         //then
         assertNotNull(levelSaved);
         assertEquals(levelDTO.getName(),levelSaved.getName());
@@ -108,9 +107,8 @@ class LevelServiceImpTest {
     void getOne(){
         //given
         given(this.levelRepository.findById(anyLong())).willReturn(Optional.of(level));
-        given(this.mapperLevel.mapperLevelDTO(any(Level.class))).willReturn(levelDTO);
         //when
-        LevelDTO levelFound=this.levelService.getOne(level.getId());
+        Level levelFound=this.levelService.getOne(level.getId());
         // then
         assertNotNull(levelFound);
         assertEquals(level.getId(),levelFound.getId());
@@ -135,7 +133,6 @@ class LevelServiceImpTest {
     void delete(){
         //given
         given(this.levelRepository.findById(anyLong())).willReturn(Optional.of(level));
-        given(this.mapperLevel.mapperLevelDTO(any(Level.class))).willReturn(levelDTO);
         willDoNothing().given(this.levelRepository).deleteById(anyLong());
         //when
         this.levelService.delete(anyLong());
