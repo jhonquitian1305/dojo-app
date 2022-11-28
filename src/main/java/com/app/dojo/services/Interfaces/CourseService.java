@@ -11,6 +11,5 @@ public interface CourseService {
     Course getOne(Long id);
     CourseResponse getAll(int numberPage, int pageSize);
     Course update(Long id, CourseDTO courseDTO);
-    CourseResponse findByLevel(Long idLevel,int numberPage, int pageSize );
     void delete(Long id);
 }
