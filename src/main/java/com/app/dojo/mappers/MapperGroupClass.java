@@ -29,7 +29,7 @@ public class MapperGroupClass {
     }
 
     public GroupClass updateInformation(GroupClass groupClass, GroupClassDTO groupClassDTO, List<Schedule> schedules, List<Room> rooms, Course course){
-        groupClass.setNameClass(groupClassDTO.getNameClass());
+        groupClass.setNameClass(groupClassDTO.getNameClass().toUpperCase());
         groupClass.setCode(groupClassDTO.getCode());
         groupClass.setHoursPerWeek(groupClassDTO.getHoursPerWeek());
         groupClass.setTotalHours(groupClassDTO.getTotalHours());
