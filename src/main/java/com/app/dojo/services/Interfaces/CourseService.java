@@ -9,8 +9,7 @@ import java.util.List;
 public interface CourseService {
     Course create(CourseDTO courseDTO) throws Exception;
     Course getOne(Long id);
-    CourseResponse getAll(int numberPage, int pageSize);
+    CourseResponse getAll(int numberPage, int pageSize,String model, Long idCondition);
     Course update(Long id, CourseDTO courseDTO);
-    CourseResponse findByLevel(Long idLevel,int numberPage, int pageSize );
     void delete(Long id);
 }

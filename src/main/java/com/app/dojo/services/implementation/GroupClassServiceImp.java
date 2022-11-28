@@ -86,7 +86,7 @@ public class GroupClassServiceImp implements GroupClassService {
     @Override
     public GroupClassResponse getAll(int numberPage, int pageSize,Long idCondition, String modelCondition) throws Exception {
 
-        GroupsStrategy groupsStrategy=this.groupsContext.LoadStrategy(modelCondition.toUpperCase());
+        GroupsStrategy groupsStrategy=this.groupsContext.loadStrategy(modelCondition.toUpperCase());
         Pageable pageable=PageRequest.of(numberPage,pageSize);
         Page<GroupClass> allGroupClasses=groupsStrategy.findGroups(pageable,idCondition);
 

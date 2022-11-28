@@ -34,24 +34,16 @@ public class CourseController {
     @GetMapping()
     public  ResponseEntity<CourseResponse> getAll(
             @RequestParam(value = "numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
-            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize
+            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize,@RequestParam(value="id",defaultValue = PaginationRequest.DEFAULT_ID,required = false) Long id,
+            @RequestParam(value="model",defaultValue =PaginationRequest.DEFAULT_MODEL,required = false) String model
     ){
-        return ResponseEntity.ok(this.courseService.getAll(numberPage,pageSize));
+        return ResponseEntity.ok(this.courseService.getAll(numberPage,pageSize,model,id));
     }
 
     @GetMapping(EndPointsConstants.ENDPOINT_ID)
     public ResponseEntity<CourseDTOResponse> getOne(@PathVariable("id") Long id){
         Course courseFound=this.courseService.getOne(id);
         return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseFound));
-    }
-
-    @GetMapping(EndPointsConstants.ENDPOINT_COURSE_BY_LEVEL)
-    public  ResponseEntity<CourseResponse> getByLevel(
-            @PathVariable("id") Long id,
-            @RequestParam(value = "numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
-            @RequestParam(value = "pageSize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false)int pageSize
-    ){
-        return ResponseEntity.ok(this.courseService.findByLevel(id,numberPage,pageSize));
     }
 
     @PutMapping(EndPointsConstants.ENDPOINT_ID)

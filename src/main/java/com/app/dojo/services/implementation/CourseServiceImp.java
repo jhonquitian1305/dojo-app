@@ -17,6 +17,8 @@ import com.app.dojo.services.Interfaces.CourseService;
 import com.app.dojo.services.Interfaces.LevelService;
 import com.app.dojo.services.Interfaces.RoomService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
+import com.app.dojo.services.strategyCourses.CoursesContext;
+import com.app.dojo.services.strategyCourses.CoursesStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +39,8 @@ public class CourseServiceImp  implements CourseService {
     private LevelService levelService;
     @Autowired
     private MapperCourse mapperCourse;
+    @Autowired
+    private CoursesContext coursesContext;
 
     @Override
     public Course create(CourseDTO courseDTO) throws Exception {
@@ -62,9 +66,11 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
-    public CourseResponse getAll(int numberPage, int pageSize) {
+    public CourseResponse getAll(int numberPage, int pageSize,String model, Long idCondition) {
         Pageable pageable= PageRequest.of(numberPage,pageSize);
-        Page<Course> coursesFound=this.courseRepository.findAll(pageable);
+        CoursesStrategy coursesStrategy =coursesContext.loadStrategy(model.toUpperCase());
+        Page<Course> coursesFound=coursesStrategy.findCourses(pageable,idCondition);
+
         return new CourseResponseBuilder()
                 .setContent(coursesFound.getContent())
                 .setLastOne(coursesFound.isLast())
@@ -84,22 +90,6 @@ public class CourseServiceImp  implements CourseService {
 
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
         return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound));
-    }
-
-    @Override
-    public CourseResponse findByLevel(Long idLevel, int numberPage, int pageSize) {
-        Level levelFound=levelService.getOne(idLevel);
-        Pageable pageable= PageRequest.of(numberPage,pageSize);
-        Page<Course> coursesFound=this.courseRepository.findByLevel(levelFound,pageable);
-        if (coursesFound.getContent().size()==0) throw new NotFoundException(Message.MESSAGE_BAD_REQUEST_COURSES_BY_LEVEL.formatted(levelFound.getName()));
-        return new CourseResponseBuilder()
-                .setContent(coursesFound.getContent())
-                .setTotalPages(coursesFound.getTotalPages())
-                .setTotalElements(coursesFound.getTotalElements())
-                .setNumberPage(coursesFound.getNumber())
-                .setSizePage(coursesFound.getSize())
-                .setLastOne(coursesFound.isLast())
-                .build();
     }
 
     @Override
