@@ -100,21 +100,6 @@ public class GroupClassServiceImp implements GroupClassService {
     }
 
     @Override
-    public GroupClassResponse getByCourse(Long idCourse, int numberPage, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public GroupClassResponse getByRoom(Long idRoom, int numberPage, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public GroupClassResponse getBySchedule(Long idSchedule, int numberPage, int pageSize) {
-        return null;
-    }
-
-    @Override
     public GroupClass update(Long id, GroupClassDTO groupClassDTO) {
         return null;
     }
