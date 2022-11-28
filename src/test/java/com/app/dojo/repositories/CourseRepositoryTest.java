@@ -124,4 +124,17 @@ class CourseRepositoryTest {
     assertNotNull(coursesFound);
     assertThat(coursesFound.size()).isGreaterThan(0);
   }
+  @Test
+  @DisplayName("Test CourseRepository, test to delete a schedule")
+  void delete(){
+    //given
+    Level levelSaved = this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+    Course courseSaved=this.courseRepository.save(course);
+    //when
+    this.courseRepository.deleteById(courseSaved.getId());
+    //then
+    Optional<Course> courseFound=this.courseRepository.findById(courseSaved.getId());
+    assertTrue(courseFound.isEmpty());
+  }
 }
