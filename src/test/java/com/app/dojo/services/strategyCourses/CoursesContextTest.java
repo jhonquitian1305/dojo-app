@@ -17,7 +17,14 @@ class CoursesContextTest {
   @Test
   @DisplayName("Test CoursesContext, Test to get default strategy to find courses")
   void loadDefaultStrategy(){
-    CoursesStrategy levelStrategy=coursesContext.loadStrategy("DEFAULT");
+    CoursesStrategy defaultStrategy=coursesContext.loadStrategy("DEFAULT");
+    assertNotNull(defaultStrategy);
+  }
+
+  @Test
+  @DisplayName("Test CoursesContext, Test to get level strategy to find courses by level")
+  void loadLevelStrategy(){
+    CoursesStrategy levelStrategy=coursesContext.loadStrategy("LEVEL");
     assertNotNull(levelStrategy);
   }
 }
