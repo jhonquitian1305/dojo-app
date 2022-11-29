@@ -206,4 +206,20 @@ class CourseServiceTest {
     //then
     assertEquals("There is already a course saved under that name",badRequest.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CourseService, Check for failure when trying to update a course with wrong dates")
+  void failUpdateCourseWrongDates() throws ParseException {
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+    given(this.courseRepository.existsCourseByNameAndIdNot(anyString(),anyLong())).willReturn(false);
+    courseDTO.setFinishDate(format.parse("2022-05-14"));
+    courseDTO.setStartDate(format.parse("2022-06-14"));
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->{
+      this.courseService.update(anyLong(),courseDTO);
+    });
+    //then
+    assertEquals("The end date of the course must be after the start date.",badRequest.getMessage());
+  }
 }
