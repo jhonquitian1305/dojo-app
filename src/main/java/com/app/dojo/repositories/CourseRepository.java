@@ -14,5 +14,6 @@ import java.util.Optional;
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Long> {
     boolean existsCourseByName(String name);
+    boolean existsCourseByNameAndIdNot(String name,Long id);
     Page<Course> findByLevel(Level level, Pageable pageable);
 }
