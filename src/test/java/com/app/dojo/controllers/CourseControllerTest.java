@@ -44,4 +44,15 @@ class CourseControllerTest {
         .setLevel(2L)
         .build();
   }
+
+  @Order(1)
+  @Test
+  @DisplayName("Test CourseController, create a course")
+  void create(){
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(url,courseDTO,CourseDTOResponse.class);
+    assertEquals(201,response.getStatusCodeValue());
+    assertEquals(HttpStatus.CREATED,response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+  }
 }
