@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
 import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperCourse;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
@@ -129,5 +130,18 @@ class CourseServiceTest {
     assertEquals(200000.0,courseFound.getPrice());
     assertThat(courseFound.getLevel()).isNotNull();
     assertEquals("CINTA NEGRA PRINCIPIANTES",courseFound.getName());
+  }
+
+  @Test
+  @DisplayName("Test CourseService, verify failure in trying to find a course that doesn't exist")
+  void failGetOne(){
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->{
+        this.courseService.getOne(anyLong());
+    });
+    //then
+    assertEquals("There is no course saved with that id %s".formatted(0L),notFoundException.getMessage());
   }
 }
