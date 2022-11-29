@@ -235,4 +235,18 @@ class CourseServiceTest {
     //then
     verify(this.courseRepository,times(1)).deleteById(anyLong());
   }
+
+  @Test
+  @DisplayName("Test CourseService, Check for failure when trying to delete a course that doesn't exist")
+  void failDelete(){
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->{
+      this.courseService.delete(anyLong());
+    });
+    //then
+    assertEquals("There is no course saved with that id %s".formatted(0),notFoundException.getMessage());
+    verify(this.courseRepository,never()).deleteById(anyLong());
+  }
 }
