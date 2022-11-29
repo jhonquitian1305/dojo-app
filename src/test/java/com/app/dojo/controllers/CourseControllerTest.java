@@ -3,6 +3,7 @@ package com.app.dojo.controllers;
 import com.app.dojo.builders.builderDTO.CourseDTOBuilder;
 import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.dtos.CourseDTOResponse;
+import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.dtos.LevelDTO;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -73,5 +75,17 @@ class CourseControllerTest {
     ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(url,courseDTO,CourseDTOResponse.class);
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  @Order(4)
+  @Test
+  @DisplayName("Test CourseController, get all courses")
+  void getAllCourses(){
+    ResponseEntity<CourseResponse> response=this.testRestTemplate.getForEntity(url,CourseResponse.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(HttpStatus.OK,response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    assertThat(response.getBody().getContent().size()).isGreaterThan(0);
   }
 }
