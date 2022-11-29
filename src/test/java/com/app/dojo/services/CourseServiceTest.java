@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.CourseDTOBuilder;
 import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
 import com.app.dojo.dtos.CourseDTO;
+import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperCourse;
@@ -13,6 +14,8 @@ import com.app.dojo.repositories.CourseRepository;
 import com.app.dojo.services.Interfaces.LevelService;
 import com.app.dojo.services.implementation.CourseServiceImp;
 import com.app.dojo.services.strategyCourses.CoursesContext;
+import com.app.dojo.services.strategyCourses.CoursesStrategy;
+import org.apache.coyote.Request;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,21 +24,30 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
 class CourseServiceTest {
+
+  @Mock
+  private CoursesStrategy coursesStrategy;
   @Mock
   private LevelService levelService;
   @Mock
@@ -143,5 +155,24 @@ class CourseServiceTest {
     });
     //then
     assertEquals("There is no course saved with that id %s".formatted(0L),notFoundException.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CourseService, find all courses")
+  void findAll(){
+    //given
+    given(coursesContext.loadStrategy(anyString())).willReturn(coursesStrategy);
+    Page<Course>coursesFound=new PageImpl<>(List.of(course));
+    Pageable pageable= PageRequest.of(1,1);
+    given(coursesStrategy.findCourses(pageable,1L)).willReturn(coursesFound);
+    //when
+    CourseResponse allCourses=this.courseService.getAll(1,1,"LEVEL",1L);
+    //then
+    assertEquals(1,allCourses.getSizePage());
+    assertEquals(0,allCourses.getNumberPage());
+    assertEquals(1,allCourses.getTotalElements());
+    assertEquals(1,allCourses.getTotalPages());
+    assertTrue(allCourses.isLastOne());
+    assertThat(allCourses.getContent().size()).isGreaterThan(0);
   }
 }
