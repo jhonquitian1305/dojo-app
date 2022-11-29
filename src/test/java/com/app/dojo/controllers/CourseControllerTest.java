@@ -100,4 +100,15 @@ class CourseControllerTest {
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     assertThat(response.getBody().getContent().size()).isGreaterThan(0);
   }
+
+  @Order(6)
+  @Test
+  @DisplayName("Test CourseController, Test to find a course")
+  void getOne(){
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(url+"/1",CourseDTOResponse.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(HttpStatus.OK,response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+  }
 }
