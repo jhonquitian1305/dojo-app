@@ -1,5 +1,7 @@
 package com.app.dojo.services.strategyCourses;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,4 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CoursesContextTest {
   @InjectMocks
   private CoursesContext coursesContext;
+
+  @Test
+  @DisplayName("Test CoursesContext, Test to get default strategy to find courses")
+  void loadDefaultStrategy(){
+    CoursesStrategy levelStrategy=coursesContext.loadStrategy("DEFAULT");
+    assertNotNull(levelStrategy);
+  }
 }
