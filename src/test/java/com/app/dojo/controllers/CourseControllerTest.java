@@ -105,10 +105,19 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, Test to find a course")
   void getOne(){
-    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(url+"/1",CourseDTOResponse.class);
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(url+"/2",CourseDTOResponse.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(HttpStatus.OK,response.getStatusCode());
     assertNotNull(response.getBody());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+  }
+
+  @Order(7)
+  @Test
+  @DisplayName("Test CourseController, verify failure when trying to find a course that doesn't exist")
+  void failFindOne(){
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(url+"/676",CourseDTOResponse.class);
+    assertEquals(404,response.getStatusCodeValue());
+    assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
   }
 }
