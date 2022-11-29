@@ -85,7 +85,7 @@ public class CourseServiceImp  implements CourseService {
     public Course update(Long id, CourseDTO courseDTO) {
         Course courseFound=getOne(id);
 
-        if(courseRepository.existsCourseByName(courseDTO.getName().toUpperCase())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id)) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
 
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
