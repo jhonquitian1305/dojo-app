@@ -25,10 +25,12 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -113,5 +115,19 @@ class CourseServiceTest {
     });
     //then
     assertEquals("There is already a course saved under that name",exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CourseService, test to find a course by its id")
+  void getOne(){
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+    //when
+    Course courseFound=this.courseService.getOne(anyLong());
+    //Then
+    assertNotNull(courseFound);
+    assertEquals(200000.0,courseFound.getPrice());
+    assertThat(courseFound.getLevel()).isNotNull();
+    assertEquals("CINTA NEGRA PRINCIPIANTES",courseFound.getName());
   }
 }
