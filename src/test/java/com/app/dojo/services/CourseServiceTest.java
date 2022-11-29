@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.CourseDTOBuilder;
 import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
 import com.app.dojo.dtos.CourseDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperCourse;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
@@ -45,11 +46,11 @@ class CourseServiceTest {
   private Course course;
   private Level level;
   private CourseDTO courseDTO;
-
+  private static  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
   @BeforeEach
   void init() throws ParseException {
     // Format Date
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
     Date startDate = format.parse("2022-06-01");
     Date finishDate = format.parse("2022-06-30");
 
@@ -85,6 +86,20 @@ class CourseServiceTest {
     Course courseSaved=this.courseService.create(courseDTO);
     //then
     assertNotNull(courseSaved);
+  }
+
+  @Test
+  @DisplayName("Test CourseService, test to verify failre when trying to create a course with wrong dates")
+  void failByDatesCreateCourse() throws ParseException {
+    //given
+    courseDTO.setStartDate(format.parse("2022-05-08"));
+    courseDTO.setFinishDate(format.parse("2022-04-31"));
+    //when
+    BadRequest exception=assertThrows(BadRequest.class,()->{
+      this.courseService.create(courseDTO);
+    });
+    //then
+    assertEquals("The end date of the course must be after the start date.",exception.getMessage());
   }
 
 }
