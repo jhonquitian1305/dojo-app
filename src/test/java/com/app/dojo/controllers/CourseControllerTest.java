@@ -55,4 +55,14 @@ class CourseControllerTest {
     assertNotNull(response.getBody());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
   }
+  @Order(1)
+  @Test
+  @DisplayName("Test CourseController, verify failure when trying to create a course with wrong dates")
+  void failCreateCourseWithWrongDates() throws ParseException {
+    courseDTO.setStartDate(format.parse("2022-12-10"));
+    courseDTO.setFinishDate(format.parse("2022-11-10"));
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(url,courseDTO,CourseDTOResponse.class);
+    assertEquals(400,response.getStatusCodeValue());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
 }
