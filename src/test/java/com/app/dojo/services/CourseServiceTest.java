@@ -102,4 +102,16 @@ class CourseServiceTest {
     assertEquals("The end date of the course must be after the start date.",exception.getMessage());
   }
 
+  @Test
+  @DisplayName("Test CourseService, Test to verify failure when trying to create a course that is already saved")
+  void failCreateCourseExisting(){
+    //given
+    given(this.courseRepository.existsCourseByName(anyString())).willReturn(true);
+    //when
+    BadRequest exception=assertThrows(BadRequest.class,()->{
+      this.courseService.create(courseDTO);
+    });
+    //then
+    assertEquals("There is already a course saved under that name",exception.getMessage());
+  }
 }
