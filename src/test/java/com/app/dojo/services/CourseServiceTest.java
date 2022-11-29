@@ -192,4 +192,18 @@ class CourseServiceTest {
     assertThat(courseUpdated.getLevel()).isNotNull();
     assertThat(courseUpdated.getPrice()).isGreaterThan(0);
   }
+
+  @Test
+  @DisplayName("Test CourseService, Check for failure when trying to update a course with a name that is already in use")
+  void failUpdateCourseName(){
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+    given(this.courseRepository.existsCourseByNameAndIdNot(anyString(),anyLong())).willReturn(true);
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->{
+      this.courseService.update(anyLong(),courseDTO);
+    });
+    //then
+    assertEquals("There is already a course saved under that name",badRequest.getMessage());
+  }
 }
