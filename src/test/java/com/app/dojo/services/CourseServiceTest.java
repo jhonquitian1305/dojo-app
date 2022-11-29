@@ -40,7 +40,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -221,5 +222,17 @@ class CourseServiceTest {
     });
     //then
     assertEquals("The end date of the course must be after the start date.",badRequest.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CourseService, Delete a course")
+  void delete(){
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+    willDoNothing().given(this.courseRepository).deleteById(anyLong());
+    //when
+    this.courseService.delete(anyLong());
+    //then
+    verify(this.courseRepository,times(1)).deleteById(anyLong());
   }
 }
