@@ -175,4 +175,21 @@ class CourseServiceTest {
     assertTrue(allCourses.isLastOne());
     assertThat(allCourses.getContent().size()).isGreaterThan(0);
   }
+
+  @Test
+  @DisplayName("Test CourseService, test to update a course")
+  void update(){
+    //given
+    given(this.courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+    given(this.courseRepository.existsCourseByNameAndIdNot(anyString(),anyLong())).willReturn(false);
+    given(this.levelService.getOne(anyLong())).willReturn(level);
+    given(this.mapperCourse.updateInformation(any(Course.class),any(CourseDTO.class),any(Level.class))).willReturn(course);
+    given(this.courseRepository.save(any(Course.class))).willReturn(course);
+    //when
+    Course courseUpdated=this.courseService.update(anyLong(),courseDTO);
+    //then
+    assertNotNull(courseUpdated);
+    assertThat(courseUpdated.getLevel()).isNotNull();
+    assertThat(courseUpdated.getPrice()).isGreaterThan(0);
+  }
 }
