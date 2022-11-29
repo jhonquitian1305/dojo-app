@@ -88,4 +88,16 @@ class CourseControllerTest {
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     assertThat(response.getBody().getContent().size()).isGreaterThan(0);
   }
+
+  @Order(5)
+  @Test
+  @DisplayName("Test CourseController, Test to find courses by level")
+  void findCoursesByLevel(){
+    ResponseEntity<CourseResponse> response=this.testRestTemplate.getForEntity(url+"?id=2&model=level",CourseResponse.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(HttpStatus.OK,response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+  }
 }
