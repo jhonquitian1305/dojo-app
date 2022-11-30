@@ -4,9 +4,11 @@ import com.app.dojo.builders.builderDTO.StudentDTOBuilder;
 import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.dtos.StudentDTO;
 import com.app.dojo.models.Student;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MapperStudent {
-    public static Student mapStudent(StudentDTO studentDTO){
+    public Student mapStudent(StudentDTO studentDTO){
         return new StudentBuilder()
                 .setId(studentDTO.getId())
                 .setDni(studentDTO.getDni())
@@ -18,7 +20,7 @@ public class MapperStudent {
                 .build();
     }
 
-    public static StudentDTO mapStudentDTO(Student student){
+    public StudentDTO mapStudentDTO(Student student){
         return new StudentDTOBuilder()
                 .setId(student.getId())
                 .setDni(student.getDni())

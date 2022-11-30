@@ -25,16 +25,19 @@ public class StudentServiceImp implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private MapperStudent mapperStudent;
+
     @Override
     public StudentDTO saveStudent(StudentDTO studentDTO) {
         findStudentByDni(studentDTO.getDni());
         findStudentByEmail(studentDTO.getEmail());
 
-        Student student = MapperStudent.mapStudent(studentDTO);
+        Student student = mapperStudent.mapStudent(studentDTO);
 
         Student studentSaved = studentRepository.save(student);
 
-        return MapperStudent.mapStudentDTO(studentSaved);
+        return mapperStudent.mapStudentDTO(studentSaved);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class StudentServiceImp implements StudentService {
         Page<Student> studentsFound = studentRepository.findAll(pageable);
 
         List<Student> studentListFound = studentsFound.getContent();
-        List<StudentDTO> students = studentListFound.stream().map(MapperStudent::mapStudentDTO).collect(Collectors.toList());
+        List<StudentDTO> students = studentListFound.stream().map(mapperStudent::mapStudentDTO).collect(Collectors.toList());
 
         return new StudentResponseBuilder()
                 .setContent(students)
@@ -63,7 +66,7 @@ public class StudentServiceImp implements StudentService {
         if(studentFound.isEmpty()){
             throw new NotFoundException(String.format("Student with id %s doesn't exists", id));
         }
-        return MapperStudent.mapStudentDTO(studentFound.get());
+        return mapperStudent.mapStudentDTO(studentFound.get());
     }
 
     @Override
@@ -72,7 +75,7 @@ public class StudentServiceImp implements StudentService {
         if(studentFound == null){
             throw new NotFoundException(String.format("Student with dni %s doesn't exists", studentDTO.getDni()));
         }
-        return MapperStudent.mapStudentDTO(studentFound);
+        return mapperStudent.mapStudentDTO(studentFound);
     }
 
     @Override
