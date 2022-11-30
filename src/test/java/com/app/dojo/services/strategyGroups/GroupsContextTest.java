@@ -1,6 +1,5 @@
 package com.app.dojo.services.strategyGroups;
 
-import com.app.dojo.services.strategyCourses.CoursesContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -35,6 +33,13 @@ class GroupsContextTest {
   @DisplayName("Test GroupsContext, Test to load schedule strategy")
   void loadScheduleStrategy(){
     GroupsStrategy defaultStrategy=this.groupsContext.loadStrategy("SCHEDULE");
+    assertNotNull(defaultStrategy);
+  }
+
+  @Test
+  @DisplayName("Test GroupsContext, Test to load course strategy")
+  void loadCourseStrategy(){
+    GroupsStrategy defaultStrategy=this.groupsContext.loadStrategy("COURSE");
     assertNotNull(defaultStrategy);
   }
 }
