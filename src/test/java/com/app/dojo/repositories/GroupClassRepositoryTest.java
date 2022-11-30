@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -39,7 +40,6 @@ class GroupClassRepositoryTest {
 
   @BeforeEach()
   void init() throws ParseException {
-
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Date startDate = format.parse("2022-06-01");
     Date finishDate = format.parse("2022-06-30");
@@ -77,12 +77,8 @@ class GroupClassRepositoryTest {
         .setStartDate(startDate)
         .setFinishDate(finishDate)
         .build();
-  }
 
-  @Test
-  @DisplayName("Test GroupClassRepository, Test to create a new group")
-  void create(){
-    //given
+    //given all groups
     Level levelSaved=this.levelRepository.save(level);
     course.setLevel(levelSaved);
     Course courseSaved=this.courseRepository.save(course);
@@ -92,12 +88,18 @@ class GroupClassRepositoryTest {
 
     ArrayList<Room> rooms=new ArrayList<>();
     rooms.add(roomSaved);
+
     ArrayList<Schedule> schedules=new ArrayList<>();
     schedules.add(scheduleSaved);
 
     group.setRooms(rooms);
     group.setSchedules(schedules);
     group.setCourse(course);
+  }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, Test to create a new group")
+  void create(){
     //when
     GroupClass groupSaved=this.groupClassRepository.save(group);
     //then
@@ -110,4 +112,20 @@ class GroupClassRepositoryTest {
     );
   }
 
+  @Test
+  @DisplayName("Test GroupClassRepository, test to find one group")
+  void findOne(){
+    //given
+    GroupClass groupSaved=this.groupClassRepository.save(group);
+    //when
+    Optional<GroupClass> groupFound=this.groupClassRepository.findById(groupSaved.getId());
+    //then
+    assertAll(
+        ()->assertTrue(groupFound.isPresent()),
+        ()->assertNotNull(groupFound.get()),
+        ()->assertThat(groupFound.get().getSchedules().size()).isGreaterThan(0),
+        ()->assertThat(groupFound.get().getSchedules().size()).isGreaterThan(0),
+        ()->assertNotNull(groupFound.get().getCourse())
+    );
+  }
 }
