@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.StudentDTOBuilder;
 import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
 import com.app.dojo.repositories.StudentRepository;
@@ -22,8 +23,11 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -83,5 +87,18 @@ public class StudentServiceTest {
         StudentDTO studentSaved = this.studentService.saveStudent(this.studentDTO);
 
         assertNotNull(studentSaved);
+    }
+
+    @DisplayName("Test service to save a student when the dni exists")
+    @Test
+    void failSaveWhenDniExists(){
+        given(this.studentRepository.findStudentByDni(studentDTO.getDni())).willReturn(student);
+
+        assertThrows(BadRequest.class, () -> {
+            this.studentService.saveStudent(studentDTO);
+        });
+
+        verify(this.studentRepository, never()).save(any(Student.class));
+
     }
 }
