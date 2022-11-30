@@ -256,4 +256,28 @@ class GroupClassRepositoryTest {
         ()->assertTrue(groups.isLast())
     );
   }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, test to find groups by rooms")
+  void findByRoom(){
+    //given
+    Room roomSaved=this.roomRepository.save(room);
+
+    List<Room> rooms=new ArrayList<>();
+    rooms.add(roomSaved);
+    group.setRooms(rooms);
+
+    this.groupClassRepository.save(group);
+
+    //when
+    Pageable pageable=PageRequest.of(0,10);
+    Page<GroupClass> groups=this.groupClassRepository.findByRooms(roomSaved,pageable);
+    //then
+    assertAll(
+        ()->assertThat(groups.getContent().size()).isGreaterThan(0),
+        ()->assertEquals(1,groups.getTotalElements()),
+        ()->assertEquals(1,groups.getTotalPages()),
+        ()->assertTrue(groups.isLast())
+    );
+  }
 }
