@@ -43,6 +43,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -359,7 +362,7 @@ class GroupClassServiceTest {
   }
 
   @Test
-  @DisplayName("Test GroupClassService, Test to verify if there is a failure when trying to update a course with similar information")
+  @DisplayName("Test GroupClassService, Test to verify if there is a failure when trying to update a group with similar information")
   void failUpdate() throws Exception {
     //given
     List<Long> roomsAndSchedulesId=new ArrayList<>();
@@ -384,5 +387,17 @@ class GroupClassServiceTest {
     BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.update(anyLong(),groupClassDTO));
     //then
     assertEquals("The %s room has already been assigned the %s schedule  on %s day".formatted(room.getRoomName(),schedule.getHoursClass(),schedule.getDayName()),badRequest.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to delete a group")
+  void delete(){
+    //given
+    given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.of(group));
+    willDoNothing().given(this.groupClassRepository).delete(any(GroupClass.class));
+    //when
+    this.groupClassService.delete(anyLong());
+    //then
+    verify(this.groupClassRepository,times(1)).delete(any(GroupClass.class));
   }
 }
