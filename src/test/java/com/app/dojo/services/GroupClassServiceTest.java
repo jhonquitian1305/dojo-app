@@ -332,7 +332,7 @@ class GroupClassServiceTest {
     roomsAndSchedulesId.add(1L);
     groupClassDTO= new GroupClassDTOBuilder()
         .setCode("23456789")
-        .setNameClass("PRINCIPIANTES 01")
+        .setNameClass("PRINCIPIANTES 02")
         .setHoursPerWeek(2L)
         .setTotalHours(20L)
         .setWeeks(10L)
@@ -349,6 +349,7 @@ class GroupClassServiceTest {
     given(this.groupClassRepository.existsGroupClassByRoomsAndSchedulesAndIdNot(any(Room.class),any(Schedule.class),anyLong())).willReturn(false);
     given(this.groupClassRepository.save(any(GroupClass.class))).willReturn(group);
     given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.of(group));
+    given(this.groupClassRepository.existsGroupClassByNameClass(anyString())).willReturn(false);
     //when
     GroupClass groupUpdated=this.groupClassService.update(anyLong(),groupClassDTO);
     //then
