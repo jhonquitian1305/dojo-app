@@ -23,4 +23,11 @@ class GroupsContextTest {
     GroupsStrategy defaultStrategy=this.groupsContext.loadStrategy("DEFAULT");
     assertNotNull(defaultStrategy);
   }
+
+  @Test
+  @DisplayName("Test GroupsContext, Test to load room strategy")
+  void loadRoomStrategy(){
+    GroupsStrategy defaultStrategy=this.groupsContext.loadStrategy("ROOM");
+    assertNotNull(defaultStrategy);
+  }
 }
