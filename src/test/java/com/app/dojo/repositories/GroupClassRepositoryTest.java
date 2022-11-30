@@ -222,4 +222,16 @@ class GroupClassRepositoryTest {
     //then
     assertFalse(hasGroup);
   }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, test to find all groups")
+  void findAll(){
+    //given
+    this.groupClassRepository.save(group);
+    //when
+    List<GroupClass> groupsFound=this.groupClassRepository.findAll();
+    //then
+    assertNotNull(groupsFound);
+    assertThat(groupsFound.size()).isGreaterThan(0);
+  }
 }
