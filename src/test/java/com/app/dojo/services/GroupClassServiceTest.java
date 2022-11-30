@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.builders.builderModels.*;
 import com.app.dojo.dtos.GroupClassDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperGroupClass;
 import com.app.dojo.models.*;
 import com.app.dojo.repositories.GroupClassRepository;
@@ -141,5 +142,28 @@ class GroupClassServiceTest {
         ()->assertThat(groupSaved.getSchedules().size()).isGreaterThan(0),
         ()->assertThat(groupSaved.getRooms().size()).isGreaterThan(0)
     );
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService, test to check for failure when trying to create a group with an already saved name")
+  void failCreateGroupWithSimilarName(){
+    //given
+    List<Long> roomsAndSchedulesId=new ArrayList<>();
+    roomsAndSchedulesId.add(1L);
+    groupClassDTO= new GroupClassDTOBuilder()
+        .setCode("23456789")
+        .setNameClass("PRINCIPIANTES 01")
+        .setHoursPerWeek(2L)
+        .setTotalHours(20L)
+        .setWeeks(10L)
+        .setCourse(1L)
+        .setSchedules(roomsAndSchedulesId)
+        .setRooms(roomsAndSchedulesId)
+        .build();
+    given(this.groupClassRepository.existsGroupClassByNameClass(anyString())).willReturn(true);
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.create(groupClassDTO));
+    //then
+    assertEquals("There is already a group saved with that name %s".formatted(groupClassDTO.getNameClass()),badRequest.getMessage());
   }
 }
