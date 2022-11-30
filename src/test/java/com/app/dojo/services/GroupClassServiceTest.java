@@ -321,4 +321,40 @@ class GroupClassServiceTest {
     //then
     assertEquals("There aren't groups saved",notFoundException.getMessage());
   }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to update a group")
+  void update() throws Exception {
+    //given
+    List<Long> roomsAndSchedulesId=new ArrayList<>();
+    roomsAndSchedulesId.add(1L);
+    groupClassDTO= new GroupClassDTOBuilder()
+        .setCode("23456789")
+        .setNameClass("PRINCIPIANTES 01")
+        .setHoursPerWeek(2L)
+        .setTotalHours(20L)
+        .setWeeks(10L)
+        .setCourse(1L)
+        .setSchedules(roomsAndSchedulesId)
+        .setRooms(roomsAndSchedulesId)
+        .build();
+
+    given(this.courseService.getOne(anyLong())).willReturn(course);
+    given(this.scheduleServcie.findOne(anyLong())).willReturn(schedule);
+    given(this.roomService.findById(anyLong())).willReturn(room);
+    given(this.mapperGroupClass.updateInformation(group,groupClassDTO,List.of(schedule),List.of(room),course)).willReturn(group);
+
+    given(this.groupClassRepository.existsGroupClassByRoomsAndSchedulesAndIdNot(any(Room.class),any(Schedule.class),anyLong())).willReturn(false);
+    given(this.groupClassRepository.save(any(GroupClass.class))).willReturn(group);
+    given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.of(group));
+    //when
+    GroupClass groupUpdated=this.groupClassService.update(anyLong(),groupClassDTO);
+    //then
+    assertAll(
+        ()->assertNotNull(groupUpdated),
+        ()->assertNotNull(groupUpdated.getCourse()),
+        ()-> AssertionsForClassTypes.assertThat(groupUpdated.getSchedules().size()).isGreaterThan(0),
+        ()-> AssertionsForClassTypes.assertThat(groupUpdated.getRooms().size()).isGreaterThan(0)
+    );
+  }
 }
