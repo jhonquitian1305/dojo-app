@@ -13,6 +13,7 @@ import com.app.dojo.services.Interfaces.RoomService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import com.app.dojo.services.implementation.GroupClassServiceImp;
 import com.app.dojo.services.strategyGroups.GroupsContext;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -246,5 +248,21 @@ class GroupClassServiceTest {
     BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.create(groupClassDTO));
     //then
     assertEquals( "The %s room has already been assigned the %s schedule  on %s day".formatted(room.getRoomName(),schedule.getHoursClass(),schedule.getDayName()),badRequest.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService, test to find a group")
+  void findOne(){
+    //given
+    given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.of(group));
+    //when
+    GroupClass groupFound=this.groupClassService.getOne(anyLong());
+    //then
+    assertAll(
+        ()->assertNotNull(groupFound),
+        ()->assertNotNull(groupFound.getCourse()),
+        ()-> AssertionsForClassTypes.assertThat(groupFound.getSchedules().size()).isGreaterThan(0),
+        ()-> AssertionsForClassTypes.assertThat(groupFound.getRooms().size()).isGreaterThan(0)
+    );
   }
 }
