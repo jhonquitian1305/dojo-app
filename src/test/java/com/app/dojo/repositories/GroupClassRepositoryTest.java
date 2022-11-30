@@ -304,4 +304,16 @@ class GroupClassRepositoryTest {
         ()->assertTrue(groups.isLast())
     );
   }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, Test to delete a group")
+  void delete(){
+    //given
+    GroupClass groupSaved=this.groupClassRepository.save(group);
+    //when
+    this.groupClassRepository.deleteById(groupSaved.getId());
+    //then
+    Optional<GroupClass> groupFound=this.groupClassRepository.findById(groupSaved.getId());
+    assertTrue(groupFound.isEmpty());
+  }
 }
