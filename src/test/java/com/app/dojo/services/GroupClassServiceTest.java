@@ -2,6 +2,7 @@ package com.app.dojo.services;
 
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.builders.builderModels.*;
+import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.GroupClassDTO;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperGroupClass;
@@ -216,5 +217,34 @@ class GroupClassServiceTest {
     BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.create(groupClassDTO));
     //then
     assertEquals("Total hours do not match weeks entered and hours per week",badRequest.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService,test to check if there is a failure when trying to create a group with similar information")
+  void failCreateGroupWithSimilarInformation() throws Exception {
+    //given
+    List<Long> roomsAndSchedulesId=new ArrayList<>();
+    roomsAndSchedulesId.add(1L);
+    groupClassDTO= new GroupClassDTOBuilder()
+        .setCode("23456789")
+        .setNameClass("PRINCIPIANTES 01")
+        .setHoursPerWeek(2L)
+        .setTotalHours(20L)
+        .setWeeks(10L)
+        .setCourse(1L)
+        .setSchedules(roomsAndSchedulesId)
+        .setRooms(roomsAndSchedulesId)
+        .build();
+
+    given(this.scheduleServcie.findOne(anyLong())).willReturn(schedule);
+    given(this.roomService.findById(anyLong())).willReturn(room);
+
+    given(this.groupClassRepository.existsGroupClassByNameClass(anyString())).willReturn(false);
+    given(this.groupClassRepository.existsGroupClassByRoomsAndSchedules(any(Room.class),any(Schedule.class))).willReturn(true);
+
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.create(groupClassDTO));
+    //then
+    assertEquals( "The %s room has already been assigned the %s schedule  on %s day".formatted(room.getRoomName(),schedule.getHoursClass(),schedule.getDayName()),badRequest.getMessage());
   }
 }
