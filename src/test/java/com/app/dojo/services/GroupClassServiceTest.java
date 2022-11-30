@@ -44,8 +44,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -399,5 +398,17 @@ class GroupClassServiceTest {
     this.groupClassService.delete(anyLong());
     //then
     verify(this.groupClassRepository,times(1)).delete(any(GroupClass.class));
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to check if there is a failure when trying to delete a group that doesn't exist")
+  void failDelete(){
+    //given
+    given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->this.groupClassService.delete(anyLong()));
+    //then
+    verify(this.groupClassRepository,never()).delete(any(GroupClass.class));
+    assertEquals("There isn't a group saved with that id %s".formatted(0),notFoundException.getMessage());
   }
 }
