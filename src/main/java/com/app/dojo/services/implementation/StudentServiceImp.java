@@ -5,20 +5,16 @@ import com.app.dojo.dtos.StudentDTO;
 import com.app.dojo.dtos.StudentResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
-import com.app.dojo.mappers.StudentDTOMapper;
-import com.app.dojo.mappers.StudentMapper;
+import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
 import com.app.dojo.repositories.StudentRepository;
 import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,16 +25,19 @@ public class StudentServiceImp implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private MapperStudent mapperStudent;
+
     @Override
     public StudentDTO saveStudent(StudentDTO studentDTO) {
         findStudentByDni(studentDTO.getDni());
         findStudentByEmail(studentDTO.getEmail());
 
-        Student student = StudentMapper.mapStudent(studentDTO);
+        Student student = mapperStudent.mapStudent(studentDTO);
 
         Student studentSaved = studentRepository.save(student);
 
-        return StudentDTOMapper.mapStudentDTO(studentSaved);
+        return mapperStudent.mapStudentDTO(studentSaved);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class StudentServiceImp implements StudentService {
         Page<Student> studentsFound = studentRepository.findAll(pageable);
 
         List<Student> studentListFound = studentsFound.getContent();
-        List<StudentDTO> students = studentListFound.stream().map(StudentDTOMapper::mapStudentDTO).collect(Collectors.toList());
+        List<StudentDTO> students = studentListFound.stream().map(mapperStudent::mapStudentDTO).collect(Collectors.toList());
 
         return new StudentResponseBuilder()
                 .setContent(students)
@@ -67,7 +66,7 @@ public class StudentServiceImp implements StudentService {
         if(studentFound.isEmpty()){
             throw new NotFoundException(String.format("Student with id %s doesn't exists", id));
         }
-        return StudentDTOMapper.mapStudentDTO(studentFound.get());
+        return mapperStudent.mapStudentDTO(studentFound.get());
     }
 
     @Override
@@ -76,7 +75,7 @@ public class StudentServiceImp implements StudentService {
         if(studentFound == null){
             throw new NotFoundException(String.format("Student with dni %s doesn't exists", studentDTO.getDni()));
         }
-        return StudentDTOMapper.mapStudentDTO(studentFound);
+        return mapperStudent.mapStudentDTO(studentFound);
     }
 
     @Override
