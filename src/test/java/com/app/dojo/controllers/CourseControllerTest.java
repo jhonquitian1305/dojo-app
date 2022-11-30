@@ -1,6 +1,7 @@
 package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.CourseDTOBuilder;
+import com.app.dojo.builders.builderDTO.LevelDTOBuilder;
 import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.dtos.CourseDTOResponse;
 import com.app.dojo.dtos.CourseResponse;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,23 +31,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class CourseControllerTest {
   @Autowired
   private TestRestTemplate testRestTemplate;
-  private LevelDTO levelDTO;
-  private String url="http://localhost:8080/api/dojo-app/levels";
+  private String urlCourse ="http://localhost:8080/api/dojo-app/courses";
+  private String urlLevel ="http://localhost:8080/api/dojo-app/levels";
   private CourseDTO courseDTO;
   private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+  private LevelDTO levelDTO;
 
   @BeforeEach()
   void init() throws ParseException {
 
-    Date startDate = format.parse("2022-06-01");
+    Date startDate = format.parse("2022-05-01");
     Date finishDate = format.parse("2022-06-30");
 
     courseDTO=new CourseDTOBuilder()
-        .setName("CINTA BLANCA PRINCIPIANTES")
+        .setName("CINTA ORANGE AVANZADOS")
         .setStartDate(startDate)
         .setFinishDate(finishDate)
         .setPrice(200000.0)
-        .setLevel(3L)
+        .setLevel(1L)
+        .build();
+
+    levelDTO= new LevelDTOBuilder()
+        .setName("CINTA ORANGE")
         .build();
   }
 
@@ -51,7 +60,11 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, create a course")
   void create(){
-    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(url,courseDTO,CourseDTOResponse.class);
+    //Create Level
+    ResponseEntity<LevelDTO> levelSaved=this.testRestTemplate.postForEntity(urlLevel,levelDTO, LevelDTO.class);
+    courseDTO.setLevel(levelSaved.getBody().getId());
+    //Create Course
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(urlCourse,courseDTO,CourseDTOResponse.class);
     assertEquals(201,response.getStatusCodeValue());
     assertEquals(HttpStatus.CREATED,response.getStatusCode());
     assertNotNull(response.getBody());
@@ -63,7 +76,7 @@ class CourseControllerTest {
   void failCreateCourseWithWrongDates() throws ParseException {
     courseDTO.setStartDate(format.parse("2022-12-10"));
     courseDTO.setFinishDate(format.parse("2022-11-10"));
-    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(url,courseDTO,CourseDTOResponse.class);
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(urlCourse,courseDTO,CourseDTOResponse.class);
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
@@ -72,7 +85,7 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, verify failure when trying to create a course with similar name")
   void failCreateCourseWithSimilarName(){
-    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(url,courseDTO,CourseDTOResponse.class);
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(urlCourse,courseDTO,CourseDTOResponse.class);
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
@@ -81,7 +94,7 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, get all courses")
   void getAllCourses(){
-    ResponseEntity<CourseResponse> response=this.testRestTemplate.getForEntity(url,CourseResponse.class);
+    ResponseEntity<CourseResponse> response=this.testRestTemplate.getForEntity(urlCourse,CourseResponse.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(HttpStatus.OK,response.getStatusCode());
     assertNotNull(response.getBody());
@@ -93,7 +106,7 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, Test to find courses by level")
   void findCoursesByLevel(){
-    ResponseEntity<CourseResponse> response=this.testRestTemplate.getForEntity(url+"?id=2&model=level",CourseResponse.class);
+    ResponseEntity<CourseResponse> response=this.testRestTemplate.getForEntity(urlCourse +"?id=2&model=level",CourseResponse.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(HttpStatus.OK,response.getStatusCode());
     assertNotNull(response.getBody());
@@ -105,7 +118,7 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, Test to find a course")
   void getOne(){
-    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(url+"/2",CourseDTOResponse.class);
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(urlCourse +"/2",CourseDTOResponse.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(HttpStatus.OK,response.getStatusCode());
     assertNotNull(response.getBody());
@@ -116,8 +129,20 @@ class CourseControllerTest {
   @Test
   @DisplayName("Test CourseController, verify failure when trying to find a course that doesn't exist")
   void failFindOne(){
-    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(url+"/676",CourseDTOResponse.class);
+    ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.getForEntity(urlCourse +"/676",CourseDTOResponse.class);
     assertEquals(404,response.getStatusCodeValue());
     assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
   }
+
+  @Order(8)
+  @Test
+  @DisplayName("Test CourseController, Test to delete a course")
+  void delete(){
+    Map<String,Long> pathVariables= new HashMap<>();
+    pathVariables.put("id",1L);
+    ResponseEntity<Void> exchange=this.testRestTemplate.exchange(urlCourse+"/9", HttpMethod.DELETE,null, Void.class,pathVariables);
+    assertEquals(204,exchange.getStatusCodeValue());
+    assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
+  }
+
 }
