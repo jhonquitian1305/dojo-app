@@ -99,6 +99,17 @@ public class StudentServiceTest {
         });
 
         verify(this.studentRepository, never()).save(any(Student.class));
+    }
 
+    @DisplayName("Test service to save a student when the email exists")
+    @Test
+    void failSaveWhenEmailExists(){
+        given(this.studentRepository.findStudentByEmail(studentDTO.getEmail())).willReturn(student);
+
+        assertThrows(BadRequest.class, () -> {
+            this.studentService.saveStudent(studentDTO);
+        });
+
+        verify(this.studentRepository, never()).save(any(Student.class));
     }
 }
