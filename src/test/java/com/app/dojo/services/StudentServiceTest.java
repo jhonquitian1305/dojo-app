@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.StudentDTOBuilder;
 import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.dtos.StudentResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
@@ -15,15 +16,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -111,5 +115,27 @@ public class StudentServiceTest {
         });
 
         verify(this.studentRepository, never()).save(any(Student.class));
+    }
+
+    @DisplayName("Test service to get all students")
+    @Test
+    void getAll(){
+        Student student1 = new StudentBuilder()
+                .setDni("135792468")
+                .setNames("Jairo")
+                .setLastnames("Montoya")
+                .setBirthday(formatDate)
+                .setEmail("jairomontoya@mail.com")
+                .setPassword("135792468")
+                .build();
+        Page<Student> students = new PageImpl<>(List.of(student, student1));
+        given(this.studentRepository.findAll(any(Pageable.class))).willReturn(students);
+        given(this.mapperStudent.mapStudentDTO(any(Student.class))).willReturn(studentDTO);
+
+        StudentResponse studentResponse = this.studentService.getAllStudents(0, 10, "id", "desc");
+
+        assertEquals(0, studentResponse.getNumberPage());
+        assertEquals(2, studentResponse.getTotalElements());
+        assertThat(studentResponse.getContent().size()).isEqualTo(2);
     }
 }
