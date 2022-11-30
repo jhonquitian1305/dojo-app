@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.*;
 import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.GroupClassDTO;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperGroupClass;
 import com.app.dojo.models.*;
 import com.app.dojo.repositories.GroupClassRepository;
@@ -264,5 +265,16 @@ class GroupClassServiceTest {
         ()-> AssertionsForClassTypes.assertThat(groupFound.getSchedules().size()).isGreaterThan(0),
         ()-> AssertionsForClassTypes.assertThat(groupFound.getRooms().size()).isGreaterThan(0)
     );
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to check if there is a failure when trying to find a group that doesn't exist")
+  void failFindOne(){
+    //given
+    given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->this.groupClassService.getOne(anyLong()));
+    //then
+    assertEquals("There isn't a group saved with that id %s".formatted(0),notFoundException.getMessage());
   }
 }
