@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +52,7 @@ public class StudentServiceTest {
 
     @BeforeEach
     void begin(){
-        Student student = new StudentBuilder()
+        student = new StudentBuilder()
                 .setDni("12345678")
                 .setNames("Jhon")
                 .setLastnames("Quitian")
@@ -59,7 +61,7 @@ public class StudentServiceTest {
                 .setPassword("12345678")
                 .build();
 
-        StudentDTO studentDTO = new StudentDTOBuilder()
+        studentDTO = new StudentDTOBuilder()
                 .setDni("12345678")
                 .setNames("Jhon")
                 .setLastnames("Quitian")
@@ -67,5 +69,19 @@ public class StudentServiceTest {
                 .setEmail("jhonquitian@mail.com")
                 .setPassword("12345678")
                 .build();
+    }
+
+    @DisplayName("Test service to save a student")
+    @Test
+    void save(){
+        given(this.studentRepository.findStudentByDni(this.studentDTO.getDni())).willReturn(null);
+        given(this.studentRepository.findStudentByEmail(this.studentDTO.getEmail())).willReturn(null);
+        given(this.studentRepository.save(any(Student.class))).willReturn(student);
+
+        given(this.mapperStudent.mapStudent(any(StudentDTO.class))).willReturn(student);
+
+        StudentDTO studentSaved = this.studentService.saveStudent(this.studentDTO);
+
+        assertNotNull(studentSaved);
     }
 }
