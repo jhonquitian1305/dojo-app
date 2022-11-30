@@ -357,4 +357,32 @@ class GroupClassServiceTest {
         ()-> AssertionsForClassTypes.assertThat(groupUpdated.getRooms().size()).isGreaterThan(0)
     );
   }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to verify if there is a failure when trying to update a course with similar information")
+  void failUpdate() throws Exception {
+    //given
+    List<Long> roomsAndSchedulesId=new ArrayList<>();
+    roomsAndSchedulesId.add(1L);
+    groupClassDTO= new GroupClassDTOBuilder()
+        .setCode("23456789")
+        .setNameClass("PRINCIPIANTES 01")
+        .setHoursPerWeek(2L)
+        .setTotalHours(20L)
+        .setWeeks(10L)
+        .setCourse(1L)
+        .setSchedules(roomsAndSchedulesId)
+        .setRooms(roomsAndSchedulesId)
+        .build();
+
+    given(this.scheduleServcie.findOne(anyLong())).willReturn(schedule);
+    given(this.roomService.findById(anyLong())).willReturn(room);
+
+    given(this.groupClassRepository.existsGroupClassByRoomsAndSchedulesAndIdNot(any(Room.class),any(Schedule.class),anyLong())).willReturn(true);
+    given(this.groupClassRepository.findById(anyLong())).willReturn(Optional.of(group));
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.update(anyLong(),groupClassDTO));
+    //then
+    assertEquals("The %s room has already been assigned the %s schedule  on %s day".formatted(room.getRoomName(),schedule.getHoursClass(),schedule.getDayName()),badRequest.getMessage());
+  }
 }
