@@ -166,4 +166,30 @@ class GroupClassServiceTest {
     //then
     assertEquals("There is already a group saved with that name %s".formatted(groupClassDTO.getNameClass()),badRequest.getMessage());
   }
+
+  @Test
+  @DisplayName("Test GroupClassService, test to check if there is a failure when trying to create a group with an incorrect hours per week")
+  void failCreateGroupWithWrongHoursWeek(){
+    //given
+    List<Long> roomsAndSchedulesId=new ArrayList<>();
+    roomsAndSchedulesId.add(1L);
+    groupClassDTO= new GroupClassDTOBuilder()
+        .setCode("23456789")
+        .setNameClass("PRINCIPIANTES 01")
+        .setHoursPerWeek(4L)
+        .setTotalHours(20L)
+        .setWeeks(10L)
+        .setCourse(1L)
+        .setSchedules(roomsAndSchedulesId)
+        .setRooms(roomsAndSchedulesId)
+        .build();
+
+    given(this.scheduleServcie.findOne(anyLong())).willReturn(schedule);
+
+    given(this.groupClassRepository.existsGroupClassByNameClass(anyString())).willReturn(false);
+    //when
+    BadRequest badRequest=assertThrows(BadRequest.class,()->this.groupClassService.create(groupClassDTO));
+    //then
+    assertEquals("Hours per week do not coincide with the hours set in the schedule.".formatted(groupClassDTO.getNameClass()),badRequest.getMessage());
+  }
 }
