@@ -307,4 +307,18 @@ class GroupClassServiceTest {
         ()->assertThat(groupsFound.getContent().size()).isGreaterThan(0)
     );
   }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to check if there is a failure when trying to find all groups and there are not")
+  void failFindAll() throws Exception {
+    //given
+    given(this.groupsContext.loadStrategy(anyString())).willReturn(groupsStrategy);
+    Pageable pageable= PageRequest.of(0,1);
+    Page<GroupClass> groups= new PageImpl<>(List.of());
+    given(this.groupsStrategy.findGroups(pageable,1L)).willReturn(groups);
+    //when
+    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->this.groupClassService.getAll(0,1,1L,anyString()));
+    //then
+    assertEquals("There aren't groups saved",notFoundException.getMessage());
+  }
 }
