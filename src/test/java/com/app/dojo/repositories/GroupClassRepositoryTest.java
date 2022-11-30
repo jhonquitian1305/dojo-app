@@ -247,7 +247,7 @@ class GroupClassRepositoryTest {
     this.groupClassRepository.save(group);
     //when
     Pageable pageable= PageRequest.of(0,10);
-    Page<GroupClass> groups=this.groupClassRepository.findByCourse(course,pageable);
+    Page<GroupClass> groups=this.groupClassRepository.findByCourse(courseSaved,pageable);
     //then
     assertAll(
         ()->assertThat(groups.getContent().size()).isGreaterThan(0),
@@ -272,6 +272,30 @@ class GroupClassRepositoryTest {
     //when
     Pageable pageable=PageRequest.of(0,10);
     Page<GroupClass> groups=this.groupClassRepository.findByRooms(roomSaved,pageable);
+    //then
+    assertAll(
+        ()->assertThat(groups.getContent().size()).isGreaterThan(0),
+        ()->assertEquals(1,groups.getTotalElements()),
+        ()->assertEquals(1,groups.getTotalPages()),
+        ()->assertTrue(groups.isLast())
+    );
+  }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, test to find groups by schedule")
+  void findBySchedule(){
+    //given
+    Schedule scheduleSaved=this.scheduleRepository.save(schedule);
+
+    List<Schedule> schedules=new ArrayList<>();
+    schedules.add(scheduleSaved);
+    group.setSchedules(schedules);
+
+    this.groupClassRepository.save(group);
+
+    //when
+    Pageable pageable=PageRequest.of(0,10);
+    Page<GroupClass> groups=this.groupClassRepository.findBySchedules(scheduleSaved,pageable);
     //then
     assertAll(
         ()->assertThat(groups.getContent().size()).isGreaterThan(0),
