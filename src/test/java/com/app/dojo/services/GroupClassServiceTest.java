@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.builders.builderModels.*;
 import com.app.dojo.constants.Message;
 import com.app.dojo.dtos.GroupClassDTO;
+import com.app.dojo.dtos.GroupClassResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperGroupClass;
@@ -14,6 +15,8 @@ import com.app.dojo.services.Interfaces.RoomService;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
 import com.app.dojo.services.implementation.GroupClassServiceImp;
 import com.app.dojo.services.strategyGroups.GroupsContext;
+import com.app.dojo.services.strategyGroups.GroupsStrategy;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +26,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -52,6 +59,8 @@ class GroupClassServiceTest {
   private GroupsContext groupsContext;
   @Mock
   private MapperGroupClass mapperGroupClass;
+  @Mock
+  private GroupsStrategy groupsStrategy;
   @InjectMocks
   private GroupClassServiceImp groupClassService;
   private Course course;
@@ -276,5 +285,26 @@ class GroupClassServiceTest {
     NotFoundException notFoundException=assertThrows(NotFoundException.class,()->this.groupClassService.getOne(anyLong()));
     //then
     assertEquals("There isn't a group saved with that id %s".formatted(0),notFoundException.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test GroupClassService, Test to find all groups")
+  void findAll() throws Exception {
+    //given
+    given(this.groupsContext.loadStrategy(anyString())).willReturn(groupsStrategy);
+    Pageable pageable= PageRequest.of(0,1);
+    Page<GroupClass> groups= new PageImpl<>(List.of(group));
+    given(this.groupsStrategy.findGroups(pageable,1L)).willReturn(groups);
+    //when
+    GroupClassResponse groupsFound=this.groupClassService.getAll(0,1,1L,anyString());
+    //then
+    assertAll(
+        ()->assertEquals(1,groupsFound.getSizePage()),
+        ()->assertEquals(0,groupsFound.getNumberPage()),
+        ()->assertEquals(1,groupsFound.getTotalElements()),
+        ()->assertEquals(1,groupsFound.getTotalPages()),
+        ()->assertTrue(groupsFound.isLastOne()),
+        ()->assertThat(groupsFound.getContent().size()).isGreaterThan(0)
+    );
   }
 }
