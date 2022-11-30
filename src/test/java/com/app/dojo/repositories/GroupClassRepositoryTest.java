@@ -128,4 +128,15 @@ class GroupClassRepositoryTest {
         ()->assertNotNull(groupFound.get().getCourse())
     );
   }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, test to verify if a group exists by name")
+  void existsGroupClassByNameClass(){
+    //given
+    GroupClass groupSaved=this.groupClassRepository.save(group);
+    //when
+    boolean hasGroup=this.groupClassRepository.existsGroupClassByNameClass(groupSaved.getNameClass());
+    //then
+    assertTrue(hasGroup);
+  }
 }
