@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,10 +78,15 @@ class GroupClassRepositoryTest {
         .setStartDate(startDate)
         .setFinishDate(finishDate)
         .build();
+  }
 
-    //given all groups
+  @Test
+  @DisplayName("Test GroupClassRepository, Test to create a new group")
+  void create(){
+    //given
     Level levelSaved=this.levelRepository.save(level);
     course.setLevel(levelSaved);
+
     Course courseSaved=this.courseRepository.save(course);
 
     Schedule scheduleSaved=this.scheduleRepository.save(schedule);
@@ -94,12 +100,8 @@ class GroupClassRepositoryTest {
 
     group.setRooms(rooms);
     group.setSchedules(schedules);
-    group.setCourse(course);
-  }
+    group.setCourse(courseSaved);
 
-  @Test
-  @DisplayName("Test GroupClassRepository, Test to create a new group")
-  void create(){
     //when
     GroupClass groupSaved=this.groupClassRepository.save(group);
     //then
@@ -116,6 +118,24 @@ class GroupClassRepositoryTest {
   @DisplayName("Test GroupClassRepository, test to find one group")
   void findOne(){
     //given
+    Level levelSaved=this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+
+    Course courseSaved=this.courseRepository.save(course);
+
+    Schedule scheduleSaved=this.scheduleRepository.save(schedule);
+    Room roomSaved=this.roomRepository.save(room);
+
+    ArrayList<Room> rooms=new ArrayList<>();
+    rooms.add(roomSaved);
+
+    ArrayList<Schedule> schedules=new ArrayList<>();
+    schedules.add(scheduleSaved);
+
+    group.setRooms(rooms);
+    group.setSchedules(schedules);
+    group.setCourse(courseSaved);
+
     GroupClass groupSaved=this.groupClassRepository.save(group);
     //when
     Optional<GroupClass> groupFound=this.groupClassRepository.findById(groupSaved.getId());
@@ -155,9 +175,26 @@ class GroupClassRepositoryTest {
   @DisplayName("Test GroupClassRepository, test to verify if a group exists by room and schedule")
   void existsGroupClassByRoomsAndSchedules(){
     //given
+    Level levelSaved=this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+    Course courseSaved=this.courseRepository.save(course);
+
+    Schedule scheduleSaved=this.scheduleRepository.save(schedule);
+    Room roomSaved=this.roomRepository.save(room);
+
+    ArrayList<Room> rooms=new ArrayList<>();
+    rooms.add(roomSaved);
+
+    ArrayList<Schedule> schedules=new ArrayList<>();
+    schedules.add(scheduleSaved);
+
+    group.setRooms(rooms);
+    group.setSchedules(schedules);
+    group.setCourse(courseSaved);
+
     this.groupClassRepository.save(group);
     //when
-    boolean hasGroup=this.groupClassRepository.existsGroupClassByRoomsAndSchedules(room,schedule);
+    boolean hasGroup=this.groupClassRepository.existsGroupClassByRoomsAndSchedules(roomSaved,scheduleSaved);
     //then
     assertTrue(hasGroup);
   }
