@@ -161,4 +161,16 @@ class GroupClassRepositoryTest {
     //then
     assertTrue(hasGroup);
   }
+
+  @Test
+  @DisplayName("Test GroupClassRepository, test to check for false response when trying to verify if a group exists by schedule and room")
+  void notExistsGroupClassByRoomsAndSchedules(){
+    //given
+    this.groupClassRepository.save(group);
+    room.setId(2L);
+    //when
+    boolean hasGroup=this.groupClassRepository.existsGroupClassByRoomsAndSchedules(room,schedule);
+    //then
+    assertFalse(hasGroup);
+  }
 }
