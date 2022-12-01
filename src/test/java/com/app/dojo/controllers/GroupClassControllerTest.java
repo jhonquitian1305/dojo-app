@@ -2,6 +2,8 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.dtos.*;
+import com.app.dojo.models.GroupClass;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,9 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -101,5 +110,16 @@ class GroupClassControllerTest {
     assertNotNull(response.getBody());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+  }
+
+  @Order(7)
+  @Test
+  @DisplayName("Test GroupClassService, test to find a group")
+  void findOne(){
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.getForEntity(url+"/2",GroupClassDTOResponse.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(HttpStatus.OK,response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
   }
 }
