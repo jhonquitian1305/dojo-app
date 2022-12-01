@@ -2,8 +2,7 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.dtos.*;
-import com.app.dojo.models.GroupClass;
-import org.assertj.core.api.AssertionsForClassTypes;
+import com.app.dojo.exception.errors.NotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,12 +16,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,6 +27,7 @@ class GroupClassControllerTest {
   private TestRestTemplate testRestTemplate;
   private String url ="http://localhost:8080/api/dojo-app/groups";
   private GroupClassDTO groupClassDTO;
+  private Long id;
   @BeforeEach()
   void init() {
     groupClassDTO= new GroupClassDTOBuilder()
@@ -50,6 +46,7 @@ class GroupClassControllerTest {
   @DisplayName("Test GroupClassController, create a new group")
   void create(){
     ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
+    id=response.getBody().getId();
     assertEquals(201,response.getStatusCodeValue());
     assertEquals(HttpStatus.CREATED,response.getStatusCode());
     assertNotNull(response.getBody());
@@ -116,10 +113,20 @@ class GroupClassControllerTest {
   @Test
   @DisplayName("Test GroupClassService, test to find a group")
   void findOne(){
-    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.getForEntity(url+"/2",GroupClassDTOResponse.class);
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.getForEntity(url+"/%s".formatted(id),GroupClassDTOResponse.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(HttpStatus.OK,response.getStatusCode());
     assertNotNull(response.getBody());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
   }
+
+  @Order(8)
+  @Test
+  @DisplayName("Test GroupClassService, Test to check if there is a failure when trying to find a group that doesn't exist")
+  void failFindOne(){
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.getForEntity(url+"/%s".formatted(1000),GroupClassDTOResponse.class);
+    assertEquals(404,response.getStatusCodeValue());
+    assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+  }
+
 }
