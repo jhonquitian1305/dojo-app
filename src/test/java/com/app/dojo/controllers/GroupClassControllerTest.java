@@ -40,7 +40,7 @@ class GroupClassControllerTest {
   }
   @Order(1)
   @Test
-  @DisplayName("Test CourseController, create a course")
+  @DisplayName("Test GroupClassController, create a new group")
   void create(){
     ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
     assertEquals(201,response.getStatusCodeValue());
