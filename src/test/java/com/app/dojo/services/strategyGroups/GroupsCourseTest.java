@@ -6,10 +6,16 @@ import com.app.dojo.repositories.GroupClassRepository;
 import com.app.dojo.services.Interfaces.CourseService;
 import com.app.dojo.services.Interfaces.RoomService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -18,7 +24,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
 class GroupsCourseTest {
@@ -81,5 +91,26 @@ class GroupsCourseTest {
         .setSchedules(schedules)
         .build();
   }
+  @Test
+  @DisplayName("Test GroupsStrategy, Test to get all groups by course")
+  void findGroups() {
+    //given
+    Page<GroupClass> groups=new PageImpl<>(List.of(group));
+    Pageable pageable= PageRequest.of(1,10);
 
+    given(this.groupClassRepository.findByCourse(course,pageable)).willReturn(groups);
+    given(this.courseService.getOne(anyLong())).willReturn(course);
+    //when
+    Page<GroupClass> coursesFound=this.groups.findGroups(pageable,anyLong());
+    //then
+    assertAll(
+        ()->assertEquals(1,coursesFound.getTotalElements()),
+        ()->assertEquals(1,coursesFound.getSize()),
+        ()->assertEquals(1,coursesFound.getTotalPages()),
+        ()->assertEquals(0,coursesFound.getNumber()),
+        ()->assertTrue(coursesFound.isLast()),
+        ()->assertNotNull(coursesFound.getContent()),
+        ()->assertThat(coursesFound.getContent().size()).isGreaterThan(0)
+    );
+  }
 }
