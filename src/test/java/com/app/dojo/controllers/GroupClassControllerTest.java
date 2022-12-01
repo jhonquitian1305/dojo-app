@@ -2,22 +2,21 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.dtos.*;
-import com.app.dojo.exception.errors.NotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,13 +31,13 @@ class GroupClassControllerTest {
   void init() {
     groupClassDTO= new GroupClassDTOBuilder()
         .setCode("2345678")
-        .setNameClass("PRINCIPIANTES 01")
+        .setNameClass("PRINCIPIANTES 03")
         .setHoursPerWeek(2L)
         .setTotalHours(20L)
         .setWeeks(10L)
         .setCourse(1L)
         .setSchedules(List.of(1L))
-        .setRooms(List.of(1L))
+        .setRooms(List.of(2L))
         .build();
   }
   @Order(1)
@@ -129,4 +128,14 @@ class GroupClassControllerTest {
     assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
   }
 
+  @Order(9)
+  @Test
+  @DisplayName("Test GroupClassService, Test to delete a group")
+  void delete(){
+    Map<String,Long> pathVariables= new HashMap<>();
+    pathVariables.put("id",id);
+    ResponseEntity<Void> exchange=this.testRestTemplate.exchange(url+"/2", HttpMethod.DELETE,null, Void.class,pathVariables);
+    assertEquals(204,exchange.getStatusCodeValue());
+    assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
+  }
 }
