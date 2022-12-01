@@ -2,9 +2,6 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.dtos.*;
-import com.app.dojo.exception.errors.BadRequest;
-import com.app.dojo.models.Room;
-import com.app.dojo.models.Schedule;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,16 +9,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -97,5 +89,17 @@ class GroupClassControllerTest {
     ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  @Order(6)
+  @Test
+  @DisplayName("Test GroupClassService, Test to find all groups")
+  void findAll() throws Exception {
+    ResponseEntity<GroupClassResponse> response=this.testRestTemplate.getForEntity(url,GroupClassResponse.class);
+    assertEquals(200,response.getStatusCodeValue());
+    assertEquals(HttpStatus.OK,response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    assertThat(response.getBody().getContent().size()).isGreaterThan(0);
   }
 }
