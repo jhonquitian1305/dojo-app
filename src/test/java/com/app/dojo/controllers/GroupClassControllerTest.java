@@ -72,4 +72,16 @@ class GroupClassControllerTest {
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
+
+  @Order(4)
+  @Test
+  @DisplayName("Test GroupClassService, test to check if there is a failure when trying to create a group with an incorrect total hours")
+  void failCreateGroupWithWrongTotalHours(){
+    groupClassDTO.setNameClass("PRINCIPIANTES 02");
+    groupClassDTO.setHoursPerWeek(2L);
+    groupClassDTO.setTotalHours(66L);
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
+    assertEquals(400,response.getStatusCodeValue());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
 }
