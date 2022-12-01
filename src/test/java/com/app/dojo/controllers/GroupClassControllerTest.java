@@ -2,6 +2,7 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.dtos.*;
+import com.app.dojo.exception.errors.BadRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,10 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -53,6 +57,17 @@ class GroupClassControllerTest {
   @Test
   @DisplayName("Test GroupClassController, Test to check when trying to create a group  with an already saved name")
   void failCreateGroupWithWrongName(){
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
+    assertEquals(400,response.getStatusCodeValue());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  @Order(3)
+  @Test
+  @DisplayName("Test GroupClassService, test to check if there is a failure when trying to create a group with an incorrect hours per week")
+  void failCreateGroupWithWrongHoursWeek(){
+    groupClassDTO.setNameClass("PRINCIPIANTES 02");
+    groupClassDTO.setHoursPerWeek(8L);
     ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
