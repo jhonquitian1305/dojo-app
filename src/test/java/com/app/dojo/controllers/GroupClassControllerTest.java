@@ -3,6 +3,8 @@ package com.app.dojo.controllers;
 import com.app.dojo.builders.builderDTO.GroupClassDTOBuilder;
 import com.app.dojo.dtos.*;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.models.Room;
+import com.app.dojo.models.Schedule;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -80,6 +82,18 @@ class GroupClassControllerTest {
     groupClassDTO.setNameClass("PRINCIPIANTES 02");
     groupClassDTO.setHoursPerWeek(2L);
     groupClassDTO.setTotalHours(66L);
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
+    assertEquals(400,response.getStatusCodeValue());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  @Order(5)
+  @Test
+  @DisplayName("Test GroupClassService,test to check if there is a failure when trying to create a group with similar information")
+  void failCreateGroupWithSimilarInformation(){
+    groupClassDTO.setNameClass("PRINCIPIANTES 02");
+    groupClassDTO.setHoursPerWeek(2L);
+    groupClassDTO.setTotalHours(20L);
     ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
     assertEquals(400,response.getStatusCodeValue());
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
