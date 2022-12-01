@@ -48,4 +48,13 @@ class GroupClassControllerTest {
     assertNotNull(response.getBody());
     assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
   }
+
+  @Order(2)
+  @Test
+  @DisplayName("Test GroupClassController, Test to check when trying to create a group  with an already saved name")
+  void failCreateGroupWithWrongName(){
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.postForEntity(url,groupClassDTO,GroupClassDTOResponse.class);
+    assertEquals(400,response.getStatusCodeValue());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
 }
