@@ -112,7 +112,7 @@ class GroupClassControllerTest {
   @Test
   @DisplayName("Test GroupClassService, test to find a group")
   void findOne(){
-    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.getForEntity(url+"/%s".formatted(id),GroupClassDTOResponse.class);
+    ResponseEntity<GroupClassDTOResponse> response=this.testRestTemplate.getForEntity(url+"/3",GroupClassDTOResponse.class);
     assertEquals(200,response.getStatusCodeValue());
     assertEquals(HttpStatus.OK,response.getStatusCode());
     assertNotNull(response.getBody());
@@ -134,7 +134,7 @@ class GroupClassControllerTest {
   void delete(){
     Map<String,Long> pathVariables= new HashMap<>();
     pathVariables.put("id",id);
-    ResponseEntity<Void> exchange=this.testRestTemplate.exchange(url+"/2", HttpMethod.DELETE,null, Void.class,pathVariables);
+    ResponseEntity<Void> exchange=this.testRestTemplate.exchange(url+"/3", HttpMethod.DELETE,null, Void.class,pathVariables);
     assertEquals(204,exchange.getStatusCodeValue());
     assertEquals(HttpStatus.NO_CONTENT,exchange.getStatusCode());
   }
