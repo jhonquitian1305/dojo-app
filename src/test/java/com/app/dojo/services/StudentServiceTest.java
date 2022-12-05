@@ -198,4 +198,16 @@ public class StudentServiceTest {
 
         verify(this.studentRepository, times(1)).deleteById(anyLong());
     }
+
+    @DisplayName("Test service to delete a student when doesn't exists")
+    @Test
+    void failDeleteOne(){
+        given(this.studentRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        NotFoundException studentNotFound = assertThrows(NotFoundException.class, () -> {
+            this.studentService.getStudentById(1L);
+        });
+
+        assertEquals("Student with id %s doesn't exists".formatted(1L), studentNotFound.getMessage());
+    }
 }
