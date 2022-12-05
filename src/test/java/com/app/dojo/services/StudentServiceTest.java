@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.dtos.StudentDTO;
 import com.app.dojo.dtos.StudentResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
 import com.app.dojo.repositories.StudentRepository;
@@ -161,5 +162,29 @@ public class StudentServiceTest {
         assertEquals(1L, studentGetById.getId());
         assertEquals(1L, studentGetByDni.getId());
         assertEquals(1L, studentGetByEmail.getId());
+    }
+
+    @DisplayName("Test service to get a student when doesn't exists")
+    @Test
+    void failGetOne(){
+        given(this.studentRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(this.studentRepository.findStudentByDni(studentDTO.getDni())).willReturn(null);
+        given(this.studentRepository.findStudentByEmail(studentDTO.getEmail())).willReturn(null);
+
+        NotFoundException studentNotFoundById = assertThrows(NotFoundException.class, () -> {
+            this.studentService.getStudentById(1L);
+        });
+
+        NotFoundException studentNotFoundByDni = assertThrows(NotFoundException.class, () -> {
+            this.studentService.getStudentByDni(studentDTO);
+        });
+
+        NotFoundException studentNotFoundByEmail = assertThrows(NotFoundException.class, () -> {
+            this.studentService.getStudentByEmail(studentDTO);
+        });
+
+        assertEquals("Student with id %s doesn't exists".formatted(1L), studentNotFoundById.getMessage());
+        assertEquals("Student with dni %s doesn't exists".formatted(studentDTO.getDni()), studentNotFoundByDni.getMessage());
+        assertEquals("Student with email %s doesn't exists".formatted(studentDTO.getEmail()), studentNotFoundByEmail.getMessage());
     }
 }
