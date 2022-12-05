@@ -25,10 +25,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -137,5 +139,27 @@ public class StudentServiceTest {
         assertEquals(0, studentResponse.getNumberPage());
         assertEquals(2, studentResponse.getTotalElements());
         assertThat(studentResponse.getContent().size()).isEqualTo(2);
+    }
+
+    @DisplayName("Test service to get a student by id, dni and email")
+    @Test
+    void getOne(){
+        given(this.studentRepository.findById(anyLong())).willReturn(Optional.of(student));
+        given(this.studentRepository.findStudentByDni(studentDTO.getDni()));
+        given(this.studentRepository.findStudentByEmail(studentDTO.getEmail()));
+
+
+        Student studentGetById = this.studentService.getStudentById(1L);
+
+        Student studentGetByDni = this.studentService.getStudentByDni(studentDTO);
+
+        Student studentGetByEmail = this.studentService.getStudentByEmail(studentDTO);
+
+        assertNotNull(studentGetById);
+        assertNotNull(studentGetByDni);
+        assertNotNull(studentGetByEmail);
+        assertEquals(1L, studentGetById.getId());
+        assertEquals(1L, studentGetByDni.getId());
+        assertEquals(1L, studentGetByEmail.getId());
     }
 }
