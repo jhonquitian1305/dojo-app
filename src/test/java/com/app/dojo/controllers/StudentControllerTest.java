@@ -69,4 +69,12 @@ public class StudentControllerTest {
         assertEquals("12345678", studentSaved.getPassword());
     }
 
+    @DisplayName("Test controller to save a student when exists")
+    @Test
+    @Order(2)
+    void failCreate(){
+        ResponseEntity<StudentDTO> response = testRestTemplate.postForEntity(url, studentDTO, StudentDTO.class);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
 }
