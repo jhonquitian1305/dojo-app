@@ -33,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -186,5 +186,16 @@ public class StudentServiceTest {
         assertEquals("Student with id %s doesn't exists".formatted(1L), studentNotFoundById.getMessage());
         assertEquals("Student with dni %s doesn't exists".formatted(studentDTO.getDni()), studentNotFoundByDni.getMessage());
         assertEquals("Student with email %s doesn't exists".formatted(studentDTO.getEmail()), studentNotFoundByEmail.getMessage());
+    }
+
+    @DisplayName("Test service to delete a student")
+    @Test
+    void deleteOne() throws Exception {
+        given(this.studentRepository.findById(anyLong())).willReturn(Optional.of(student));
+        willDoNothing().given(this.studentRepository).deleteById(anyLong());
+
+        this.studentService.deleteStudent(anyLong());
+
+        verify(this.studentRepository, times(1)).deleteById(anyLong());
     }
 }
