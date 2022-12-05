@@ -2,6 +2,7 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.StudentDTOBuilder;
 import com.app.dojo.dtos.StudentDTO;
+import com.app.dojo.dtos.StudentResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -75,6 +77,31 @@ public class StudentControllerTest {
     void failCreate(){
         ResponseEntity<StudentDTO> response = testRestTemplate.postForEntity(url, studentDTO, StudentDTO.class);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @DisplayName("Test controller to get all students")
+    @Test
+    @Order(3)
+    void findAll(){
+        ResponseEntity<StudentResponse> response = this.testRestTemplate.getForEntity(url, StudentResponse.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+    }
+
+    @DisplayName("Test controller to get a student by id")
+    @Test
+    @Order(4)
+    void findOne(){
+        ResponseEntity<StudentDTO> response = this.testRestTemplate.getForEntity(url+"/1", StudentDTO.class);
+        StudentDTO student = response.getBody();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+
+        assertNotNull(student);
+        assertEquals(1L, student.getId());
     }
 
 }
