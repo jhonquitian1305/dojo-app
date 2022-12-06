@@ -127,4 +127,17 @@ public class StudentControllerTest {
         assertFalse(exchange.hasBody());
     }
 
+    @DisplayName("Test controller to delete a student when doesn't exists")
+    @Test
+    @Order(7)
+    void failDeleteOne(){
+        ResponseEntity<StudentResponse> response = this.testRestTemplate.getForEntity(url, StudentResponse.class);
+        assertThat(Objects.requireNonNull(response.getBody()).getContent().size()).isGreaterThan(0);
+
+        Map<String, Long> pathVariables = new HashMap<>();
+        pathVariables.put("id", 1L);
+        ResponseEntity<Void> exchange = this.testRestTemplate.exchange(url+"/{id}", HttpMethod.DELETE, null, Void.class, pathVariables);
+
+        assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode());
+    }
 }
