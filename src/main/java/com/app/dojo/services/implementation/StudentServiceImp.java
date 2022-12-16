@@ -29,7 +29,7 @@ public class StudentServiceImp implements StudentService {
     private MapperStudent mapperStudent;
 
     @Override
-    public StudentDTO saveStudent(StudentDTO studentDTO) {
+    public Student saveStudent(StudentDTO studentDTO) {
         findStudentByDni(studentDTO.getDni());
         findStudentByEmail(studentDTO.getEmail());
 
@@ -37,7 +37,7 @@ public class StudentServiceImp implements StudentService {
 
         Student studentSaved = studentRepository.save(student);
 
-        return mapperStudent.mapStudentDTO(studentSaved);
+        return studentSaved;
     }
 
     @Override

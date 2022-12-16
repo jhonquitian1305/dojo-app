@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public interface StudentService {
-    StudentDTO saveStudent(StudentDTO studentDTO);
+    Student saveStudent(StudentDTO studentDTO);
     StudentResponse getAllStudents(int numberPage, int pageSize, String sortBy, String sortDir);
     Student getStudentById(Long id) throws Exception;
     Student getStudentByDni(StudentDTO studentDTO);
