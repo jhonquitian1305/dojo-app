@@ -9,9 +9,9 @@ import java.util.List;
 
 
 public interface StudentService {
-    StudentDTO saveStudent(StudentDTO studentDTO);
+    Student saveStudent(StudentDTO studentDTO);
     StudentResponse getAllStudents(int numberPage, int pageSize, String sortBy, String sortDir);
-    StudentDTO getStudentById(Long id) throws Exception;
-    StudentDTO getStudentByDni(StudentDTO studentDTO);
+    Student getStudentById(Long id) throws Exception;
+    Student getStudentByDni(StudentDTO studentDTO);
     void deleteStudent(Long id) throws Exception;
 }

@@ -3,6 +3,7 @@ package com.app.dojo.controllers;
 import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.StudentDTO;
 import com.app.dojo.dtos.StudentResponse;
+import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
 import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,13 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    MapperStudent mapperStudent;
+
     @PostMapping
     public ResponseEntity<StudentDTO> saveStudent(@RequestBody StudentDTO studentDTO){
-        return new ResponseEntity<>(studentService.saveStudent(studentDTO), HttpStatus.CREATED);
+        StudentDTO studentSave = mapperStudent.mapStudentDTO(studentService.saveStudent(studentDTO));
+        return new ResponseEntity<>(studentSave, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -37,12 +42,14 @@ public class StudentController {
 
     @GetMapping(ENDPOINT_ID)
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable("id") Long id) throws Exception {
-        return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
+        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentById(id));
+        return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
     @GetMapping(ENDPOINT_STUDENT_BY_DNI)
     public ResponseEntity<StudentDTO> getStudentByDni(@RequestBody StudentDTO studentDTO) throws Exception {
-        return new ResponseEntity<>(studentService.getStudentByDni(studentDTO), HttpStatus.OK);
+        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByDni(studentDTO));
+        return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
     @DeleteMapping(ENDPOINT_ID)
