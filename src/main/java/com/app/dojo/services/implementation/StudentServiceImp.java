@@ -70,12 +70,12 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public StudentDTO getStudentByDni(StudentDTO studentDTO) {
+    public Student getStudentByDni(StudentDTO studentDTO) {
         Student studentFound = studentRepository.findStudentByDni(studentDTO.getDni());
         if(studentFound == null){
             throw new NotFoundException(String.format("Student with dni %s doesn't exists", studentDTO.getDni()));
         }
-        return mapperStudent.mapStudentDTO(studentFound);
+        return studentFound;
     }
 
     @Override
