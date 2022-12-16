@@ -61,12 +61,12 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public StudentDTO getStudentById(Long id) throws NotFoundException {
+    public Student getStudentById(Long id) throws NotFoundException {
         Optional<Student> studentFound = studentRepository.findById(id);
         if(studentFound.isEmpty()){
             throw new NotFoundException(String.format("Student with id %s doesn't exists", id));
         }
-        return mapperStudent.mapStudentDTO(studentFound.get());
+        return studentFound.get();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     public void deleteStudent(Long id){
-        StudentDTO studentFound = this.getStudentById(id);
+        Student studentFound = this.getStudentById(id);
         this.studentRepository.deleteById(studentFound.getId());
     }
 
