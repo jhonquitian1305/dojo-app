@@ -13,5 +13,6 @@ public interface StudentService {
     StudentResponse getAllStudents(int numberPage, int pageSize, String sortBy, String sortDir);
     Student getStudentById(Long id) throws Exception;
     Student getStudentByDni(StudentDTO studentDTO);
+    Student getStudentByEmail(StudentDTO studentDTO);
     void deleteStudent(Long id) throws Exception;
 }

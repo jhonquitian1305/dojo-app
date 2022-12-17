@@ -52,6 +52,12 @@ public class StudentController {
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
+    @GetMapping(ENDPOINT_STUDENT_BY_EMAIL)
+    public ResponseEntity<StudentDTO> getStudentByEmail(@RequestBody StudentDTO studentDTO){
+        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByEmail(studentDTO));
+        return new ResponseEntity<>(studentFound, HttpStatus.OK);
+    }
+
     @DeleteMapping(ENDPOINT_ID)
     public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id) throws Exception {
         this.studentService.deleteStudent(id);
