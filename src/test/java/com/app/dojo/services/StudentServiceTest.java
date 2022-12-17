@@ -64,6 +64,7 @@ public class StudentServiceTest {
     @BeforeEach
     void begin(){
         student = new StudentBuilder()
+                .setId(1L)
                 .setDni("12345678")
                 .setNames("Jhon")
                 .setLastnames("Quitian")
@@ -73,6 +74,7 @@ public class StudentServiceTest {
                 .build();
 
         studentDTO = new StudentDTOBuilder()
+                .setId(1L)
                 .setDni("12345678")
                 .setNames("Jhon")
                 .setLastnames("Quitian")
@@ -91,7 +93,7 @@ public class StudentServiceTest {
 
         given(this.mapperStudent.mapStudent(any(StudentDTO.class))).willReturn(student);
 
-        StudentDTO studentSaved = this.studentService.saveStudent(this.studentDTO);
+        Student studentSaved = this.studentService.saveStudent(this.studentDTO);
 
         assertNotNull(studentSaved);
     }
@@ -146,8 +148,8 @@ public class StudentServiceTest {
     @Test
     void getOne(){
         given(this.studentRepository.findById(anyLong())).willReturn(Optional.of(student));
-        given(this.studentRepository.findStudentByDni(studentDTO.getDni()));
-        given(this.studentRepository.findStudentByEmail(studentDTO.getEmail()));
+        given(this.studentRepository.findStudentByDni(studentDTO.getDni())).willReturn(student);
+        given(this.studentRepository.findStudentByEmail(studentDTO.getEmail())).willReturn(student);
 
 
         Student studentGetById = this.studentService.getStudentById(1L);
