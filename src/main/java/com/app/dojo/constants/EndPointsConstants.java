@@ -25,4 +25,7 @@ public final class EndPointsConstants {
 
     // GroupClasses
     public static final String ENDPOINT_GROUP_CLASSES="/api/dojo-app/groups";
+
+    //Teacher
+    public static final String ENDPOINT_TEACHERS="/api/dojo-app/teachers";
 }
