@@ -19,4 +19,11 @@ public class TeacherServiceImp implements TeacherService {
             throw new BadRequest("This teacher already exists");
         }
     }
+
+    public void findTeacherByEmail(String email){
+        Teacher teacherFound = this.teacherRepository.findStudentByEmail(email);
+        if(teacherFound != null){
+            throw new BadRequest("This email already exists");
+        }
+    }
 }
