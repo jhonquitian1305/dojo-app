@@ -4,7 +4,9 @@ import com.app.dojo.builders.builderDTO.TeacherDTOBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.dtos.TeacherDTO;
 import com.app.dojo.models.Teacher;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MapperTeacher {
     public Teacher mapTeacher(TeacherDTO teacherDTO){
         return new TeacherBuilder()
