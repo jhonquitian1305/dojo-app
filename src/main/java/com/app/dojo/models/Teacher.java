@@ -8,6 +8,7 @@ import java.util.Date;
 @Table(name = "teachers")
 public class Teacher extends User implements Serializable {
     public Teacher() {
+        super();
     }
 
     public Teacher(Long id, String dni, String names, String lastnames, Date birthday, String email, String password) {

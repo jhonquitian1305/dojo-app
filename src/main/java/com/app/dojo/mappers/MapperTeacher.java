@@ -26,6 +26,7 @@ public class MapperTeacher {
                 .setDni(teacher.getDni())
                 .setNames(teacher.getNames())
                 .setLastnames(teacher.getLastnames())
+                .setBirthday(teacher.getBirthday())
                 .setEmail(teacher.getEmail())
                 .setPassword(teacher.getPassword())
                 .build();
