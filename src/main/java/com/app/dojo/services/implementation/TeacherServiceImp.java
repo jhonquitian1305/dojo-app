@@ -70,6 +70,16 @@ public class TeacherServiceImp implements TeacherService {
         return teacherFound.get();
     }
 
+    @Override
+    public Teacher updateOne(Long id, TeacherDTO teacherDTO) {
+        Optional<Teacher> teacherFound = this.teacherRepository.findById(id);
+        if(teacherFound.isEmpty()){
+            throw new NotFoundException(String.format("Teacher with id %s doesn't exists", id));
+        }
+        Teacher teacherUpdated = updateTeacher(teacherFound.get(), teacherDTO);
+        return this.teacherRepository.save(teacherUpdated);
+    }
+
     public void findTeacherByDni(String dni){
         Teacher teacherFound = this.teacherRepository.findTeacherByDni(dni);
         if(teacherFound != null){
@@ -82,5 +92,16 @@ public class TeacherServiceImp implements TeacherService {
         if(teacherFound != null){
             throw new BadRequest("This email already exists");
         }
+    }
+
+    private Teacher updateTeacher(Teacher teacher, TeacherDTO teacherDTO){
+        teacher.setDni(teacherDTO.getDni());
+        teacher.setNames(teacherDTO.getNames());
+        teacher.setLastnames(teacherDTO.getLastnames());
+        teacher.setBirthday(teacherDTO.getBirthday());
+        teacher.setEmail(teacherDTO.getEmail());
+        teacher.setPassword(teacherDTO.getPassword());
+
+        return teacher;
     }
 }

@@ -47,4 +47,10 @@ public class TeacherController {
         TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getById(id));
         return new ResponseEntity<>(teacherFound, HttpStatus.OK);
     }
+
+    @PutMapping(ENDPOINT_ID)
+    public ResponseEntity<TeacherDTO> updateOne(@PathVariable("id") Long id, @RequestBody TeacherDTO teacherDTO){
+        TeacherDTO teacherUpdated = this.mapperTeacher.mapTeacherDTO(this.teacherService.updateOne(id, teacherDTO));
+        return new ResponseEntity<>(teacherUpdated, HttpStatus.OK);
+    }
 }
