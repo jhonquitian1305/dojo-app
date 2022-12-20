@@ -12,8 +12,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
@@ -52,5 +54,25 @@ public class TeacherRepositoryTest {
 
         assertNotNull(teacherSaved);
         assertThat(teacherSaved.getId()).isGreaterThan(0);
+    }
+
+    @DisplayName("Test Repository to get all teachers")
+    @Test
+    void getAll(){
+        Teacher teacher1 = new TeacherBuilder()
+                .setDni("864297531")
+                .setNames("Carlos")
+                .setLastnames("Andrade")
+                .setBirthday(formatDate)
+                .setEmail("carlosandrade@mail.com")
+                .setPassword("864297531")
+                .build();
+        this.teacherRepository.save(teacher);
+        this.teacherRepository.save(teacher1);
+
+        List<Teacher> teacherList = this.teacherRepository.findAll();
+
+        assertNotNull(teacherList);
+        assertEquals(2, teacherList.size());
     }
 }
