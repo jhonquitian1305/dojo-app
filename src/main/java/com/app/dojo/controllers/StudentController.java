@@ -4,14 +4,11 @@ import com.app.dojo.constants.PaginationRequest;
 import com.app.dojo.dtos.StudentDTO;
 import com.app.dojo.dtos.StudentResponse;
 import com.app.dojo.mappers.MapperStudent;
-import com.app.dojo.models.Student;
 import com.app.dojo.services.Interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.app.dojo.constants.EndPointsConstants.*;
 
@@ -46,13 +43,13 @@ public class StudentController {
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
-    @GetMapping(ENDPOINT_STUDENT_BY_DNI)
+    @GetMapping(ENDPOINT_DNI)
     public ResponseEntity<StudentDTO> getStudentByDni(@RequestBody StudentDTO studentDTO) throws Exception {
         StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByDni(studentDTO));
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
-    @GetMapping(ENDPOINT_STUDENT_BY_EMAIL)
+    @GetMapping(ENDPOINT_EMAIL)
     public ResponseEntity<StudentDTO> getStudentByEmail(@RequestBody StudentDTO studentDTO){
         StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByEmail(studentDTO));
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
