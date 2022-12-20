@@ -9,5 +9,6 @@ public interface TeacherService {
     TeacherResponse getAll(int numberPage, int pageSize, String sortBy, String sortDir);
     Teacher getById(Long id);
     Teacher getByDni(TeacherDTO teacherDTO);
+    Teacher getByEmail(TeacherDTO teacherDTO);
     Teacher updateOne(Long id, TeacherDTO teacherDTO);
 }

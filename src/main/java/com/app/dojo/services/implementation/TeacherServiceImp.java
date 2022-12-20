@@ -80,6 +80,15 @@ public class TeacherServiceImp implements TeacherService {
     }
 
     @Override
+    public Teacher getByEmail(TeacherDTO teacherDTO) {
+        Teacher teacherFound = this.teacherRepository.findTeacherByEmail(teacherDTO.getEmail());
+        if(teacherFound == null){
+            throw new NotFoundException(String.format("Teacher with email %s doesn't exists", teacherDTO.getEmail()));
+        }
+        return teacherFound;
+    }
+
+    @Override
     public Teacher updateOne(Long id, TeacherDTO teacherDTO) {
         Optional<Teacher> teacherFound = this.teacherRepository.findById(id);
         if(teacherFound.isEmpty()){
