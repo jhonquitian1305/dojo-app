@@ -41,6 +41,34 @@ public abstract class User {
         this.password = password;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setNames(String names) {
+        this.names = names;
+    }
+
+    public void setLastnames(String lastnames) {
+        this.lastnames = lastnames;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }

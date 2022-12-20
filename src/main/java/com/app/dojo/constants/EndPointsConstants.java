@@ -4,6 +4,8 @@ public final class EndPointsConstants {
 
     ///// General
     public static final String ENDPOINT_ID = "/{id}";
+    public static final String ENDPOINT_DNI ="/dni/";
+    public static final String ENDPOINT_EMAIL ="/email/";
 
     // Rooms
     public static final String ENDPOINT_ROOMS="/api/dojo-app/rooms";
@@ -11,8 +13,6 @@ public final class EndPointsConstants {
 
     // Students
     public static final String ENDPOINT_STUDENTS="/api/dojo-app/students";
-    public static final String ENDPOINT_STUDENT_BY_DNI ="/dni/";
-    public static final String ENDPOINT_STUDENT_BY_EMAIL="/email/";
 
     // Shedule
     public static final String ENDPOINT_SCHEDULE="/api/dojo-app/schedules";
@@ -25,4 +25,7 @@ public final class EndPointsConstants {
 
     // GroupClasses
     public static final String ENDPOINT_GROUP_CLASSES="/api/dojo-app/groups";
+
+    //Teacher
+    public static final String ENDPOINT_TEACHERS="/api/dojo-app/teachers";
 }
