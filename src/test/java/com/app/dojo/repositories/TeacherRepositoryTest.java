@@ -13,10 +13,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -106,5 +106,19 @@ public class TeacherRepositoryTest {
 
         assertNotNull(teacherFound);
         assertEquals(teacher.getEmail(), teacherFound.getEmail());
+    }
+
+    @DisplayName("Test Repository when search a teacher that not exists")
+    @Test
+    void teacherNotFound(){
+        this.teacherRepository.save(teacher);
+
+        Optional<Teacher> teacherFoundId = this.teacherRepository.findById(20L);
+        Teacher teacherFoundDni = this.teacherRepository.findTeacherByDni("1358987744658");
+        Teacher teacherFoundEmail = this.teacherRepository.findTeacherByEmail("camiloalzate@mail.com");
+
+        assertThat(teacherFoundId.isEmpty()).isTrue();
+        assertNull(teacherFoundDni);
+        assertNull(teacherFoundEmail);
     }
 }
