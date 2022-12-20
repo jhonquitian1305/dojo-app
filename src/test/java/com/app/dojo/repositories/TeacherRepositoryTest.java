@@ -121,4 +121,15 @@ public class TeacherRepositoryTest {
         assertNull(teacherFoundDni);
         assertNull(teacherFoundEmail);
     }
+    
+    @DisplayName("Test Repository to delete a teacher")
+    @Test
+    void deleteOne(){
+        this.teacherRepository.save(teacher);
+        
+        this.teacherRepository.deleteById(teacher.getId());
+        Optional<Teacher> teacherDeleted = this.teacherRepository.findById(teacher.getId());
+        
+        assertThat(teacherDeleted).isEmpty();
+    }
 }
