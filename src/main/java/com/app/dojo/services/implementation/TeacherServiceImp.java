@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.TeacherResponseBuilder;
 import com.app.dojo.dtos.TeacherDTO;
 import com.app.dojo.dtos.TeacherResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperTeacher;
 import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.TeacherRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeacherServiceImp implements TeacherService {
@@ -57,6 +59,15 @@ public class TeacherServiceImp implements TeacherService {
                 .setTotalPages(teachersFound.getTotalPages())
                 .setLastOne(teachersFound.isLast())
                 .build();
+    }
+
+    @Override
+    public Teacher getById(Long id) {
+        Optional<Teacher> teacherFound = this.teacherRepository.findById(id);
+        if(teacherFound.isEmpty()){
+            throw new NotFoundException(String.format("Teacher with id %s doesn't exists", id));
+        }
+        return teacherFound.get();
     }
 
     public void findTeacherByDni(String dni){

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_ID;
 import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_TEACHERS;
 
 @RestController
@@ -39,5 +40,11 @@ public class TeacherController {
             @RequestParam(value = "sortDir", defaultValue = PaginationRequest.DEFAULT_SORT_DIR, required = false) String sortDir
     ){
         return new ResponseEntity<>(this.teacherService.getAll(numberPage, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @GetMapping(ENDPOINT_ID)
+    public ResponseEntity<TeacherDTO> getById(@PathVariable("id") Long id){
+        TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getById(id));
+        return new ResponseEntity<>(teacherFound, HttpStatus.OK);
     }
 }
