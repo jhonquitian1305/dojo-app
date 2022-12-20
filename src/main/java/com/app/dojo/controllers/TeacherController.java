@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_ID;
-import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_TEACHERS;
+import static com.app.dojo.constants.EndPointsConstants.*;
 
 @RestController
 @RequestMapping(ENDPOINT_TEACHERS)
@@ -45,6 +44,12 @@ public class TeacherController {
     @GetMapping(ENDPOINT_ID)
     public ResponseEntity<TeacherDTO> getById(@PathVariable("id") Long id){
         TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getById(id));
+        return new ResponseEntity<>(teacherFound, HttpStatus.OK);
+    }
+
+    @GetMapping(ENDPOINT_DNI)
+    public ResponseEntity<TeacherDTO> getByDni(@RequestBody TeacherDTO teacherDTO){
+        TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getByDni(teacherDTO));
         return new ResponseEntity<>(teacherFound, HttpStatus.OK);
     }
 

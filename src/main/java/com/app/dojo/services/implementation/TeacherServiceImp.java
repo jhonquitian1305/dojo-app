@@ -71,6 +71,15 @@ public class TeacherServiceImp implements TeacherService {
     }
 
     @Override
+    public Teacher getByDni(TeacherDTO teacherDTO) {
+        Teacher teacherFound = this.teacherRepository.findTeacherByDni(teacherDTO.getDni());
+        if(teacherFound == null){
+            throw new NotFoundException(String.format("Teacher with dni %s doesn't exists", teacherDTO.getDni()));
+        }
+        return teacherFound;
+    }
+
+    @Override
     public Teacher updateOne(Long id, TeacherDTO teacherDTO) {
         Optional<Teacher> teacherFound = this.teacherRepository.findById(id);
         if(teacherFound.isEmpty()){
