@@ -96,4 +96,15 @@ public class TeacherRepositoryTest {
         assertNotNull(teacherFound);
         assertEquals(teacher.getDni(), teacherFound.getDni());
     }
+
+    @DisplayName("Test Repository to get a teacher by email")
+    @Test
+    void getOneByEmail(){
+        this.teacherRepository.save(teacher);
+
+        Teacher teacherFound = this.teacherRepository.findTeacherByEmail(teacher.getEmail());
+
+        assertNotNull(teacherFound);
+        assertEquals(teacher.getEmail(), teacherFound.getEmail());
+    }
 }
