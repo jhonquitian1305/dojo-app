@@ -98,6 +98,12 @@ public class TeacherServiceImp implements TeacherService {
         return this.teacherRepository.save(teacherUpdated);
     }
 
+    @Override
+    public void deleteOne(Long id) {
+        Teacher teacherFound = this.getById(id);
+        this.teacherRepository.delete(teacherFound);
+    }
+
     public void findTeacherByDni(String dni){
         Teacher teacherFound = this.teacherRepository.findTeacherByDni(dni);
         if(teacherFound != null){

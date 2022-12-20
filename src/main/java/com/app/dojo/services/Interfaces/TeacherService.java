@@ -11,4 +11,5 @@ public interface TeacherService {
     Teacher getByDni(TeacherDTO teacherDTO);
     Teacher getByEmail(TeacherDTO teacherDTO);
     Teacher updateOne(Long id, TeacherDTO teacherDTO);
+    void deleteOne(Long id);
 }

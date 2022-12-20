@@ -64,4 +64,10 @@ public class TeacherController {
         TeacherDTO teacherUpdated = this.mapperTeacher.mapTeacherDTO(this.teacherService.updateOne(id, teacherDTO));
         return new ResponseEntity<>(teacherUpdated, HttpStatus.OK);
     }
+
+    @DeleteMapping(ENDPOINT_ID)
+    public ResponseEntity<String> deleteOne(@PathVariable("id") Long id){
+        this.teacherService.deleteOne(id);
+        return new ResponseEntity<>("Teacher deleted", HttpStatus.OK);
+    }
 }
