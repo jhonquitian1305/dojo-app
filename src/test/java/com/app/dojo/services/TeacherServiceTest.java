@@ -190,4 +190,18 @@ public class TeacherServiceTest {
         assertEquals("Teacher with dni %s doesn't exists".formatted(this.teacherDTO.getDni()), teacherNotFoundByDni.getMessage());
         assertEquals("Teacher with email %s doesn't exists".formatted(this.teacherDTO.getEmail()), teacherNotFoundByEmail.getMessage());
     }
+
+    @DisplayName("Test service to update a teacher")
+    @Test
+    void updateOne(){
+        given(this.teacherRepository.save(teacher)).willReturn(teacher);
+        given(this.teacherRepository.findById(anyLong())).willReturn(Optional.of(teacher));
+        teacherDTO.setDni("1984168878");
+        teacherDTO.setNames("Ramiro");
+
+        Teacher teacherUpdated = this.teacherService.updateOne(1L, teacherDTO);
+
+        assertThat(teacherUpdated.getDni()).isEqualTo("1984168878");
+        assertThat(teacherUpdated.getNames()).isEqualTo("Ramiro");
+    }
 }
