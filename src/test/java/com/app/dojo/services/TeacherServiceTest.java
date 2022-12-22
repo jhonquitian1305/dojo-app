@@ -25,10 +25,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -141,5 +143,26 @@ public class TeacherServiceTest {
         assertEquals(0, teacherResponse.getNumberPage());
         assertEquals(2, teacherResponse.getTotalElements());
         assertThat(teacherResponse.getContent().size()).isEqualTo(2);
+    }
+
+    @DisplayName("Test service to get a teacher by id, dni and email")
+    @Test
+    void getOne(){
+        given(this.teacherRepository.findById(anyLong())).willReturn(Optional.of(teacher));
+        given(this.teacherRepository.findTeacherByDni(this.teacherDTO.getDni())).willReturn(teacher);
+        given(this.teacherRepository.findTeacherByEmail(this.teacherDTO.getEmail())).willReturn(teacher);
+
+        Teacher teacherFoundById = this.teacherService.getById(1L);
+
+        Teacher teacherFoundByDni = this.teacherService.getByDni(teacherDTO);
+
+        Teacher teacherFoundByEmail = this.teacherService.getByEmail(teacherDTO);
+
+        assertNotNull(teacherFoundById);
+        assertNotNull(teacherFoundByDni);
+        assertNotNull(teacherFoundByEmail);
+        assertEquals(1L, teacherFoundById.getId());
+        assertEquals(1L, teacherFoundByDni.getId());
+        assertEquals(1L, teacherFoundByEmail.getId());
     }
 }
