@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.dtos.TeacherDTO;
 import com.app.dojo.dtos.TeacherResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperTeacher;
 import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.TeacherRepository;
@@ -164,5 +165,29 @@ public class TeacherServiceTest {
         assertEquals(1L, teacherFoundById.getId());
         assertEquals(1L, teacherFoundByDni.getId());
         assertEquals(1L, teacherFoundByEmail.getId());
+    }
+
+    @DisplayName("Test service to get a teacher when doesn't exists")
+    @Test
+    void failGetOne(){
+        given(this.teacherRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(this.teacherRepository.findTeacherByDni(this.teacherDTO.getDni())).willReturn(null);
+        given(this.teacherRepository.findTeacherByEmail(this.teacherDTO.getEmail())).willReturn(null);
+
+        NotFoundException teacherNotFoundById = assertThrows(NotFoundException.class, () -> {
+            this.teacherService.getById(1L);
+        });
+
+        NotFoundException teacherNotFoundByDni = assertThrows(NotFoundException.class, () -> {
+            this.teacherService.getByDni(this.teacherDTO);
+        });
+
+        NotFoundException teacherNotFoundByEmail = assertThrows(NotFoundException.class, () -> {
+            this.teacherService.getByEmail(this.teacherDTO);
+        });
+
+        assertEquals("Teacher with id %s doesn't exists".formatted( 1L), teacherNotFoundById.getMessage());
+        assertEquals("Teacher with dni %s doesn't exists".formatted(this.teacherDTO.getDni()), teacherNotFoundByDni.getMessage());
+        assertEquals("Teacher with email %s doesn't exists".formatted(this.teacherDTO.getEmail()), teacherNotFoundByEmail.getMessage());
     }
 }
