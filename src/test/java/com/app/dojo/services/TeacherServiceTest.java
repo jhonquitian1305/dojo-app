@@ -101,4 +101,17 @@ public class TeacherServiceTest {
         verify(this.teacherRepository, never()).save(any(Teacher.class));
         assertEquals("This teacher already exists", teacherFoundByDni.getMessage());
     }
+
+    @DisplayName("Test service to save a teacher when email exists")
+    @Test
+    void failSaveWhenEmailExists(){
+        given(this.teacherRepository.findTeacherByEmail(this.teacherDTO.getEmail())).willReturn(teacher);
+
+        BadRequest teacherFoundByEmail = assertThrows(BadRequest.class, () -> {
+            this.teacherService.save(teacherDTO);
+        });
+
+        verify(this.teacherRepository, never()).save(any(Teacher.class));
+        assertEquals("This email already exists", teacherFoundByEmail.getMessage());
+    }
 }
