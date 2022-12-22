@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.TeacherDTOBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.dtos.TeacherDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperTeacher;
 import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.TeacherRepository;
@@ -20,9 +21,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -84,5 +87,18 @@ public class TeacherServiceTest {
         Teacher teacherSaved = this.teacherService.save(teacherDTO);
 
         assertNotNull(teacherSaved);
+    }
+
+    @DisplayName("Test service to save a teacher when the dni exists")
+    @Test
+    void failSaveWhenDniExists(){
+        given(this.teacherRepository.findTeacherByDni(this.teacherDTO.getDni())).willReturn(teacher);
+
+        BadRequest teacherFoundByDni = assertThrows(BadRequest.class, () -> {
+            this.teacherService.save(teacherDTO);
+        });
+
+        verify(this.teacherRepository, never()).save(any(Teacher.class));
+        assertEquals("This teacher already exists", teacherFoundByDni.getMessage());
     }
 }
