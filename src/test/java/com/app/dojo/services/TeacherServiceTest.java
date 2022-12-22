@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.TeacherDTOBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.dtos.TeacherDTO;
+import com.app.dojo.dtos.TeacherResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperTeacher;
 import com.app.dojo.models.Teacher;
@@ -15,12 +16,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -113,5 +119,27 @@ public class TeacherServiceTest {
 
         verify(this.teacherRepository, never()).save(any(Teacher.class));
         assertEquals("This email already exists", teacherFoundByEmail.getMessage());
+    }
+
+    @DisplayName("Test service to get all teachers")
+    @Test
+    void getAll(){
+        Teacher teacher1 = new TeacherBuilder()
+                .setDni("864297531")
+                .setNames("Carlos")
+                .setLastnames("Andrade")
+                .setBirthday(formatDate)
+                .setEmail("carlosandrade@mail.com")
+                .setPassword("864297531")
+                .build();
+        Page<Teacher> teachers = new PageImpl<>(List.of(teacher, teacher1));
+        given(this.teacherRepository.findAll(any(Pageable.class))).willReturn(teachers);
+        given(this.mapperTeacher.mapTeacherDTO(any(Teacher.class))).willReturn(teacherDTO);
+
+        TeacherResponse teacherResponse = this.teacherService.getAll(0, 10, "id", "desc");
+
+        assertEquals(0, teacherResponse.getNumberPage());
+        assertEquals(2, teacherResponse.getTotalElements());
+        assertThat(teacherResponse.getContent().size()).isEqualTo(2);
     }
 }
