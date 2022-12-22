@@ -8,6 +8,8 @@ import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.TeacherRepository;
 import com.app.dojo.services.implementation.TeacherServiceImp;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +19,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -64,5 +70,19 @@ public class TeacherServiceTest {
                 .setEmail("jorgeortiz@mail.com")
                 .setPassword("987654321")
                 .build();
+    }
+
+    @DisplayName("Test service to save a teacher")
+    @Test
+    void save(){
+        given(this.teacherRepository.findTeacherByDni(this.teacherDTO.getDni())).willReturn(null);
+        given(this.teacherRepository.findTeacherByEmail(this.teacherDTO.getEmail())).willReturn(null);
+        given(this.teacherRepository.save(any(Teacher.class))).willReturn(teacher);
+
+        given(this.mapperTeacher.mapTeacher(any(TeacherDTO.class))).willReturn(teacher);
+
+        Teacher teacherSaved = this.teacherService.save(teacherDTO);
+
+        assertNotNull(teacherSaved);
     }
 }
