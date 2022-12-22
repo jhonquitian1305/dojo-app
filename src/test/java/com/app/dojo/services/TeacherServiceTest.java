@@ -33,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -203,5 +203,16 @@ public class TeacherServiceTest {
 
         assertThat(teacherUpdated.getDni()).isEqualTo("1984168878");
         assertThat(teacherUpdated.getNames()).isEqualTo("Ramiro");
+    }
+
+    @DisplayName("Test service to delete a teacher")
+    @Test
+    void deleteOne(){
+        given(this.teacherRepository.findById(anyLong())).willReturn(Optional.of(this.teacher));
+        willDoNothing().given(this.teacherRepository).delete(this.teacher);
+
+        this.teacherService.deleteOne(anyLong());
+
+        verify(this.teacherRepository, times(1)).delete(this.teacher);
     }
 }
