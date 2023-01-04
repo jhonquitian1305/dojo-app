@@ -70,4 +70,12 @@ public class TeacherControllerTest {
         assertEquals("jorgeortiz@mail.com", teacherSaved.getEmail());
         assertEquals("987654321", teacherSaved.getPassword());
     }
+
+    @DisplayName("Test controller to save a teacher when exists")
+    @Test
+    @Order(2)
+    void failCreate(){
+        ResponseEntity<TeacherDTO> response = this.testRestTemplate.postForEntity(url, teacherDTO, TeacherDTO.class);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 }
