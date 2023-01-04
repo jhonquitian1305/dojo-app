@@ -51,4 +51,23 @@ public class TeacherControllerTest {
                 .setPassword("987654321")
                 .build();
     }
+
+    @DisplayName("Test Controller to save a teacher")
+    @Test
+    @Order(1)
+    void create(){
+        ResponseEntity<TeacherDTO> response = this.testRestTemplate.postForEntity(url, teacherDTO, TeacherDTO.class);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+
+        TeacherDTO teacherSaved = response.getBody();
+        assertNotNull(teacherSaved);
+
+        assertEquals("987654321", teacherSaved.getDni());
+        assertEquals("Jorge", teacherSaved.getNames());
+        assertEquals("Ortíz", teacherSaved.getLastnames());
+        assertEquals(formatDate, teacherSaved.getBirthday());
+        assertEquals("jorgeortiz@mail.com", teacherSaved.getEmail());
+        assertEquals("987654321", teacherSaved.getPassword());
+    }
 }
