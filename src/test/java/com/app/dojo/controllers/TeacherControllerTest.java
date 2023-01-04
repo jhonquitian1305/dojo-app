@@ -2,6 +2,7 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.TeacherDTOBuilder;
 import com.app.dojo.dtos.TeacherDTO;
+import com.app.dojo.dtos.TeacherResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -77,5 +79,16 @@ public class TeacherControllerTest {
     void failCreate(){
         ResponseEntity<TeacherDTO> response = this.testRestTemplate.postForEntity(url, teacherDTO, TeacherDTO.class);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @DisplayName("Test controller to get all teachers")
+    @Test
+    @Order(3)
+    void findAll(){
+        ResponseEntity<TeacherResponse> response = this.testRestTemplate.getForEntity(url, TeacherResponse.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getContent()).size().isGreaterThan(0);
     }
 }
