@@ -105,4 +105,12 @@ public class TeacherControllerTest {
         assertNotNull(teacher);
         assertEquals(1L, teacher.getId());
     }
+
+    @DisplayName("Test controller to get a teacher when doesn't exists")
+    @Test
+    @Order(5)
+    void failGetOne(){
+        ResponseEntity<TeacherDTO> response = this.testRestTemplate.getForEntity(url+"/100000", TeacherDTO.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
