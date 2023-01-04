@@ -91,4 +91,18 @@ public class TeacherControllerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getContent()).size().isGreaterThan(0);
     }
+
+    @DisplayName("Test controller to get a teacher by id")
+    @Test
+    @Order(4)
+    void findOne(){
+        ResponseEntity<TeacherDTO> response = this.testRestTemplate.getForEntity(url+"/1", TeacherDTO.class);
+        TeacherDTO teacher = response.getBody();
+        System.out.println(response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+
+        assertNotNull(teacher);
+        assertEquals(1L, teacher.getId());
+    }
 }
