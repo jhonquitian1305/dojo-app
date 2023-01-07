@@ -5,12 +5,11 @@ import com.app.dojo.dtos.ScheduleDTO;
 import com.app.dojo.dtos.ScheduleResponse;
 import com.app.dojo.mappers.MapperSchedule;
 import com.app.dojo.services.Interfaces.ScheduleServcie;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 import static com.app.dojo.constants.EndPointsConstants.*;
 

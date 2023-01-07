@@ -1,7 +1,8 @@
 package com.app.dojo.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 import java.io.Serializable;
 import java.util.Date;
 @Entity

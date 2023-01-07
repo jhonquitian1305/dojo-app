@@ -2,12 +2,10 @@ package com.app.dojo.dtos;
 
 import com.app.dojo.constants.Message;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
 
 public class CourseDTO {
   @NotNull(message = Message.FIELD_NULL)

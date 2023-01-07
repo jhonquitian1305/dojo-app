@@ -1,6 +1,10 @@
 package com.app.dojo.dtos;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 public abstract class UserDTO {

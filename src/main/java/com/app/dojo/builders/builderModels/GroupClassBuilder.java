@@ -5,7 +5,6 @@ import com.app.dojo.models.GroupClass;
 import com.app.dojo.models.Room;
 import com.app.dojo.models.Schedule;
 
-import javax.persistence.*;
 import java.util.List;
 
 public class GroupClassBuilder {
