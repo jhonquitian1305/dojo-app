@@ -1,9 +1,8 @@
 package com.app.dojo.dtos;
 
 import com.app.dojo.constants.Message;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class LevelDTO {
   private Long id;

@@ -4,11 +4,10 @@ import com.app.dojo.constants.Message;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Room;
 import com.app.dojo.models.Schedule;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 public class GroupClassDTO {

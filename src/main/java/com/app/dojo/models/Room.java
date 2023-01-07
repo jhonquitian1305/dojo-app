@@ -1,8 +1,8 @@
 package com.app.dojo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Entity

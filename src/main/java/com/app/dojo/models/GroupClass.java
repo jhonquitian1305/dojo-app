@@ -1,6 +1,6 @@
 package com.app.dojo.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity

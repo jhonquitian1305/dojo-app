@@ -8,13 +8,12 @@ import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.mappers.MapperCourse;
 import com.app.dojo.models.Course;
 import com.app.dojo.services.Interfaces.CourseService;
+import jakarta.validation.Valid;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(EndPointsConstants.ENDPOINT_COURSES)
