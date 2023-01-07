@@ -28,12 +28,17 @@ public class StudentServiceImp implements StudentService {
     @Autowired
     private MapperStudent mapperStudent;
 
+    @Autowired
+    EncryptServiceImp encryptServiceImp;
+
     @Override
     public Student saveStudent(StudentDTO studentDTO) {
         findStudentByDni(studentDTO.getDni());
         findStudentByEmail(studentDTO.getEmail());
 
-        Student student = mapperStudent.mapStudent(studentDTO);
+        String hashPass = encryptServiceImp.encryptPassword(studentDTO.getPassword());
+
+        Student student = mapperStudent.mapStudent(studentDTO, hashPass);
 
         Student studentSaved = studentRepository.save(student);
 
