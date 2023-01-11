@@ -28,12 +28,17 @@ public class TeacherServiceImp implements TeacherService {
     @Autowired
     MapperTeacher mapperTeacher;
 
+    @Autowired
+    EncryptServiceImp encryptServiceImp;
+
     @Override
     public Teacher save(TeacherDTO teacherDTO) {
         findTeacherByDni(teacherDTO.getDni());
         findTeacherByEmail(teacherDTO.getEmail());
 
-        Teacher teacher = this.mapperTeacher.mapTeacher(teacherDTO);
+        String hassPass = encryptServiceImp.encryptPassword(teacherDTO.getPassword());
+
+        Teacher teacher = this.mapperTeacher.mapTeacher(teacherDTO, hassPass);
 
         Teacher teacherSaved = this.teacherRepository.save(teacher);
 
