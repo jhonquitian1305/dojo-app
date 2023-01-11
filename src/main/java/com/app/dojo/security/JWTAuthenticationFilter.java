@@ -33,4 +33,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         );
         return getAuthenticationManager().authenticate(usernamePAT);
     }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        String token = "";
+        if(authResult.getPrincipal().getClass().equals(StudentDetailsImp.class)){
+            StudentDetailsImp studentDetails = (StudentDetailsImp) authResult.getPrincipal();
+            token = TokenUtils.createToken(studentDetails.getNombre(), studentDetails.getUsername());
+        }else{
+            TeacherDetailsImp teacherDetails = (TeacherDetailsImp) authResult.getPrincipal();
+            token = TokenUtils.createToken(teacherDetails.getNombre(), teacherDetails.getUsername());
+        }
+
+        response.addHeader("Authorization", String.format("Bearer %s", token));
+        response.getWriter().flush();
+
+        super.successfulAuthentication(request, response, chain, authResult);
+    }
 }
