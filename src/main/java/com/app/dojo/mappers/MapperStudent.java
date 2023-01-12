@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MapperStudent {
-    public Student mapStudent(StudentDTO studentDTO, String hashPassword){
+    public Student mapStudent(StudentDTO studentDTO){
         return new StudentBuilder()
                 .setId(studentDTO.getId())
                 .setDni(studentDTO.getDni())
@@ -16,7 +16,7 @@ public class MapperStudent {
                 .setLastnames(studentDTO.getLastnames())
                 .setBirthday(studentDTO.getBirthday())
                 .setEmail(studentDTO.getEmail())
-                .setPassword(hashPassword)
+                .setPassword(studentDTO.getPassword())
                 .build();
     }
 
@@ -28,7 +28,6 @@ public class MapperStudent {
                 .setLastnames(student.getLastnames())
                 .setBirthday(student.getBirthday())
                 .setEmail(student.getEmail())
-                .setPassword(student.getPassword())
                 .build();
     }
 }

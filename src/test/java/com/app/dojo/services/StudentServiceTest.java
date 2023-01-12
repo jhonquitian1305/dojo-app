@@ -91,7 +91,7 @@ public class StudentServiceTest {
         given(this.studentRepository.findStudentByEmail(this.studentDTO.getEmail())).willReturn(null);
         given(this.studentRepository.save(any(Student.class))).willReturn(student);
 
-        given(this.mapperStudent.mapStudent(any(StudentDTO.class), studentDTO.getPassword())).willReturn(student);
+        given(this.mapperStudent.mapStudent(any(StudentDTO.class))).willReturn(student);
 
         Student studentSaved = this.studentService.saveStudent(this.studentDTO);
 

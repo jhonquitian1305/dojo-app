@@ -36,8 +36,9 @@ public class StudentServiceImp implements StudentService {
         findStudentByDni(studentDTO.getDni());
         findStudentByEmail(studentDTO.getEmail());
 
-        String hashPass = encryptServiceImp.encryptPassword(studentDTO.getPassword());
-        Student student = mapperStudent.mapStudent(studentDTO, hashPass);
+        this.encryptPassword(studentDTO);
+
+        Student student = mapperStudent.mapStudent(studentDTO);
 
         Student studentSaved = studentRepository.save(student);
 
@@ -94,6 +95,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public Student updateOne(Long id, StudentDTO studentDTO) {
         Student studentFound = this.getStudentById(id);
+        this.encryptPassword(studentDTO);
         Student studentUpdated = this.updateStudent(studentFound, studentDTO);
         return this.studentRepository.save(studentUpdated);
     }
@@ -127,5 +129,10 @@ public class StudentServiceImp implements StudentService {
         student.setPassword(studentDTO.getPassword());
 
         return student;
+    }
+
+    private void encryptPassword(StudentDTO studentDTO){
+        String hashPass = encryptServiceImp.encryptPassword(studentDTO.getPassword());
+        studentDTO.setPassword(hashPass);
     }
 }
