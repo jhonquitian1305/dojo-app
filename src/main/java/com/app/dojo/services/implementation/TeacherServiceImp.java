@@ -95,12 +95,9 @@ public class TeacherServiceImp implements TeacherService {
 
     @Override
     public Teacher updateOne(Long id, TeacherDTO teacherDTO) {
-        Optional<Teacher> teacherFound = this.teacherRepository.findById(id);
-        if(teacherFound.isEmpty()){
-            throw new NotFoundException(String.format("Teacher with id %s doesn't exists", id));
-        }
+        Teacher teacherFound = this.getById(id);
         this.encryptPassword(teacherDTO);
-        Teacher teacherUpdated = updateTeacher(teacherFound.get(), teacherDTO);
+        Teacher teacherUpdated = updateTeacher(teacherFound, teacherDTO);
         return this.teacherRepository.save(teacherUpdated);
     }
 
