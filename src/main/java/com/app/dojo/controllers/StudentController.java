@@ -55,6 +55,12 @@ public class StudentController {
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
+    @PutMapping(ENDPOINT_ID)
+    public ResponseEntity<StudentDTO> updateOne(@PathVariable("id") Long id, @RequestBody StudentDTO studentDTO){
+        StudentDTO studentUpdated = this.mapperStudent.mapStudentDTO(this.studentService.updateOne(id, studentDTO));
+        return new ResponseEntity<>(studentUpdated, HttpStatus.OK);
+    }
+
     @DeleteMapping(ENDPOINT_ID)
     public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id) throws Exception {
         this.studentService.deleteStudent(id);

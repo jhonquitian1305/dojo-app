@@ -36,9 +36,9 @@ public class TeacherServiceImp implements TeacherService {
         findTeacherByDni(teacherDTO.getDni());
         findTeacherByEmail(teacherDTO.getEmail());
 
-        String hassPass = encryptServiceImp.encryptPassword(teacherDTO.getPassword());
+        this.encryptPassword(teacherDTO);
 
-        Teacher teacher = this.mapperTeacher.mapTeacher(teacherDTO, hassPass);
+        Teacher teacher = this.mapperTeacher.mapTeacher(teacherDTO);
 
         Teacher teacherSaved = this.teacherRepository.save(teacher);
 
@@ -95,11 +95,9 @@ public class TeacherServiceImp implements TeacherService {
 
     @Override
     public Teacher updateOne(Long id, TeacherDTO teacherDTO) {
-        Optional<Teacher> teacherFound = this.teacherRepository.findById(id);
-        if(teacherFound.isEmpty()){
-            throw new NotFoundException(String.format("Teacher with id %s doesn't exists", id));
-        }
-        Teacher teacherUpdated = updateTeacher(teacherFound.get(), teacherDTO);
+        Teacher teacherFound = this.getById(id);
+        this.encryptPassword(teacherDTO);
+        Teacher teacherUpdated = updateTeacher(teacherFound, teacherDTO);
         return this.teacherRepository.save(teacherUpdated);
     }
 
@@ -132,5 +130,10 @@ public class TeacherServiceImp implements TeacherService {
         teacher.setPassword(teacherDTO.getPassword());
 
         return teacher;
+    }
+
+    private void encryptPassword(TeacherDTO teacherDTO){
+        String hassPass = encryptServiceImp.encryptPassword(teacherDTO.getPassword());
+        teacherDTO.setPassword(hassPass);
     }
 }

@@ -36,9 +36,9 @@ public class StudentServiceImp implements StudentService {
         findStudentByDni(studentDTO.getDni());
         findStudentByEmail(studentDTO.getEmail());
 
-        String hashPass = encryptServiceImp.encryptPassword(studentDTO.getPassword());
+        this.encryptPassword(studentDTO);
 
-        Student student = mapperStudent.mapStudent(studentDTO, hashPass);
+        Student student = mapperStudent.mapStudent(studentDTO);
 
         Student studentSaved = studentRepository.save(student);
 
@@ -93,6 +93,14 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    public Student updateOne(Long id, StudentDTO studentDTO) {
+        Student studentFound = this.getStudentById(id);
+        this.encryptPassword(studentDTO);
+        Student studentUpdated = this.updateStudent(studentFound, studentDTO);
+        return this.studentRepository.save(studentUpdated);
+    }
+
+    @Override
     public void deleteStudent(Long id){
         Student studentFound = this.getStudentById(id);
         this.studentRepository.deleteById(studentFound.getId());
@@ -110,5 +118,21 @@ public class StudentServiceImp implements StudentService {
         if(studentFound != null){
             throw new BadRequest("This email already exists");
         }
+    }
+
+    private Student updateStudent(Student student, StudentDTO studentDTO){
+        student.setDni(studentDTO.getDni());
+        student.setNames(studentDTO.getNames());
+        student.setLastnames(studentDTO.getLastnames());
+        student.setBirthday(studentDTO.getBirthday());
+        student.setEmail(studentDTO.getEmail());
+        student.setPassword(studentDTO.getPassword());
+
+        return student;
+    }
+
+    private void encryptPassword(StudentDTO studentDTO){
+        String hashPass = encryptServiceImp.encryptPassword(studentDTO.getPassword());
+        studentDTO.setPassword(hashPass);
     }
 }
