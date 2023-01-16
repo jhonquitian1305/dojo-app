@@ -3,6 +3,7 @@ package com.app.dojo.services.implementation;
 import com.app.dojo.builders.builderDTO.CommentResponseBuilder;
 import com.app.dojo.dtos.CommentDTO;
 import com.app.dojo.dtos.CommentResponse;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperComment;
 import com.app.dojo.models.Comment;
 import com.app.dojo.models.Course;
@@ -13,6 +14,8 @@ import com.app.dojo.services.Interfaces.CommentService;
 import com.app.dojo.services.Interfaces.CourseService;
 import com.app.dojo.services.Interfaces.StudentService;
 import com.app.dojo.services.Interfaces.TeacherService;
+import com.app.dojo.services.strategyComments.CommentsContext;
+import com.app.dojo.services.strategyComments.CommentsStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImp implements CommentService {
@@ -40,6 +44,9 @@ public class CommentServiceImp implements CommentService {
     @Autowired
     StudentService studentService;
 
+    @Autowired
+    CommentsContext commentsContext;
+
     @Override
     public Comment createOne(CommentDTO commentDTO) throws Exception {
         Course courseFound = this.courseService.getOne(commentDTO.getCourse());
@@ -58,11 +65,8 @@ public class CommentServiceImp implements CommentService {
 
         Page<Comment> commentsFound = this.commentRepository.findAll(pageable);
 
-        List<Comment> commentListFound = commentsFound.getContent();
-        List<CommentDTO> comments = commentListFound.stream().map(this.mapperComment::mapCommentDTO).toList();
-
         return new CommentResponseBuilder()
-                .setContent(comments)
+                .setContent(commentsFound.getContent())
                 .setNumberPage(commentsFound.getNumber())
                 .setSizePage(commentsFound.getSize())
                 .setTotalElements(commentsFound.getTotalElements())
