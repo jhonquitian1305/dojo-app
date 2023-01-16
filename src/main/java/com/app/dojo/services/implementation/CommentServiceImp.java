@@ -1,6 +1,8 @@
 package com.app.dojo.services.implementation;
 
+import com.app.dojo.builders.builderDTO.CommentResponseBuilder;
 import com.app.dojo.dtos.CommentDTO;
+import com.app.dojo.dtos.CommentResponse;
 import com.app.dojo.mappers.MapperComment;
 import com.app.dojo.models.Comment;
 import com.app.dojo.models.Course;
@@ -12,7 +14,13 @@ import com.app.dojo.services.Interfaces.CourseService;
 import com.app.dojo.services.Interfaces.StudentService;
 import com.app.dojo.services.Interfaces.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CommentServiceImp implements CommentService {
@@ -42,4 +50,26 @@ public class CommentServiceImp implements CommentService {
 
         return commentCreated;
     }
+
+    @Override
+    public CommentResponse getAll(int numberPage, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(numberPage, pageSize, sort);
+
+        Page<Comment> commentsFound = this.commentRepository.findAll(pageable);
+
+        List<Comment> commentListFound = commentsFound.getContent();
+        List<CommentDTO> comments = commentListFound.stream().map(this.mapperComment::mapCommentDTO).toList();
+
+        return new CommentResponseBuilder()
+                .setContent(comments)
+                .setNumberPage(commentsFound.getNumber())
+                .setSizePage(commentsFound.getSize())
+                .setTotalElements(commentsFound.getTotalElements())
+                .setTotalPages(commentsFound.getTotalPages())
+                .setLastOne(commentsFound.isLast())
+                .build();
+    }
+
+
 }
