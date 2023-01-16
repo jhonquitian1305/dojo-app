@@ -1,5 +1,6 @@
 package com.app.dojo.mappers;
 
+import com.app.dojo.builders.builderDTO.CommentDTOBuilder;
 import com.app.dojo.builders.builderDTO.CommentDTOResponseBuilder;
 import com.app.dojo.builders.builderModels.CommentBuilder;
 import com.app.dojo.dtos.CommentDTO;
@@ -30,6 +31,16 @@ public class MapperComment {
                 .setCourse(course)
                 .setTeacher(teacher)
                 .setStudent(student)
+                .build();
+    }
+
+    public CommentDTO mapCommentDTO(Comment comment){
+        return new CommentDTOBuilder()
+                .setId(comment.getId())
+                .setDateComment(comment.getDateComment())
+                .setComment(comment.getComment())
+                .setTeacher(comment.getTeacher().getId())
+                .setStudent(comment.getStudent().getId())
                 .build();
     }
 }
