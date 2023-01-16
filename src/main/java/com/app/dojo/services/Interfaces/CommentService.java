@@ -7,4 +7,5 @@ import com.app.dojo.models.Comment;
 public interface CommentService {
     Comment createOne(CommentDTO commentDTO) throws Exception;
     CommentResponse getAll(int numberPage, int pageSize, String sortBy, String sortDir);
+    Comment getById(Long id);
 }

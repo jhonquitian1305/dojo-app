@@ -75,5 +75,12 @@ public class CommentServiceImp implements CommentService {
                 .build();
     }
 
-
+    @Override
+    public Comment getById(Long id) {
+        Optional<Comment> commentFound = this.commentRepository.findById(id);
+        if(commentFound.isEmpty()){
+            throw new NotFoundException(String.format("Comment with id %s doesn't exists", id));
+        }
+        return commentFound.get();
+    }
 }

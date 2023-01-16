@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_COMMENTS;
+import static com.app.dojo.constants.EndPointsConstants.ENDPOINT_ID;
 
 @RestController
 @RequestMapping(ENDPOINT_COMMENTS)
@@ -37,5 +38,11 @@ public class CommentController {
             @RequestParam(value = "sortDir", defaultValue = PaginationRequest.DEFAULT_SORT_DIR, required = false) String sortDir
     ){
         return new ResponseEntity<>(this.commentService.getAll(numberPage, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @GetMapping(ENDPOINT_ID)
+    public ResponseEntity<CommentDTOResponse> getById(@PathVariable("id") Long id){
+        CommentDTOResponse commentFound = this.mapperComment.mapCommentDTOResponse(this.commentService.getById(id));
+        return new ResponseEntity<>(commentFound, HttpStatus.OK);
     }
 }
