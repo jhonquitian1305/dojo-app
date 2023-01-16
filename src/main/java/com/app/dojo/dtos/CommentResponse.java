@@ -5,7 +5,7 @@ import com.app.dojo.models.Comment;
 import java.util.List;
 
 public class CommentResponse {
-    private List<CommentDTO> content;
+    private List<Comment> content;
     private int numberPage;
     private int sizePage;
     private Long totalElements;
@@ -15,7 +15,7 @@ public class CommentResponse {
     public CommentResponse() {
     }
 
-    public CommentResponse(List<CommentDTO> content, int numberPage, int sizePage, Long totalElements, int totalPages, boolean lastOne) {
+    public CommentResponse(List<Comment> content, int numberPage, int sizePage, Long totalElements, int totalPages, boolean lastOne) {
         this.content = content;
         this.numberPage = numberPage;
         this.sizePage = sizePage;
@@ -24,11 +24,11 @@ public class CommentResponse {
         this.lastOne = lastOne;
     }
 
-    public List<CommentDTO> getContent() {
+    public List<Comment> getContent() {
         return content;
     }
 
-    public void setContent(List<CommentDTO> content) {
+    public void setContent(List<Comment> content) {
         this.content = content;
     }
 

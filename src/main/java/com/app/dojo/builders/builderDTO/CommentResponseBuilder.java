@@ -7,14 +7,14 @@ import com.app.dojo.models.Comment;
 import java.util.List;
 
 public class CommentResponseBuilder {
-    private List<CommentDTO> content;
+    private List<Comment> content;
     private int numberPage;
     private int sizePage;
     private Long totalElements;
     private int totalPages;
     private boolean lastOne;
 
-    public CommentResponseBuilder setContent(List<CommentDTO> content) {
+    public CommentResponseBuilder setContent(List<Comment> content) {
         this.content = content;
         return this;
     }
