@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CommentsStrategy {
-    Page<Comment> findComments(Pageable pageable, Long idCondition);
+    Page<Comment> findComments(Pageable pageable, Long idCondition) throws Exception;
 }
