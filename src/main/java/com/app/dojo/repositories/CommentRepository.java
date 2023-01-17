@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findByCourse(Course course, Pageable pageable);
+    Page<Comment> findByTeacher(Teacher teacher, Pageable pageable);
 }
