@@ -18,6 +18,8 @@ public class CommentsContext {
 
     public CommentsStrategy loadStrategy(String modelCondition){
         switch (modelCondition){
+            case "COURSE":
+                return new CommentsCourse(this.courseService, this.commentRepository);
             default:
                 return new Comments(this.commentRepository);
         }
