@@ -46,4 +46,10 @@ public class CommentController {
         CommentDTOResponse commentFound = this.mapperComment.mapCommentDTOResponse(this.commentService.getById(id));
         return new ResponseEntity<>(commentFound, HttpStatus.OK);
     }
+
+    @PutMapping(ENDPOINT_ID)
+    public ResponseEntity<CommentDTOResponse> updateOne(@PathVariable("id") Long id, @RequestBody CommentDTO commentDTO) throws Exception {
+        CommentDTOResponse commentUpdated = this.mapperComment.mapCommentDTOResponse(this.commentService.updateOne(id, commentDTO));
+        return new ResponseEntity<>(commentUpdated, HttpStatus.OK);
+    }
 }

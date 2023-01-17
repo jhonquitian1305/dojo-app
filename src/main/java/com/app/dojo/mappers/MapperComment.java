@@ -43,4 +43,13 @@ public class MapperComment {
                 .setStudent(comment.getStudent().getId())
                 .build();
     }
+
+    public Comment updateComment(CommentDTO commentDTO, Comment comment, Course course, Teacher teacher, Student student){
+        comment.setComment(commentDTO.getComment());
+        comment.setCourse(course);
+        comment.setTeacher(teacher);
+        comment.setStudent(student);
+
+        return comment;
+    }
 }

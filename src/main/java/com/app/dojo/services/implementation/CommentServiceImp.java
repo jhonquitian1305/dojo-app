@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +82,17 @@ public class CommentServiceImp implements CommentService {
             throw new NotFoundException(String.format("Comment with id %s doesn't exists", id));
         }
         return commentFound.get();
+    }
+
+    @Override
+    public Comment updateOne(Long id, CommentDTO commentDTO) throws Exception {
+        Comment commentFound = this.getById(id);
+        Course courseFound = this.courseService.getOne(commentDTO.getCourse());
+        Teacher teacherFound = this.teacherService.getById(commentDTO.getTeacher());
+        Student studentFound = this.studentService.getStudentById(commentDTO.getStudent());
+
+        Comment commentUpdate = this.mapperComment.updateComment(commentDTO, commentFound, courseFound, teacherFound, studentFound);
+
+        return this.commentRepository.save(commentUpdate);
     }
 }
