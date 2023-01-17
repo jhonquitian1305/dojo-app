@@ -59,11 +59,12 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public CommentResponse getAll(int numberPage, int pageSize, String sortBy, String sortDir) {
+    public CommentResponse getAllByCondition(int numberPage, int pageSize, String sortBy, String sortDir, String model, Long idCondition) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(numberPage, pageSize, sort);
 
-        Page<Comment> commentsFound = this.commentRepository.findAll(pageable);
+        CommentsStrategy commentsStrategy = this.commentsContext.loadStrategy(model.toUpperCase());
+        Page<Comment> commentsFound = commentsStrategy.findComments(pageable, idCondition);
 
         return new CommentResponseBuilder()
                 .setContent(commentsFound.getContent())

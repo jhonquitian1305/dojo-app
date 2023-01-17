@@ -6,6 +6,6 @@ import com.app.dojo.models.Comment;
 
 public interface CommentService {
     Comment createOne(CommentDTO commentDTO) throws Exception;
-    CommentResponse getAll(int numberPage, int pageSize, String sortBy, String sortDir);
+    CommentResponse getAllByCondition(int numberPage, int pageSize, String sortBy, String sortDir, String model, Long idCondition) throws Exception;
     Comment getById(Long id);
 }
