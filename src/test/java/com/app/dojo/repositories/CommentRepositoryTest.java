@@ -26,8 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -200,5 +199,21 @@ public class CommentRepositoryTest {
         assertThat(commentsFound.getContent().size()).isEqualTo(1);
         assertTrue(commentsFound.isLast());
         assertThat(commentsFound.getTotalElements()).isEqualTo(1);
+    }
+
+    @DisplayName("Test repository when search a comment that doesn't exist")
+    @Test
+    void commentNotFound(){
+        Course courseSaved = this.courseRepository.save(course);
+        Teacher teacherSaved = this.teacherRepository.save(teacher);
+        Student studentSaved = this.studentRepository.save(student);
+        comment.setCourse(courseSaved);
+        comment.setTeacher(teacherSaved);
+        comment.setStudent(studentSaved);
+        this.commentRepository.save(comment);
+
+        Optional<Comment> commentFoundId = this.commentRepository.findById(10L);
+
+        assertThat(commentFoundId.isEmpty()).isTrue();
     }
 }
