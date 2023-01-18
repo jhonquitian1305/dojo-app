@@ -35,4 +35,11 @@ public class CommentsContextTest {
         CommentsStrategy teacherStrategy = this.commentsContext.loadStrategy("TEACHER");
         assertNotNull(teacherStrategy);
     }
+
+    @DisplayName("Test CommentsContext to get student strategy to find comments")
+    @Test
+    void loadStudentStrategy(){
+        CommentsStrategy studentStrategy = this.commentsContext.loadStrategy("STUDENT");
+        assertNotNull(studentStrategy);
+    }
 }
