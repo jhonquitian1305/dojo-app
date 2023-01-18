@@ -10,16 +10,28 @@ import com.app.dojo.models.Student;
 import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.CommentRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -78,5 +90,23 @@ public class CommentsTest {
                 .setTeacher(teacher)
                 .setStudent(student)
                 .build();
+    }
+
+    @DisplayName("Test CommentsStrategy to get all comments without any condition")
+    @Test
+    void findComments(){
+        Page<Comment> comments = new PageImpl<>(List.of(comment));
+        Pageable pageable = PageRequest.of(1, 10);
+        given(this.commentRepository.findAll(pageable)).willReturn(comments);
+
+        Page<Comment> commentsFound = this.comments.findComments(pageable, anyLong());
+
+        assertEquals(1, commentsFound.getTotalElements());
+        assertEquals(1, commentsFound.getSize());
+        assertEquals(1, commentsFound.getTotalPages());
+        assertEquals(0, commentsFound.getNumber());
+        assertTrue(commentsFound.isLast());
+        assertNotNull(commentsFound.getContent());
+        assertThat(commentsFound.getContent().size()).isEqualTo(1);
     }
 }
