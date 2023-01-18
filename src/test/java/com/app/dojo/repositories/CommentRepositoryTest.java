@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -104,5 +105,22 @@ public class CommentRepositoryTest {
         assertNotNull(commentSaved.getCourse());
         assertNotNull(commentSaved.getTeacher());
         assertNotNull(commentSaved.getStudent());
+    }
+
+    @DisplayName("Test repository to get all comments")
+    @Test
+    void getAll(){
+        Course courseSaved = this.courseRepository.save(course);
+        Teacher teacherSaved = this.teacherRepository.save(teacher);
+        Student studentSaved = this.studentRepository.save(student);
+        comment.setCourse(courseSaved);
+        comment.setTeacher(teacherSaved);
+        comment.setStudent(studentSaved);
+        this.commentRepository.save(comment);
+
+        List<Comment> commentFound = this.commentRepository.findAll();
+
+        assertNotNull(commentFound);
+        assertThat(commentFound.size()).isEqualTo(1);
     }
 }
