@@ -21,4 +21,11 @@ public class CommentsContextTest {
         CommentsStrategy defaultStrategy = this.commentsContext.loadStrategy("DEFAULT");
         assertNotNull(defaultStrategy);
     }
+
+    @DisplayName("Test CommentsContext to get course strategy to find comments")
+    @Test
+    void loadCourseStrategy(){
+        CommentsStrategy courseStrategy = this.commentsContext.loadStrategy("COURSE");
+        assertNotNull(courseStrategy);
+    }
 }
