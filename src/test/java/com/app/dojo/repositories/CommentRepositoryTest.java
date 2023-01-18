@@ -9,6 +9,8 @@ import com.app.dojo.models.Course;
 import com.app.dojo.models.Student;
 import com.app.dojo.models.Teacher;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,6 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -44,8 +49,8 @@ public class CommentRepositoryTest {
     String date = "04/02/1995";
     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     Date formatDate = format.parse(date);
-    Date startDate = format.parse("2022-06-01");
-    Date finishDate = format.parse("2022-06-30");
+    Date startDate = format.parse("01/06/2022");
+    Date finishDate = format.parse("30/06/2022");
 
 
     public CommentRepositoryTest() throws ParseException {
@@ -80,5 +85,24 @@ public class CommentRepositoryTest {
                 .setEmail("jhonquitian@mail.com")
                 .setPassword("12345678")
                 .build();
+    }
+
+    @DisplayName("Test repository to create a comment")
+    @Test
+    void create(){
+        Course courseSaved = this.courseRepository.save(course);
+        Teacher teacherSaved = this.teacherRepository.save(teacher);
+        Student studentSaved = this.studentRepository.save(student);
+
+        comment.setCourse(courseSaved);
+        comment.setTeacher(teacherSaved);
+        comment.setStudent(studentSaved);
+        Comment commentSaved = this.commentRepository.save(comment);
+
+        assertNotNull(commentSaved);
+        assertThat(commentSaved.getId()).isGreaterThan(0);
+        assertNotNull(commentSaved.getCourse());
+        assertNotNull(commentSaved.getTeacher());
+        assertNotNull(commentSaved.getStudent());
     }
 }
