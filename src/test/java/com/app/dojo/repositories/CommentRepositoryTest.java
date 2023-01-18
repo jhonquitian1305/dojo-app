@@ -216,4 +216,21 @@ public class CommentRepositoryTest {
 
         assertThat(commentFoundId.isEmpty()).isTrue();
     }
+
+    @DisplayName("Test repository to delete a comment")
+    @Test
+    void deleteOne(){
+        Course courseSaved = this.courseRepository.save(course);
+        Teacher teacherSaved = this.teacherRepository.save(teacher);
+        Student studentSaved = this.studentRepository.save(student);
+        comment.setCourse(courseSaved);
+        comment.setTeacher(teacherSaved);
+        comment.setStudent(studentSaved);
+        Comment commentSaved = this.commentRepository.save(comment);
+
+        this.commentRepository.deleteById(commentSaved.getId());
+        Optional<Comment> commentDeleted = this.commentRepository.findById(commentSaved.getId());
+
+        assertTrue(commentDeleted.isEmpty());
+    }
 }
