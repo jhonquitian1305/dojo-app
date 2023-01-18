@@ -13,6 +13,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -24,6 +27,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -139,5 +143,24 @@ public class CommentRepositoryTest {
         Optional<Comment> commentFound = this.commentRepository.findById(commentSaved.getId());
 
         assertNotNull(commentFound);
+    }
+
+    @DisplayName("Test repository to get comments by course")
+    @Test
+    void getByCourse(){
+        Course courseSaved = this.courseRepository.save(course);
+        Teacher teacherSaved = this.teacherRepository.save(teacher);
+        Student studentSaved = this.studentRepository.save(student);
+        comment.setCourse(courseSaved);
+        comment.setTeacher(teacherSaved);
+        comment.setStudent(studentSaved);
+        this.commentRepository.save(comment);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Comment> commentsFound = this.commentRepository.findByCourse(courseSaved, pageable);
+
+        assertThat(commentsFound.getContent().size()).isEqualTo(1);
+        assertTrue(commentsFound.isLast());
+        assertThat(commentsFound.getTotalElements()).isEqualTo(1);
     }
 }
