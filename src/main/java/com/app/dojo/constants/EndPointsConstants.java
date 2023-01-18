@@ -28,4 +28,7 @@ public final class EndPointsConstants {
 
     //Teacher
     public static final String ENDPOINT_TEACHERS="/api/dojo-app/teachers";
+
+    //Comments
+    public static final String ENDPOINT_COMMENTS="/api/dojo-app/comments";
 }
