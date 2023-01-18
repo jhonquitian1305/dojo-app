@@ -9,4 +9,5 @@ public interface CommentService {
     CommentResponse getAllByCondition(int numberPage, int pageSize, String sortBy, String sortDir, String model, Long idCondition) throws Exception;
     Comment getById(Long id);
     Comment updateOne(Long id, CommentDTO commentDTO) throws Exception;
+    void deleteOne(Long id);
 }

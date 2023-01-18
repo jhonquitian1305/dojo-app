@@ -95,4 +95,9 @@ public class CommentServiceImp implements CommentService {
 
         return this.commentRepository.save(commentUpdate);
     }
+
+    @Override
+    public void deleteOne(Long id) {
+        this.commentRepository.deleteById(id);
+    }
 }

@@ -52,4 +52,10 @@ public class CommentController {
         CommentDTOResponse commentUpdated = this.mapperComment.mapCommentDTOResponse(this.commentService.updateOne(id, commentDTO));
         return new ResponseEntity<>(commentUpdated, HttpStatus.OK);
     }
+
+    @DeleteMapping(ENDPOINT_ID)
+    public ResponseEntity<String> deleteOne(@PathVariable("id") Long id){
+        this.commentService.deleteOne(id);
+        return new ResponseEntity<>("Comment deleted", HttpStatus.OK);
+    }
 }
