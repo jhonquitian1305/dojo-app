@@ -182,4 +182,23 @@ public class CommentRepositoryTest {
         assertTrue(commentsFound.isLast());
         assertThat(commentsFound.getTotalElements()).isEqualTo(1);
     }
+
+    @DisplayName("Test repository to get comments by student")
+    @Test
+    void getByStudent(){
+        Course courseSaved = this.courseRepository.save(course);
+        Teacher teacherSaved = this.teacherRepository.save(teacher);
+        Student studentSaved = this.studentRepository.save(student);
+        comment.setCourse(courseSaved);
+        comment.setTeacher(teacherSaved);
+        comment.setStudent(studentSaved);
+        this.commentRepository.save(comment);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Comment> commentsFound = this.commentRepository.findByStudent(studentSaved, pageable);
+
+        assertThat(commentsFound.getContent().size()).isEqualTo(1);
+        assertTrue(commentsFound.isLast());
+        assertThat(commentsFound.getTotalElements()).isEqualTo(1);
+    }
 }
