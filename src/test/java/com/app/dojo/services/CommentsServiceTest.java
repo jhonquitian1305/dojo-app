@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -159,5 +160,19 @@ public class CommentsServiceTest {
         assertEquals(1, allComments.getTotalPages());
         assertTrue(allComments.isLastOne());
         assertThat(allComments.getContent().size()).isEqualTo(1);
+    }
+
+    @DisplayName("Test service to get a comment by id")
+    @Test
+    void getOne(){
+        given(this.commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+
+        Comment commentFound = this.commentServiceImp.getById(anyLong());
+
+        assertNotNull(commentFound);
+        assertEquals("Buen trabajo", commentFound.getComment());
+        assertNotNull(commentFound.getCourse());
+        assertNotNull(commentFound.getTeacher());
+        assertNotNull(commentFound.getStudent());
     }
 }
