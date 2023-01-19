@@ -3,6 +3,7 @@ package com.app.dojo.services;
 import com.app.dojo.builders.builderDTO.CommentDTOBuilder;
 import com.app.dojo.builders.builderModels.*;
 import com.app.dojo.dtos.CommentDTO;
+import com.app.dojo.dtos.CommentResponse;
 import com.app.dojo.mappers.MapperComment;
 import com.app.dojo.models.*;
 import com.app.dojo.repositories.CommentRepository;
@@ -10,6 +11,8 @@ import com.app.dojo.services.Interfaces.CourseService;
 import com.app.dojo.services.Interfaces.StudentService;
 import com.app.dojo.services.Interfaces.TeacherService;
 import com.app.dojo.services.implementation.CommentServiceImp;
+import com.app.dojo.services.strategyComments.CommentsContext;
+import com.app.dojo.services.strategyComments.CommentsStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,16 +20,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,6 +55,12 @@ public class CommentsServiceTest {
 
     @Mock
     private StudentService studentService;
+
+    @Mock
+    private CommentsContext commentsContext;
+
+    @Mock
+    private CommentsStrategy commentsStrategy;
 
     private Comment comment;
     private Course course;
@@ -129,5 +140,24 @@ public class CommentsServiceTest {
         Comment commentSaved = this.commentServiceImp.createOne(commentDTO);
 
         assertNotNull(commentSaved);
+    }
+
+    @DisplayName("Test service to find all comments by one condition")
+    @Test
+    void findAllByCondition() throws Exception {
+        given(this.commentsContext.loadStrategy(anyString())).willReturn(commentsStrategy);
+        Page<Comment> commentsFound = new PageImpl<>(List.of(comment));
+        Sort sort = Sort.by("id").ascending();
+        Pageable pageable = PageRequest.of(1, 1, sort);
+        given(this.commentsStrategy.findComments(pageable, 1L)).willReturn(commentsFound);
+
+        CommentResponse allComments = this.commentServiceImp.getAllByCondition(1, 1,"id", "asc", "Course", 1L);
+
+        assertEquals(1, allComments.getSizePage());
+        assertEquals(0, allComments.getNumberPage());
+        assertEquals(1, allComments.getTotalElements());
+        assertEquals(1, allComments.getTotalPages());
+        assertTrue(allComments.isLastOne());
+        assertThat(allComments.getContent().size()).isEqualTo(1);
     }
 }
