@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.CommentDTOBuilder;
 import com.app.dojo.builders.builderModels.*;
 import com.app.dojo.dtos.CommentDTO;
 import com.app.dojo.dtos.CommentResponse;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperComment;
 import com.app.dojo.models.*;
 import com.app.dojo.repositories.CommentRepository;
@@ -174,5 +175,17 @@ public class CommentsServiceTest {
         assertNotNull(commentFound.getCourse());
         assertNotNull(commentFound.getTeacher());
         assertNotNull(commentFound.getStudent());
+    }
+
+    @DisplayName("Test service to get a comment when doesn't exist")
+    @Test
+    void failGetOne(){
+        given(this.commentRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        NotFoundException commentNotFound = assertThrows(NotFoundException.class, () -> {
+            this.commentServiceImp.getById(1L);
+        });
+
+        assertEquals("Comment with id %s doesn't exists".formatted(1L), commentNotFound.getMessage());
     }
 }
