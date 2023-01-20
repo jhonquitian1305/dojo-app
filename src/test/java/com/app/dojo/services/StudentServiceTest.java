@@ -9,6 +9,7 @@ import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
 import com.app.dojo.repositories.StudentRepository;
+import com.app.dojo.services.implementation.EncryptServiceImp;
 import com.app.dojo.services.implementation.StudentServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +49,9 @@ public class StudentServiceTest {
 
     @Mock
     private MapperStudent mapperStudent;
+
+    @Mock
+    private EncryptServiceImp encryptService;
 
     private Student student;
 
@@ -89,6 +93,7 @@ public class StudentServiceTest {
     void save(){
         given(this.studentRepository.findStudentByDni(this.studentDTO.getDni())).willReturn(null);
         given(this.studentRepository.findStudentByEmail(this.studentDTO.getEmail())).willReturn(null);
+        given(this.encryptService.encryptPassword(anyString())).willReturn("hash password");
         given(this.studentRepository.save(any(Student.class))).willReturn(student);
 
         given(this.mapperStudent.mapStudent(any(StudentDTO.class))).willReturn(student);
