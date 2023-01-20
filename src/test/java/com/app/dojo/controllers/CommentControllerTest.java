@@ -16,8 +16,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -112,5 +111,16 @@ public class CommentControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    }
+
+    @DisplayName("Test Controller to create a comment when the course doesn't exist")
+    @Test
+    @Order(2)
+    void failCreateWhenCourseDoesNotExist(){
+        commentDTO.setCourse(50L);
+
+        ResponseEntity<CommentDTOResponse> response = this.testRestTemplate.postForEntity(urlComment, commentDTO, CommentDTOResponse.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }
