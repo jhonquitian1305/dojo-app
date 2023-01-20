@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive;
 import java.util.Date;
 
 public class CourseDTO {
+  private Long id;
   @NotNull(message = Message.FIELD_NULL)
   @NotNull(message = Message.FIELD_EMPTY)
   private String name;
@@ -28,7 +29,8 @@ public class CourseDTO {
   @Positive()
   private Long level;
 
-  public CourseDTO(String name, Double price, Date startDate, Date finishDate, Long level) {
+  public CourseDTO(Long id, String name, Double price, Date startDate, Date finishDate, Long level) {
+    this.id = id;
     this.name = name;
     this.price = price;
     this.startDate = startDate;
@@ -37,6 +39,14 @@ public class CourseDTO {
   }
 
   public CourseDTO() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {

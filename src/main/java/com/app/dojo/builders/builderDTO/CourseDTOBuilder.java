@@ -5,11 +5,17 @@ import com.app.dojo.dtos.CourseDTO;
 import java.util.Date;
 
 public class CourseDTOBuilder {
+  private Long id;
   private String name;
   private Double price;
   private Date startDate;
   private Date finishDate;
   private Long level;
+
+  public CourseDTOBuilder setId(Long id) {
+    this.id = id;
+    return this;
+  }
 
   public CourseDTOBuilder setName(String name) {
     this.name = name;
@@ -37,6 +43,6 @@ public class CourseDTOBuilder {
   }
 
   public CourseDTO build(){
-    return  new CourseDTO(name,price,startDate,finishDate,level);
+    return  new CourseDTO(id, name,price,startDate,finishDate,level);
   }
 }

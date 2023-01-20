@@ -28,8 +28,7 @@ public class WebSecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .anyRequest()
-                .authenticated()
+                .requestMatchers("/**").permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

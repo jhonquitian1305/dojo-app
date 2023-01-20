@@ -9,6 +9,7 @@ import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperStudent;
 import com.app.dojo.models.Student;
 import com.app.dojo.repositories.StudentRepository;
+import com.app.dojo.services.implementation.EncryptServiceImp;
 import com.app.dojo.services.implementation.StudentServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +49,9 @@ public class StudentServiceTest {
 
     @Mock
     private MapperStudent mapperStudent;
+
+    @Mock
+    private EncryptServiceImp encryptService;
 
     private Student student;
 
@@ -89,6 +93,7 @@ public class StudentServiceTest {
     void save(){
         given(this.studentRepository.findStudentByDni(this.studentDTO.getDni())).willReturn(null);
         given(this.studentRepository.findStudentByEmail(this.studentDTO.getEmail())).willReturn(null);
+        given(this.encryptService.encryptPassword(anyString())).willReturn("hash password");
         given(this.studentRepository.save(any(Student.class))).willReturn(student);
 
         given(this.mapperStudent.mapStudent(any(StudentDTO.class))).willReturn(student);
@@ -188,6 +193,22 @@ public class StudentServiceTest {
         assertEquals("Student with id %s doesn't exists".formatted(1L), studentNotFoundById.getMessage());
         assertEquals("Student with dni %s doesn't exists".formatted(studentDTO.getDni()), studentNotFoundByDni.getMessage());
         assertEquals("Student with email %s doesn't exists".formatted(studentDTO.getEmail()), studentNotFoundByEmail.getMessage());
+    }
+
+    @DisplayName("Test service to update a student")
+    @Test
+    void updateOne(){
+        given(this.studentRepository.save(student)).willReturn(student);
+        given(this.studentRepository.findById(anyLong())).willReturn(Optional.of(student));
+        given(this.encryptService.encryptPassword(anyString())).willReturn("hash password");
+        studentDTO.setDni("9884914448441");
+        studentDTO.setLastnames("Jaraba");
+
+        Student studentUpdated = this.studentService.updateOne(1L, studentDTO);
+
+        assertNotNull(studentUpdated);
+        assertEquals(studentUpdated.getDni(), "9884914448441");
+        assertEquals(studentUpdated.getLastnames(), "Jaraba");
     }
 
     @DisplayName("Test service to delete a student")
