@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -213,5 +217,20 @@ public class CommentControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    }
+
+    @DisplayName("Test Controller to delete a comment")
+    @Test
+    @Order(11)
+    void deleteOne(){
+        ResponseEntity<CommentResponse> response = this.testRestTemplate.getForEntity(urlComment, CommentResponse.class);
+        assertThat(Objects.requireNonNull(response.getBody()).getContent().size()).isGreaterThan(0);
+
+        Map<String, Long> pathVariables = new HashMap<>();
+        pathVariables.put("id", 1L);
+        ResponseEntity<Void> exchange = this.testRestTemplate.exchange(urlComment+"/{id}", HttpMethod.DELETE, null, Void.class, pathVariables);
+
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        assertFalse(exchange.hasBody());
     }
 }
