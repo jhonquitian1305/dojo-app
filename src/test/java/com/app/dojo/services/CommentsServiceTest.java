@@ -188,4 +188,23 @@ public class CommentsServiceTest {
 
         assertEquals("Comment with id %s doesn't exists".formatted(1L), commentNotFound.getMessage());
     }
+
+    @DisplayName("Test service to update a comment")
+    @Test
+    void updateOne() throws Exception {
+        given(this.commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+        given(this.courseService.getOne(anyLong())).willReturn(course);
+        given(this.teacherService.getById(anyLong())).willReturn(teacher);
+        given(this.studentService.getStudentById(anyLong())).willReturn(student);
+        given(this.mapperComment.updateComment(any(CommentDTO.class), any(Comment.class), any(Course.class), any(Teacher.class), any(Student.class))).willReturn(comment);
+        given(this.commentRepository.save(any(Comment.class))).willReturn(comment);
+
+        Comment commentUpdate = this.commentServiceImp.updateOne(anyLong(), commentDTO);
+
+        assertNotNull(commentUpdate);
+        assertEquals("Buen trabajo", commentUpdate.getComment());
+        assertNotNull(commentUpdate.getCourse());
+        assertNotNull(commentUpdate.getTeacher());
+        assertNotNull(commentUpdate.getStudent());
+    }
 }
