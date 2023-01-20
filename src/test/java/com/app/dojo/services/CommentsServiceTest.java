@@ -35,6 +35,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -206,5 +209,16 @@ public class CommentsServiceTest {
         assertNotNull(commentUpdate.getCourse());
         assertNotNull(commentUpdate.getTeacher());
         assertNotNull(commentUpdate.getStudent());
+    }
+
+    @DisplayName("Test service to delete a comment")
+    @Test
+    void deleteOne(){
+        given(this.commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+        willDoNothing().given(this.commentRepository).deleteById(anyLong());
+
+        this.commentServiceImp.deleteOne(anyLong());
+
+        verify(this.commentRepository, times(1)).deleteById(anyLong());
     }
 }
