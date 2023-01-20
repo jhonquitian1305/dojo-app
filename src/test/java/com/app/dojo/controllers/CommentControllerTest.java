@@ -193,4 +193,15 @@ public class CommentControllerTest {
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         assertThat(response.getBody().getContent().size()).isGreaterThan(0);
     }
+
+    @DisplayName("Test Controller to get a comment by id")
+    @Test
+    @Order(9)
+    void getOne(){
+        ResponseEntity<CommentDTOResponse> response = this.testRestTemplate.getForEntity(urlComment+"/1", CommentDTOResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    }
 }
