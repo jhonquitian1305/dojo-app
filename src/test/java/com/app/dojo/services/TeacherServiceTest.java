@@ -9,6 +9,7 @@ import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperTeacher;
 import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.TeacherRepository;
+import com.app.dojo.services.implementation.EncryptServiceImp;
 import com.app.dojo.services.implementation.TeacherServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +46,9 @@ public class TeacherServiceTest {
 
     @InjectMocks
     private TeacherServiceImp teacherService;
+
+    @Mock
+    private EncryptServiceImp encryptService;
 
     @Mock
     private MapperTeacher mapperTeacher;
@@ -90,7 +94,7 @@ public class TeacherServiceTest {
         given(this.teacherRepository.findTeacherByDni(this.teacherDTO.getDni())).willReturn(null);
         given(this.teacherRepository.findTeacherByEmail(this.teacherDTO.getEmail())).willReturn(null);
         given(this.teacherRepository.save(any(Teacher.class))).willReturn(teacher);
-
+        given(this.encryptService.encryptPassword(anyString())).willReturn("hash password");
         given(this.mapperTeacher.mapTeacher(any(TeacherDTO.class))).willReturn(teacher);
 
         Teacher teacherSaved = this.teacherService.save(teacherDTO);
@@ -196,6 +200,7 @@ public class TeacherServiceTest {
     void updateOne(){
         given(this.teacherRepository.save(teacher)).willReturn(teacher);
         given(this.teacherRepository.findById(anyLong())).willReturn(Optional.of(teacher));
+        given(this.encryptService.encryptPassword(anyString())).willReturn("hash password");
         teacherDTO.setDni("1984168878");
         teacherDTO.setNames("Ramiro");
 
