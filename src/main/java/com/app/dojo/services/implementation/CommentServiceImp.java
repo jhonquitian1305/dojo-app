@@ -98,6 +98,7 @@ public class CommentServiceImp implements CommentService {
 
     @Override
     public void deleteOne(Long id) {
+        this.getById(id);
         this.commentRepository.deleteById(id);
     }
 }
