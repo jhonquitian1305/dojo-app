@@ -204,4 +204,14 @@ public class CommentControllerTest {
         assertTrue(response.hasBody());
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
     }
+
+    @DisplayName("Test Controller to get a comment when doesn't exist")
+    @Test
+    @Order(10)
+    void failGetOne(){
+        ResponseEntity<CommentDTOResponse> response = this.testRestTemplate.getForEntity(urlComment+"/1000", CommentDTOResponse.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    }
 }
