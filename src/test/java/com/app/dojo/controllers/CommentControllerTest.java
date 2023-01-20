@@ -169,4 +169,16 @@ public class CommentControllerTest {
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         assertThat(response.getBody().getContent().size()).isGreaterThan(0);
     }
+
+    @DisplayName("Test Controller to get comments by teacher")
+    @Test
+    @Order(7)
+    void getCommentsByTeacher(){
+        ResponseEntity<CommentResponse> response = this.testRestTemplate.getForEntity(urlComment+"?model=teacher&id=1", CommentResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        assertThat(response.getBody().getContent().size()).isGreaterThan(0);
+    }
 }
