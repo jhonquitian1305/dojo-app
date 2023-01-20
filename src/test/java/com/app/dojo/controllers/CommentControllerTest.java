@@ -123,4 +123,14 @@ public class CommentControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+    @DisplayName("Test Controller to create a comment when the teacher doesn't exist")
+    @Test
+    @Order(3)
+    void failCreateWhenTeacherDoesNotExist(){
+        commentDTO.setTeacher(50L);
+
+        ResponseEntity<CommentDTOResponse> response = this.testRestTemplate.postForEntity(urlComment, commentDTO, CommentDTOResponse.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
