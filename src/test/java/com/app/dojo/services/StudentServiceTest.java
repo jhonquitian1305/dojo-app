@@ -195,6 +195,22 @@ public class StudentServiceTest {
         assertEquals("Student with email %s doesn't exists".formatted(studentDTO.getEmail()), studentNotFoundByEmail.getMessage());
     }
 
+    @DisplayName("Test service to update a student")
+    @Test
+    void updateOne(){
+        given(this.studentRepository.save(student)).willReturn(student);
+        given(this.studentRepository.findById(anyLong())).willReturn(Optional.of(student));
+        given(this.encryptService.encryptPassword(anyString())).willReturn("hash password");
+        studentDTO.setDni("9884914448441");
+        studentDTO.setLastnames("Jaraba");
+
+        Student studentUpdated = this.studentService.updateOne(1L, studentDTO);
+
+        assertNotNull(studentUpdated);
+        assertEquals(studentUpdated.getDni(), "9884914448441");
+        assertEquals(studentUpdated.getLastnames(), "Jaraba");
+    }
+
     @DisplayName("Test service to delete a student")
     @Test
     void deleteOne() throws Exception {
