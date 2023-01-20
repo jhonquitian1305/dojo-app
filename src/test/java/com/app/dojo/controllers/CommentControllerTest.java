@@ -233,4 +233,18 @@ public class CommentControllerTest {
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         assertFalse(exchange.hasBody());
     }
+
+    @DisplayName("Test controller to delete a comment when doesn't exist")
+    @Test
+    @Order(12)
+    void failDeleteOne(){
+        ResponseEntity<TeacherResponse> response = this.testRestTemplate.getForEntity(urlComment, TeacherResponse.class);
+        assertThat(Objects.requireNonNull(response.getBody()).getContent().size()).isGreaterThan(0);
+
+        Map<String, Long> pathVariables = new HashMap<>();
+        pathVariables.put("id", 1L);
+        ResponseEntity<Void> exchange = this.testRestTemplate.exchange(urlComment+"/{id}", HttpMethod.DELETE, null, Void.class, pathVariables);
+
+        assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode());
+    }
 }
