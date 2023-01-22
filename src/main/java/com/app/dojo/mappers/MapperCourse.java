@@ -5,9 +5,11 @@ import com.app.dojo.dtos.CourseDTO;
 import com.app.dojo.dtos.CourseDTOResponse;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
+import com.app.dojo.models.Teacher;
 import org.springframework.stereotype.Component;
 
 import java.rmi.dgc.Lease;
+import java.util.List;
 
 @Component
 public class MapperCourse {
@@ -24,12 +26,13 @@ public class MapperCourse {
                 .build();
     }
 
-    public Course updateInformation(Course courseFound, CourseDTO course, Level level){
+    public Course updateInformation(Course courseFound, CourseDTO course, Level level, List<Teacher> teachers){
         courseFound.setFinishDate(course.getFinishDate());
         courseFound.setStartDate(course.getStartDate());
         courseFound.setPrice(course.getPrice());
         courseFound.setName(course.getName().toUpperCase());
         courseFound.setLevel(level);
+        courseFound.setTeachers(teachers);
         return courseFound;
     }
 }
