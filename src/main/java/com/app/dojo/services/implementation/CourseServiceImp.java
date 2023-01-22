@@ -8,15 +8,9 @@ import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperCourse;
-import com.app.dojo.models.Course;
-import com.app.dojo.models.Level;
-import com.app.dojo.models.Room;
-import com.app.dojo.models.Schedule;
+import com.app.dojo.models.*;
 import com.app.dojo.repositories.CourseRepository;
-import com.app.dojo.services.Interfaces.CourseService;
-import com.app.dojo.services.Interfaces.LevelService;
-import com.app.dojo.services.Interfaces.RoomService;
-import com.app.dojo.services.Interfaces.ScheduleServcie;
+import com.app.dojo.services.Interfaces.*;
 import com.app.dojo.services.strategyCourses.CoursesContext;
 import com.app.dojo.services.strategyCourses.CoursesStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +36,18 @@ public class CourseServiceImp  implements CourseService {
     @Autowired
     private CoursesContext coursesContext;
 
+    @Autowired
+    private TeacherService teacherService;
+
     @Override
     public Course create(CourseDTO courseDTO) throws Exception {
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
         if(courseRepository.existsCourseByName(courseDTO.getName().toUpperCase())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
+
+        courseDTO.setTeachers(uniqueValues(courseDTO.getTeachers()));
+        List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
+
        return this.courseRepository.save(
                 new CourseBuilder()
                         .setPrice(courseDTO.getPrice())
@@ -54,6 +55,7 @@ public class CourseServiceImp  implements CourseService {
                         .setStartDate(courseDTO.getStartDate())
                         .setFinishDate(courseDTO.getFinishDate())
                         .setLevel(levelFound)
+                        .setTeachers(teachersFound)
                         .build()
         );
     }
@@ -98,4 +100,16 @@ public class CourseServiceImp  implements CourseService {
         this.courseRepository.deleteById(id);
     }
 
+    protected List<Long> uniqueValues(List<Long> values){
+        if(values == null || values.size() == 0) {
+            throw new BadRequest("The teachers field should have at least one record");
+        }
+        return values.stream().distinct().collect(Collectors.toList());
+    }
+
+    protected List<Teacher> searchTeachers(List<Long> teachers){
+        List<Teacher> teachersFound = new ArrayList<>();
+        for(Long teacher:teachers) teachersFound.add(this.teacherService.getById(teacher));
+        return teachersFound;
+    }
 }
