@@ -90,8 +90,11 @@ public class CourseServiceImp  implements CourseService {
         if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id)) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
 
+        courseDTO.setTeachers(uniqueValues(courseDTO.getTeachers()));
+        List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
+
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
-        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound));
+        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound, teachersFound));
     }
 
     @Override
