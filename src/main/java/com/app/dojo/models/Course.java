@@ -28,8 +28,11 @@ public class Course {
   @Column(nullable = false)
   private List<Teacher> teachers;
 
+  @ManyToMany()
+  @Column(nullable = false)
+  private List<Student> students;
 
-  public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level, List<Teacher> teachers) {
+  public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level, List<Teacher> teachers, List<Student> students) {
     this.id = id;
     this.name = name;
     this.price = price;
@@ -37,6 +40,7 @@ public class Course {
     this.finishDate = finishDate;
     this.level=level;
     this.teachers = teachers;
+    this.students = students;
   }
 
   public Course() {
@@ -96,5 +100,13 @@ public class Course {
 
   public void setTeachers(List<Teacher> teachers) {
     this.teachers = teachers;
+  }
+
+  public List<Student> getStudents() {
+    return students;
+  }
+
+  public void setStudents(List<Student> students) {
+    this.students = students;
   }
 }

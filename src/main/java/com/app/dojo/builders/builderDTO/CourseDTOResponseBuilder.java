@@ -1,10 +1,7 @@
 package com.app.dojo.builders.builderDTO;
 
 import com.app.dojo.dtos.CourseDTOResponse;
-import com.app.dojo.models.Level;
-import com.app.dojo.models.Room;
-import com.app.dojo.models.Schedule;
-import com.app.dojo.models.Teacher;
+import com.app.dojo.models.*;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +14,7 @@ public class CourseDTOResponseBuilder {
     private Date finishDate;
     private Level level;
     private List<Teacher> teachers;
+    private List<Student> students;
 
     public CourseDTOResponseBuilder() {
     }
@@ -56,7 +54,12 @@ public class CourseDTOResponseBuilder {
         return this;
     }
 
+    public CourseDTOResponseBuilder setStudents(List<Student> students) {
+        this.students = students;
+        return this;
+    }
+
     public CourseDTOResponse build(){
-        return  new CourseDTOResponse(id,name,price,startDate,finishDate,level, teachers);
+        return  new CourseDTOResponse(id,name,price,startDate,finishDate,level, teachers, students);
     }
 }

@@ -37,7 +37,12 @@ public class CourseDTO {
   @Size(min = 1, message = "The teachers field should have at least one record")
   private List<Long> teachers;
 
-  public CourseDTO(Long id, String name, Double price, Date startDate, Date finishDate, Long level, List<Long> teachers) {
+  @NotNull(message = "The student field cannot be null")
+  @NotEmpty(message = "The student field cannot be empty")
+  @Size(min = 1, message = "The students field should have at least one record")
+  private List<Long> students;
+
+  public CourseDTO(Long id, String name, Double price, Date startDate, Date finishDate, Long level, List<Long> teachers, List<Long> students) {
     this.id = id;
     this.name = name;
     this.price = price;
@@ -45,6 +50,7 @@ public class CourseDTO {
     this.finishDate = finishDate;
     this.level = level;
     this.teachers = teachers;
+    this.students = students;
   }
 
   public CourseDTO() {
@@ -105,5 +111,13 @@ public class CourseDTO {
   public CourseDTO setTeachers(List<Long> teachers) {
     this.teachers = teachers;
     return this;
+  }
+
+  public List<Long> getStudents() {
+    return students;
+  }
+
+  public void setStudents(List<Long> students) {
+    this.students = students;
   }
 }

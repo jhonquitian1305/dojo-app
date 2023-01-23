@@ -23,6 +23,7 @@ public class MapperCourse {
                 .setFinishDate(course.getFinishDate())
                 .setLevel(course.getLevel())
                 .setTeachers(course.getTeachers())
+                .setStudents(course.getStudents())
                 .build();
     }
 

@@ -13,6 +13,7 @@ public class CourseDTOBuilder {
   private Date finishDate;
   private Long level;
   private List<Long> teachers;
+  private List<Long> students;
 
   public CourseDTOBuilder setId(Long id) {
     this.id = id;
@@ -49,7 +50,12 @@ public class CourseDTOBuilder {
     return this;
   }
 
+  public CourseDTOBuilder setStudents(List<Long> students) {
+    this.students = students;
+    return this;
+  }
+
   public CourseDTO build(){
-    return  new CourseDTO(id, name,price,startDate,finishDate,level, teachers);
+    return  new CourseDTO(id, name,price,startDate,finishDate,level, teachers, students);
   }
 }

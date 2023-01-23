@@ -1,9 +1,6 @@
 package com.app.dojo.dtos;
 
-import com.app.dojo.models.Level;
-import com.app.dojo.models.Room;
-import com.app.dojo.models.Schedule;
-import com.app.dojo.models.Teacher;
+import com.app.dojo.models.*;
 
 import java.util.Date;
 import java.util.List;
@@ -16,8 +13,9 @@ public class CourseDTOResponse {
     private Date finishDate;
     private Level level;
     private List<Teacher> teachers;
+    private List<Student> students;
 
-    public CourseDTOResponse(Long id, String name, Double price, Date startDate, Date finishDate, Level level, List<Teacher> teachers) {
+    public CourseDTOResponse(Long id, String name, Double price, Date startDate, Date finishDate, Level level, List<Teacher> teachers, List<Student> students) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -25,6 +23,7 @@ public class CourseDTOResponse {
         this.finishDate = finishDate;
         this.level = level;
         this.teachers = teachers;
+        this.students = students;
     }
 
     public CourseDTOResponse() {
@@ -84,5 +83,13 @@ public class CourseDTOResponse {
 
     public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

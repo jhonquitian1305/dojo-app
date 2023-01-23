@@ -13,6 +13,7 @@ public class CourseBuilder {
   private Date finishDate;
   private Level level;
   private List<Teacher> teachers;
+  private List<Student> students;
 
   public CourseBuilder() {
   }
@@ -52,7 +53,12 @@ public class CourseBuilder {
     return this;
   }
 
+  public CourseBuilder setStudents(List<Student> students) {
+    this.students = students;
+    return this;
+  }
+
   public Course build(){
-    return  new Course(id,name,price,startDate,finishDate,level, teachers);
+    return  new Course(id,name,price,startDate,finishDate,level, teachers, students);
   }
 }
