@@ -108,9 +108,8 @@ public class CourseDTO {
     return teachers;
   }
 
-  public CourseDTO setTeachers(List<Long> teachers) {
+  public void setTeachers(List<Long> teachers) {
     this.teachers = teachers;
-    return this;
   }
 
   public List<Long> getStudents() {
