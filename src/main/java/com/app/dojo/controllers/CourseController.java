@@ -48,7 +48,7 @@ public class CourseController {
     }
 
     @PutMapping(EndPointsConstants.ENDPOINT_ID)
-    public  ResponseEntity<CourseDTOResponse> update(@PathVariable("id") Long id, @RequestBody() CourseDTO courseDTO){
+    public  ResponseEntity<CourseDTOResponse> update(@PathVariable("id") Long id, @RequestBody() CourseDTO courseDTO) throws Exception {
         Course courseUpdated=this.courseService.update(id, courseDTO);
         return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseUpdated));
     }

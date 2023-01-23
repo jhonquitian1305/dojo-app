@@ -48,10 +48,10 @@ public class CourseServiceImp  implements CourseService {
         if(courseRepository.existsCourseByName(courseDTO.getName().toUpperCase())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
 
-        courseDTO.setTeachers(uniqueValues(courseDTO.getTeachers()));
+        courseDTO.setTeachers(uniqueValues("teacher", courseDTO.getTeachers()));
         List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
 
-        courseDTO.setStudents(uniqueValues(courseDTO.getStudents()));
+        courseDTO.setStudents(uniqueValues("student", courseDTO.getStudents()));
         List<Student> studentsFound = this.searchStudents(courseDTO.getStudents());
 
        return this.courseRepository.save(
@@ -97,10 +97,10 @@ public class CourseServiceImp  implements CourseService {
         if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id)) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
 
-        courseDTO.setTeachers(uniqueValues(courseDTO.getTeachers()));
+        courseDTO.setTeachers(uniqueValues("teacher", courseDTO.getTeachers()));
         List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
 
-        courseDTO.setStudents(uniqueValues(courseDTO.getStudents()));
+        courseDTO.setStudents(uniqueValues("student", courseDTO.getStudents()));
         List<Student> studentsFound = this.searchStudents(courseDTO.getStudents());
 
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
@@ -113,9 +113,9 @@ public class CourseServiceImp  implements CourseService {
         this.courseRepository.deleteById(id);
     }
 
-    protected List<Long> uniqueValues(List<Long> values){
+    protected List<Long> uniqueValues(String model, List<Long> values){
         if(values == null || values.size() == 0) {
-            throw new BadRequest("The teachers field should have at least one record");
+            throw new BadRequest(String.format("The %s field should have at least one record", model));
         }
         return values.stream().distinct().collect(Collectors.toList());
     }
