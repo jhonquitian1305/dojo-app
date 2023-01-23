@@ -39,6 +39,9 @@ public class CourseServiceImp  implements CourseService {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private StudentService studentService;
+
     @Override
     public Course create(CourseDTO courseDTO) throws Exception {
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
@@ -48,6 +51,9 @@ public class CourseServiceImp  implements CourseService {
         courseDTO.setTeachers(uniqueValues(courseDTO.getTeachers()));
         List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
 
+        courseDTO.setStudents(uniqueValues(courseDTO.getStudents()));
+        List<Student> studentsFound = this.searchStudents(courseDTO.getStudents());
+
        return this.courseRepository.save(
                 new CourseBuilder()
                         .setPrice(courseDTO.getPrice())
@@ -56,6 +62,7 @@ public class CourseServiceImp  implements CourseService {
                         .setFinishDate(courseDTO.getFinishDate())
                         .setLevel(levelFound)
                         .setTeachers(teachersFound)
+                        .setStudents(studentsFound)
                         .build()
         );
     }
@@ -114,5 +121,11 @@ public class CourseServiceImp  implements CourseService {
         List<Teacher> teachersFound = new ArrayList<>();
         for(Long teacher:teachers) teachersFound.add(this.teacherService.getById(teacher));
         return teachersFound;
+    }
+
+    protected List<Student> searchStudents(List<Long> students) throws Exception {
+        List<Student> studentsFound = new ArrayList<>();
+        for(Long student:students) studentsFound.add(this.studentService.getStudentById(student));
+        return studentsFound;
     }
 }
