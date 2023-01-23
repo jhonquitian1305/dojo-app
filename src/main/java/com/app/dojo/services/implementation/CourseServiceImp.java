@@ -94,7 +94,9 @@ public class CourseServiceImp  implements CourseService {
     public Course update(Long id, CourseDTO courseDTO) throws Exception {
         Course courseFound=getOne(id);
 
-        if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id)) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id) && !courseFound.getName().equals(courseDTO.getName())) {
+            throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        }
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
 
         courseDTO.setTeachers(uniqueValues("teacher", courseDTO.getTeachers()));
