@@ -3,6 +3,7 @@ package com.app.dojo.builders.builderDTO;
 import com.app.dojo.dtos.CourseDTO;
 
 import java.util.Date;
+import java.util.List;
 
 public class CourseDTOBuilder {
   private Long id;
@@ -11,6 +12,8 @@ public class CourseDTOBuilder {
   private Date startDate;
   private Date finishDate;
   private Long level;
+  private List<Long> teachers;
+  private List<Long> students;
 
   public CourseDTOBuilder setId(Long id) {
     this.id = id;
@@ -42,7 +45,17 @@ public class CourseDTOBuilder {
     return this;
   }
 
+  public CourseDTOBuilder setTeachers(List<Long> teachers) {
+    this.teachers = teachers;
+    return this;
+  }
+
+  public CourseDTOBuilder setStudents(List<Long> students) {
+    this.students = students;
+    return this;
+  }
+
   public CourseDTO build(){
-    return  new CourseDTO(id, name,price,startDate,finishDate,level);
+    return  new CourseDTO(id, name,price,startDate,finishDate,level, teachers, students);
   }
 }

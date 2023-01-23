@@ -2,10 +2,13 @@ package com.app.dojo.dtos;
 
 import com.app.dojo.constants.Message;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
+import java.util.List;
 
 public class CourseDTO {
   private Long id;
@@ -29,13 +32,25 @@ public class CourseDTO {
   @Positive()
   private Long level;
 
-  public CourseDTO(Long id, String name, Double price, Date startDate, Date finishDate, Long level) {
+  @NotNull(message = "The teacher field cannot be null")
+  @NotEmpty(message = "The teacher field cannot be empty")
+  @Size(min = 1, message = "The teachers field should have at least one record")
+  private List<Long> teachers;
+
+  @NotNull(message = "The student field cannot be null")
+  @NotEmpty(message = "The student field cannot be empty")
+  @Size(min = 1, message = "The students field should have at least one record")
+  private List<Long> students;
+
+  public CourseDTO(Long id, String name, Double price, Date startDate, Date finishDate, Long level, List<Long> teachers, List<Long> students) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.startDate = startDate;
     this.finishDate = finishDate;
     this.level = level;
+    this.teachers = teachers;
+    this.students = students;
   }
 
   public CourseDTO() {
@@ -87,5 +102,21 @@ public class CourseDTO {
 
   public void setLevel(Long level) {
     this.level = level;
+  }
+
+  public List<Long> getTeachers() {
+    return teachers;
+  }
+
+  public void setTeachers(List<Long> teachers) {
+    this.teachers = teachers;
+  }
+
+  public List<Long> getStudents() {
+    return students;
+  }
+
+  public void setStudents(List<Long> students) {
+    this.students = students;
   }
 }

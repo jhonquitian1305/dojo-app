@@ -8,15 +8,9 @@ import com.app.dojo.dtos.CourseResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperCourse;
-import com.app.dojo.models.Course;
-import com.app.dojo.models.Level;
-import com.app.dojo.models.Room;
-import com.app.dojo.models.Schedule;
+import com.app.dojo.models.*;
 import com.app.dojo.repositories.CourseRepository;
-import com.app.dojo.services.Interfaces.CourseService;
-import com.app.dojo.services.Interfaces.LevelService;
-import com.app.dojo.services.Interfaces.RoomService;
-import com.app.dojo.services.Interfaces.ScheduleServcie;
+import com.app.dojo.services.Interfaces.*;
 import com.app.dojo.services.strategyCourses.CoursesContext;
 import com.app.dojo.services.strategyCourses.CoursesStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +36,24 @@ public class CourseServiceImp  implements CourseService {
     @Autowired
     private CoursesContext coursesContext;
 
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private StudentService studentService;
+
     @Override
     public Course create(CourseDTO courseDTO) throws Exception {
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
         if(courseRepository.existsCourseByName(courseDTO.getName().toUpperCase())) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
+
+        courseDTO.setTeachers(uniqueValues("teacher", courseDTO.getTeachers()));
+        List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
+
+        courseDTO.setStudents(uniqueValues("student", courseDTO.getStudents()));
+        List<Student> studentsFound = this.searchStudents(courseDTO.getStudents());
+
        return this.courseRepository.save(
                 new CourseBuilder()
                         .setPrice(courseDTO.getPrice())
@@ -54,6 +61,8 @@ public class CourseServiceImp  implements CourseService {
                         .setStartDate(courseDTO.getStartDate())
                         .setFinishDate(courseDTO.getFinishDate())
                         .setLevel(levelFound)
+                        .setTeachers(teachersFound)
+                        .setStudents(studentsFound)
                         .build()
         );
     }
@@ -82,14 +91,22 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
-    public Course update(Long id, CourseDTO courseDTO) {
+    public Course update(Long id, CourseDTO courseDTO) throws Exception {
         Course courseFound=getOne(id);
 
-        if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id)) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id) && !courseFound.getName().equals(courseDTO.getName())) {
+            throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
+        }
         if(!courseDTO.getFinishDate().after(courseDTO.getStartDate())) throw new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_DATE);
 
+        courseDTO.setTeachers(uniqueValues("teacher", courseDTO.getTeachers()));
+        List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
+
+        courseDTO.setStudents(uniqueValues("student", courseDTO.getStudents()));
+        List<Student> studentsFound = this.searchStudents(courseDTO.getStudents());
+
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
-        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound));
+        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound, teachersFound, studentsFound));
     }
 
     @Override
@@ -98,4 +115,22 @@ public class CourseServiceImp  implements CourseService {
         this.courseRepository.deleteById(id);
     }
 
+    protected List<Long> uniqueValues(String model, List<Long> values){
+        if(values == null || values.size() == 0) {
+            throw new BadRequest(String.format("The %s field should have at least one record", model));
+        }
+        return values.stream().distinct().collect(Collectors.toList());
+    }
+
+    protected List<Teacher> searchTeachers(List<Long> teachers){
+        List<Teacher> teachersFound = new ArrayList<>();
+        for(Long teacher:teachers) teachersFound.add(this.teacherService.getById(teacher));
+        return teachersFound;
+    }
+
+    protected List<Student> searchStudents(List<Long> students) throws Exception {
+        List<Student> studentsFound = new ArrayList<>();
+        for(Long student:students) studentsFound.add(this.studentService.getStudentById(student));
+        return studentsFound;
+    }
 }

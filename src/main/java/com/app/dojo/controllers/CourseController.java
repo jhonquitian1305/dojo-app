@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.lang.model.element.Element;
+
 @RestController
 @RequestMapping(EndPointsConstants.ENDPOINT_COURSES)
 public class CourseController {
@@ -25,7 +27,7 @@ public class CourseController {
     private MapperCourse mapperCourse;
 
     @PostMapping()
-    public ResponseEntity<CourseDTOResponse> create(@Valid @RequestBody CourseDTO courseDTO) throws Exception {
+    public ResponseEntity<CourseDTOResponse> create(@RequestBody CourseDTO courseDTO) throws Exception {
         CourseDTOResponse courseSaved=this.mapperCourse.mapperCourseDTOResponse(this.courseService.create(courseDTO));
         return new ResponseEntity<>(courseSaved, HttpStatus.CREATED);
     }
@@ -46,7 +48,7 @@ public class CourseController {
     }
 
     @PutMapping(EndPointsConstants.ENDPOINT_ID)
-    public  ResponseEntity<CourseDTOResponse> update(@PathVariable("id") Long id, @RequestBody() CourseDTO courseDTO){
+    public  ResponseEntity<CourseDTOResponse> update(@PathVariable("id") Long id, @RequestBody() CourseDTO courseDTO) throws Exception {
         Course courseUpdated=this.courseService.update(id, courseDTO);
         return ResponseEntity.ok(mapperCourse.mapperCourseDTOResponse(courseUpdated));
     }

@@ -24,14 +24,23 @@ public class Course {
   @JsonIgnore
   private List<GroupClass> groupClasses;
 
+  @ManyToMany()
+  @Column(nullable = false)
+  private List<Teacher> teachers;
 
-  public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level) {
+  @ManyToMany()
+  @Column(nullable = false)
+  private List<Student> students;
+
+  public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level, List<Teacher> teachers, List<Student> students) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.startDate = startDate;
     this.finishDate = finishDate;
     this.level=level;
+    this.teachers = teachers;
+    this.students = students;
   }
 
   public Course() {
@@ -83,5 +92,21 @@ public class Course {
 
   public void setLevel(Level level) {
     this.level = level;
+  }
+
+  public List<Teacher> getTeachers() {
+    return teachers;
+  }
+
+  public void setTeachers(List<Teacher> teachers) {
+    this.teachers = teachers;
+  }
+
+  public List<Student> getStudents() {
+    return students;
+  }
+
+  public void setStudents(List<Student> students) {
+    this.students = students;
   }
 }
