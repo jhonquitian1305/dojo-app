@@ -91,7 +91,7 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
-    public Course update(Long id, CourseDTO courseDTO) {
+    public Course update(Long id, CourseDTO courseDTO) throws Exception {
         Course courseFound=getOne(id);
 
         if(courseRepository.existsCourseByNameAndIdNot(courseDTO.getName().toUpperCase(),id)) throw  new BadRequest(Message.MESSAGE_BAD_REQUEST_COURSES_NAME);
@@ -100,8 +100,11 @@ public class CourseServiceImp  implements CourseService {
         courseDTO.setTeachers(uniqueValues(courseDTO.getTeachers()));
         List<Teacher> teachersFound = this.searchTeachers(courseDTO.getTeachers());
 
+        courseDTO.setStudents(uniqueValues(courseDTO.getStudents()));
+        List<Student> studentsFound = this.searchStudents(courseDTO.getStudents());
+
         Level levelFound=this.levelService.getOne(courseDTO.getLevel());
-        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound, teachersFound));
+        return this.courseRepository.save(this.mapperCourse.updateInformation(courseFound,courseDTO,levelFound, teachersFound, studentsFound));
     }
 
     @Override
