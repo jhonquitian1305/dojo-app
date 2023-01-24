@@ -75,7 +75,7 @@ public class CourseServiceImp  implements CourseService {
     }
 
     @Override
-    public CourseResponse getAll(int numberPage, int pageSize,String model, Long idCondition) {
+    public CourseResponse getAll(int numberPage, int pageSize,String model, Long idCondition) throws Exception {
         Pageable pageable= PageRequest.of(numberPage,pageSize);
         CoursesStrategy coursesStrategy =coursesContext.loadStrategy(model.toUpperCase());
         Page<Course> coursesFound=coursesStrategy.findCourses(pageable,idCondition);
