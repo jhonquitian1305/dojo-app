@@ -2,6 +2,7 @@ package com.app.dojo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.List;
@@ -25,11 +26,11 @@ public class Course {
   private List<GroupClass> groupClasses;
 
   @ManyToMany()
-  @Column(nullable = false)
+  @NotNull()
   private List<Teacher> teachers;
 
   @ManyToMany()
-  @Column(nullable = false)
+  @NotNull()
   private List<Student> students;
 
   public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level, List<Teacher> teachers, List<Student> students) {
