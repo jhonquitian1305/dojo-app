@@ -2,9 +2,11 @@ package com.app.dojo.repositories;
 
 import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
+import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
+import com.app.dojo.models.Student;
 import com.app.dojo.models.Teacher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +40,7 @@ class CourseRepositoryTest {
   private static Course course;
   private static Level level;
   private Teacher teacher;
+  private Student student;
 
   @BeforeEach
   void init() throws ParseException {
@@ -67,6 +70,15 @@ class CourseRepositoryTest {
               .setEmail("jorgeortiz@mail.com")
               .setPassword("987654321")
               .build();
+    student = new StudentBuilder()
+            .setId(2L)
+            .setDni("12345678")
+            .setNames("Jhon")
+            .setLastnames("Quitian")
+            .setBirthday(birthday)
+            .setEmail("jhonquitian@mail.com")
+            .setPassword("12345678")
+            .build();
   }
 
   @Test
@@ -78,9 +90,14 @@ class CourseRepositoryTest {
     List<Teacher> teachers = new ArrayList<>();
     Teacher teacherSaved = this.teacherRepository.save(teacher);
     teachers.add(teacherSaved);
+
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
     //when
     course.setLevel(levelSaved);
     course.setTeachers(teachers);
+    course.setStudents(students);
     Course courseSaved = this.courseRepository.save(course);
     //then
     assertNotNull(courseSaved);
@@ -98,6 +115,11 @@ class CourseRepositoryTest {
     Teacher teacherSaved = this.teacherRepository.save(teacher);
     teachers.add(teacherSaved);
     course.setTeachers(teachers);
+
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
+    course.setStudents(students);
 
     Course courseSaved = this.courseRepository.save(course);
     //when
@@ -119,6 +141,11 @@ class CourseRepositoryTest {
     teachers.add(teacherSaved);
     course.setTeachers(teachers);
 
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
+    course.setStudents(students);
+
     Course courseSaved = this.courseRepository.save(course);
     //when
     boolean isExist = this.courseRepository.existsCourseByName(courseSaved.getName());
@@ -137,6 +164,11 @@ class CourseRepositoryTest {
     Teacher teacherSaved = this.teacherRepository.save(teacher);
     teachers.add(teacherSaved);
     course.setTeachers(teachers);
+
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
+    course.setStudents(students);
 
     Course courseSaved = this.courseRepository.save(course);
     //when
@@ -161,6 +193,11 @@ class CourseRepositoryTest {
     teachers.add(teacherSaved);
     course.setTeachers(teachers);
 
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
+    course.setStudents(students);
+
     this.courseRepository.save(course);
     //when
     List<Course> coursesFound = this.courseRepository.findAll();
@@ -179,6 +216,11 @@ class CourseRepositoryTest {
     Teacher teacherSaved = this.teacherRepository.save(teacher);
     teachers.add(teacherSaved);
     course.setTeachers(teachers);
+
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
+    course.setStudents(students);
 
     Course courseSaved=this.courseRepository.save(course);
     //when
