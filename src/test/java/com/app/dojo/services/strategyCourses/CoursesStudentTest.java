@@ -11,10 +11,16 @@ import com.app.dojo.models.Teacher;
 import com.app.dojo.repositories.CourseRepository;
 import com.app.dojo.services.Interfaces.StudentService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -23,6 +29,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -88,5 +100,26 @@ public class CoursesStudentTest {
                 .setTeachers(teachers)
                 .setStudents(students)
                 .build();
+    }
+
+    @DisplayName("Test StrategyCourses to get all courses by student")
+    @Test
+    void findCourses() throws Exception {
+        Page<Course> courses = new PageImpl<>(List.of(course));
+        Pageable pageable = PageRequest.of(1, 10);
+        given(this.courseRepository.findByStudents(student, pageable)).willReturn(courses);
+        given(this.studentService.getStudentById(anyLong())).willReturn(student);
+
+        Page<Course> coursesFound = this.coursesStudent.findCourses(pageable, anyLong());
+
+        assertAll(
+                ()->assertEquals(1, coursesFound.getTotalElements()),
+                ()->assertEquals(1, coursesFound.getSize()),
+                ()->assertEquals(1, coursesFound.getTotalPages()),
+                ()->assertEquals(0, coursesFound.getNumber()),
+                ()->assertTrue(coursesFound.isLast()),
+                ()->assertNotNull(coursesFound.getContent()),
+                ()->assertThat(coursesFound.getContent().size()).isGreaterThan(0)
+        );
     }
 }
