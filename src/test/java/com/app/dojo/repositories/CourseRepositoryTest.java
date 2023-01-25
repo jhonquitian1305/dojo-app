@@ -206,6 +206,32 @@ class CourseRepositoryTest {
     assertThat(coursesFound.getTotalElements()).isEqualTo(1);
   }
 
+  @DisplayName("Test CourseRepository, find all courses by student")
+  @Test
+  void findByStudent(){
+    Level levelSaved = this.levelRepository.save(level);
+    course.setLevel(levelSaved);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
+    course.setTeachers(teachers);
+
+    List<Student> students = new ArrayList<>();
+    Student studentSaved = this.studentRepository.save(student);
+    students.add(studentSaved);
+    course.setStudents(students);
+
+    this.courseRepository.save(course);
+
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Course> coursesFound = this.courseRepository.findByStudents(studentSaved, pageable);
+
+    assertThat(coursesFound.getContent().size()).isGreaterThan(0);
+    assertTrue(coursesFound.isLast());
+    assertThat(coursesFound.getTotalElements()).isEqualTo(1);
+  }
+
   @Test
   @DisplayName("Test CourseRepository, find all courses")
   void getAll() {
