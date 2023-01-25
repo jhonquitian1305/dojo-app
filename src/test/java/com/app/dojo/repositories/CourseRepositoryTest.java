@@ -2,8 +2,10 @@ package com.app.dojo.repositories;
 
 import com.app.dojo.builders.builderModels.CourseBuilder;
 import com.app.dojo.builders.builderModels.LevelBuilder;
+import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.models.Course;
 import com.app.dojo.models.Level;
+import com.app.dojo.models.Teacher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,8 +31,13 @@ class CourseRepositoryTest {
   private CourseRepository courseRepository;
   @Autowired
   private LevelRepository levelRepository;
+  @Autowired
+  private TeacherRepository teacherRepository;
+  @Autowired
+  private StudentRepository studentRepository;
   private static Course course;
   private static Level level;
+  private Teacher teacher;
 
   @BeforeEach
   void init() throws ParseException {
@@ -41,6 +45,7 @@ class CourseRepositoryTest {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Date startDate = format.parse("2022-06-01");
     Date finishDate = format.parse("2022-06-30");
+    Date birthday = format.parse("1998-05-15");
 
     level = new LevelBuilder()
         .setName("CINTA NEGRA")
@@ -52,6 +57,16 @@ class CourseRepositoryTest {
         .setFinishDate(finishDate)
         .setPrice(200000.0)
         .build();
+
+    teacher = new TeacherBuilder()
+              .setId(1L)
+              .setDni("987654321")
+              .setNames("Jorge")
+              .setLastnames("Ortíz")
+              .setBirthday(birthday)
+              .setEmail("jorgeortiz@mail.com")
+              .setPassword("987654321")
+              .build();
   }
 
   @Test
@@ -59,8 +74,13 @@ class CourseRepositoryTest {
   void create() {
     //given
     Level levelSaved = this.levelRepository.save(level);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
     //when
     course.setLevel(levelSaved);
+    course.setTeachers(teachers);
     Course courseSaved = this.courseRepository.save(course);
     //then
     assertNotNull(courseSaved);
@@ -73,6 +93,12 @@ class CourseRepositoryTest {
     //given
     Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
+    course.setTeachers(teachers);
+
     Course courseSaved = this.courseRepository.save(course);
     //when
     Optional<Course> courseFound = this.courseRepository.findById(courseSaved.getId());
@@ -87,6 +113,12 @@ class CourseRepositoryTest {
     //given
     Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
+    course.setTeachers(teachers);
+
     Course courseSaved = this.courseRepository.save(course);
     //when
     boolean isExist = this.courseRepository.existsCourseByName(courseSaved.getName());
@@ -100,6 +132,12 @@ class CourseRepositoryTest {
     //given
     Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
+    course.setTeachers(teachers);
+
     Course courseSaved = this.courseRepository.save(course);
     //when
     Pageable pageable = PageRequest.of(0, 10);
@@ -117,6 +155,12 @@ class CourseRepositoryTest {
     //given
     Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
+    course.setTeachers(teachers);
+
     this.courseRepository.save(course);
     //when
     List<Course> coursesFound = this.courseRepository.findAll();
@@ -130,6 +174,12 @@ class CourseRepositoryTest {
     //given
     Level levelSaved = this.levelRepository.save(level);
     course.setLevel(levelSaved);
+
+    List<Teacher> teachers = new ArrayList<>();
+    Teacher teacherSaved = this.teacherRepository.save(teacher);
+    teachers.add(teacherSaved);
+    course.setTeachers(teachers);
+
     Course courseSaved=this.courseRepository.save(course);
     //when
     this.courseRepository.deleteById(courseSaved.getId());
