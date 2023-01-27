@@ -26,11 +26,11 @@ public class Course {
   private List<GroupClass> groupClasses;
 
   @ManyToMany()
-  @NotNull()
+  @Column(nullable = false)
   private List<Teacher> teachers;
 
   @ManyToMany()
-  @NotNull()
+  @Column(nullable = false)
   private List<Student> students;
 
   public Course(Long id, String name, Double price, Date startDate, Date finishDate,Level level, List<Teacher> teachers, List<Student> students) {
