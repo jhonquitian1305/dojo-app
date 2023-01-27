@@ -2,10 +2,9 @@ package com.app.dojo.controllers;
 
 import com.app.dojo.builders.builderDTO.CourseDTOBuilder;
 import com.app.dojo.builders.builderDTO.LevelDTOBuilder;
-import com.app.dojo.dtos.CourseDTO;
-import com.app.dojo.dtos.CourseDTOResponse;
-import com.app.dojo.dtos.CourseResponse;
-import com.app.dojo.dtos.LevelDTO;
+import com.app.dojo.builders.builderDTO.StudentDTOBuilder;
+import com.app.dojo.builders.builderDTO.TeacherDTOBuilder;
+import com.app.dojo.dtos.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +33,16 @@ class CourseControllerTest {
   private TestRestTemplate testRestTemplate;
   private String urlCourse ="http://localhost:8080/api/dojo-app/courses";
   private String urlLevel ="http://localhost:8080/api/dojo-app/levels";
+  private String urlTeacher = "http://localhost:8080/api/dojo-app/teachers";
+  private String urlStudent = "http://localhost:8080/api/dojo-app/students";
   private CourseDTO courseDTO;
   private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
   private LevelDTO levelDTO;
+  private TeacherDTO teacherDTO;
+  private StudentDTO studentDTO;
+
+  ArrayList<Long> teacherId = new ArrayList<>();
+  ArrayList<Long> studentId = new ArrayList<>();
 
   @BeforeEach()
   void init() throws ParseException {
@@ -43,12 +50,36 @@ class CourseControllerTest {
     Date startDate = format.parse("2022-05-01");
     Date finishDate = format.parse("2022-06-30");
 
+    teacherDTO = new TeacherDTOBuilder()
+            .setId(1L)
+            .setDni("987654321")
+            .setNames("Jorge")
+            .setLastnames("Ortíz")
+            .setBirthday(format.parse("1990-05-02"))
+            .setEmail("jorgeortiz@mail.com")
+            .setPassword("987654321")
+            .build();
+    studentDTO = new StudentDTOBuilder()
+            .setId(2L)
+            .setDni("12345678")
+            .setNames("Jhon")
+            .setLastnames("Quitian")
+            .setBirthday(format.parse("1995-03-05"))
+            .setEmail("jhonquitian@mail.com")
+            .setPassword("12345678")
+            .build();
+
+    teacherId.add(teacherDTO.getId());
+    studentId.add(studentDTO.getId());
+
     courseDTO=new CourseDTOBuilder()
         .setName("CINTA ORANGE AVANZADOS")
         .setStartDate(startDate)
         .setFinishDate(finishDate)
         .setPrice(200000.0)
         .setLevel(1L)
+        .setTeachers(teacherId)
+        .setStudents(studentId)
         .build();
 
     levelDTO= new LevelDTOBuilder()
@@ -63,6 +94,15 @@ class CourseControllerTest {
     //Create Level
     ResponseEntity<LevelDTO> levelSaved=this.testRestTemplate.postForEntity(urlLevel,levelDTO, LevelDTO.class);
     courseDTO.setLevel(levelSaved.getBody().getId());
+
+    // create teacher
+    ResponseEntity<TeacherDTO> teacherSaved = this.testRestTemplate.postForEntity(urlTeacher, teacherDTO, TeacherDTO.class);
+    courseDTO.setTeachers(teacherId);
+
+    // create student
+    ResponseEntity<StudentDTO> studentSaved = this.testRestTemplate.postForEntity(urlStudent, studentDTO, StudentDTO.class);
+    courseDTO.setStudents(studentId);
+
     //Create Course
     ResponseEntity<CourseDTOResponse> response=this.testRestTemplate.postForEntity(urlCourse,courseDTO,CourseDTOResponse.class);
     assertEquals(201,response.getStatusCodeValue());
