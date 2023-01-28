@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DiplomaRepository extends JpaRepository<Diploma, Long> {
+    Boolean existsByDiplomaName(String diplomaName);
 }
