@@ -35,4 +35,5 @@ public final class EndPointsConstants {
     //Diplomas
     public static final String ENDPOINT_DIPLOMAS = "/api/dojo-app/diplomas";
     public static final String ENDPOINT_DIPLOMAS_STUDENT = "/students/{id}";
+    public static final String ENDPOINT_DIPLOMAS_TEACHER = "/teachers/{id}";
 }

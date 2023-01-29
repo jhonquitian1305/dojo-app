@@ -26,4 +26,10 @@ public class DiplomaController {
         DiplomaDTOResponse diplomaSaved = this.mapperDiploma.mapDiplomaDTOResponse(this.diplomaService.saveDiplomaStudent(id, diplomaDTO));
         return new ResponseEntity<>(diplomaSaved, HttpStatus.CREATED);
     }
+
+    @PostMapping(ENDPOINT_DIPLOMAS_TEACHER)
+    public ResponseEntity<DiplomaDTOResponse> saveDiplomaTeacher(@PathVariable("id") Long id, @RequestBody DiplomaDTO diplomaDTO){
+        DiplomaDTOResponse diplomaSaved = this.mapperDiploma.mapDiplomaDTOResponse(this.diplomaService.saveDiplomaTeacher(id, diplomaDTO));
+        return new ResponseEntity<>(diplomaSaved, HttpStatus.CREATED);
+    }
 }
