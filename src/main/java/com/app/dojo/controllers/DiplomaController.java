@@ -64,4 +64,12 @@ public class DiplomaController {
     ) throws Exception {
         return new ResponseEntity<>(this.diplomaService.getByIdDiplomaStudent(idStudent, idDiploma), HttpStatus.OK);
     }
+
+    @GetMapping(ENDPOINT_DIPLOMAS_TEACHER+ENDPOINT_DIPLOMA)
+    public ResponseEntity<DiplomaById> findOneDiplomaTeacher(
+            @PathVariable("idTeacher") Long idTeacher,
+            @PathVariable("idDiploma") Long idDiploma
+    ){
+        return new ResponseEntity<>(this.diplomaService.getByIdDiplomaTeacher(idTeacher, idDiploma), HttpStatus.OK);
+    }
 }

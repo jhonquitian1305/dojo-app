@@ -11,4 +11,5 @@ public interface DiplomaService {
     DiplomaResponse getDiplomasStudent(Long idStudent, int numberPage, int pageSize, String sortBy, String sortDir) throws Exception;
     DiplomaResponse getDiplomasTeacher(Long idTeacher, int numberPage, int pageSize, String sortBy, String sortDir);
     DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception;
+    DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma);
 }

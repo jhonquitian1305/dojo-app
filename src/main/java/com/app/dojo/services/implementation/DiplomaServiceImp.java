@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DiplomaServiceImp implements DiplomaService {
     @Autowired
@@ -103,6 +105,17 @@ public class DiplomaServiceImp implements DiplomaService {
         DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(idStudent, idDiploma);
 
         if(diplomaFound==null) this.diplomaNotFound(idStudent, idDiploma);
+
+        return diplomaFound;
+    }
+
+    @Override
+    public DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma) {
+        this.teacherService.getById(idTeacher);
+
+        DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(idTeacher, idDiploma);
+
+        if(diplomaFound==null) this.diplomaNotFound(idTeacher, idDiploma);
 
         return diplomaFound;
     }
