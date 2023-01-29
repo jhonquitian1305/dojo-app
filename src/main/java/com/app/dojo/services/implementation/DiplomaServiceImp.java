@@ -28,9 +28,7 @@ public class DiplomaServiceImp implements DiplomaService {
 
     @Override
     public Diploma saveDiplomaStudent(Long id, DiplomaDTO diplomaDTO) throws Exception {
-        if(this.diplomaRepository.existsByDiplomaName(diplomaDTO.getDiplomaName())){
-            throw new BadRequest("This diploma whit name %s already exists".formatted(diplomaDTO.getDiplomaName()));
-        }
+        existsDiplomaName(diplomaDTO);
 
         User studentFound = this.studentService.getStudentById(id);
 
@@ -41,14 +39,18 @@ public class DiplomaServiceImp implements DiplomaService {
 
     @Override
     public Diploma saveDiplomaTeacher(Long id, DiplomaDTO diplomaDTO) {
-        if(this.diplomaRepository.existsByDiplomaName(diplomaDTO.getDiplomaName())){
-            throw new BadRequest("This diploma whit name %s already exists".formatted(diplomaDTO.getDiplomaName()));
-        }
+        existsDiplomaName(diplomaDTO);
 
         User teacherFound = this.teacherService.getById(id);
 
         Diploma diplomaCreated = this.diplomaRepository.save((this.mapperDiploma.createDiploma(diplomaDTO, teacherFound)));
 
         return diplomaCreated;
+    }
+
+    protected void existsDiplomaName(DiplomaDTO diplomaDTO){
+        if(this.diplomaRepository.existsByDiplomaName(diplomaDTO.getDiplomaName())){
+            throw new BadRequest("This diploma whit name %s already exists".formatted(diplomaDTO.getDiplomaName()));
+        }
     }
 }
