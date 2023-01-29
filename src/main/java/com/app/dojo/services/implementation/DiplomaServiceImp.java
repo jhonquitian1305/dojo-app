@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DiplomaServiceImp implements DiplomaService {
     @Autowired
@@ -100,12 +102,16 @@ public class DiplomaServiceImp implements DiplomaService {
     public DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception {
         this.studentService.getStudentById(idStudent);
 
+        this.getDiploma(idDiploma);
+
         return this.searchDiploma(idStudent, idDiploma);
     }
 
     @Override
     public DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma) {
         this.teacherService.getById(idTeacher);
+
+        this.getDiploma(idDiploma);
 
         return this.searchDiploma(idTeacher, idDiploma);
     }
@@ -120,5 +126,10 @@ public class DiplomaServiceImp implements DiplomaService {
         DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(id, idDiploma);
         if(diplomaFound==null) throw new NotFoundException("Diploma with id %s doesn't belong to user with id %s".formatted(idDiploma, id));
         return diplomaFound;
+    }
+
+    protected void getDiploma(Long id){
+        Optional<Diploma> diplomaSearched = this.diplomaRepository.findById(id);
+        if(diplomaSearched.isEmpty()) throw new NotFoundException("Diploma with id %s doesn't exist".formatted(id));
     }
 }
