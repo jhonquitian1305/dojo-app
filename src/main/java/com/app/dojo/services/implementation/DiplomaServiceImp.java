@@ -22,8 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class DiplomaServiceImp implements DiplomaService {
     @Autowired
@@ -102,22 +100,14 @@ public class DiplomaServiceImp implements DiplomaService {
     public DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception {
         this.studentService.getStudentById(idStudent);
 
-        DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(idStudent, idDiploma);
-
-        if(diplomaFound==null) this.diplomaNotFound(idStudent, idDiploma);
-
-        return diplomaFound;
+        return this.searchDiploma(idStudent, idDiploma);
     }
 
     @Override
     public DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma) {
         this.teacherService.getById(idTeacher);
 
-        DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(idTeacher, idDiploma);
-
-        if(diplomaFound==null) this.diplomaNotFound(idTeacher, idDiploma);
-
-        return diplomaFound;
+        return this.searchDiploma(idTeacher, idDiploma);
     }
 
     protected void existsDiplomaName(DiplomaDTO diplomaDTO){
@@ -126,7 +116,9 @@ public class DiplomaServiceImp implements DiplomaService {
         }
     }
 
-    protected void diplomaNotFound(Long idStudent, Long idDiploma){
-        throw new NotFoundException("Diploma with id %s doesn't belong to user with id %s".formatted(idDiploma, idStudent));
+    protected DiplomaById searchDiploma(Long id, Long idDiploma){
+        DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(id, idDiploma);
+        if(diplomaFound==null) throw new NotFoundException("Diploma with id %s doesn't belong to user with id %s".formatted(idDiploma, id));
+        return diplomaFound;
     }
 }
