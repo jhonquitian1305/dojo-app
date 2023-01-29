@@ -116,6 +116,13 @@ public class DiplomaServiceImp implements DiplomaService {
         return this.searchDiploma(idTeacher, idDiploma);
     }
 
+    @Override
+    public void deleteDiplomaStudent(Long idStudent, Long idDiploma) throws Exception {
+        this.getDiploma(idDiploma);
+        this.getByIdDiplomaStudent(idStudent, idDiploma);
+        this.diplomaRepository.deleteById(idDiploma);
+    }
+
     protected void existsDiplomaName(DiplomaDTO diplomaDTO){
         if(this.diplomaRepository.existsByDiplomaName(diplomaDTO.getDiplomaName())){
             throw new BadRequest("This diploma whit name %s already exists".formatted(diplomaDTO.getDiplomaName()));

@@ -72,4 +72,13 @@ public class DiplomaController {
     ){
         return new ResponseEntity<>(this.diplomaService.getByIdDiplomaTeacher(idTeacher, idDiploma), HttpStatus.OK);
     }
+
+    @DeleteMapping(ENDPOINT_DIPLOMAS_STUDENT+ENDPOINT_DIPLOMA)
+    public ResponseEntity<String> deleteDiplomaStudent(
+            @PathVariable("idStudent") Long idStudent,
+            @PathVariable("idDiploma") Long idDiploma
+    ) throws Exception {
+        this.diplomaService.deleteDiplomaStudent(idStudent, idDiploma);
+        return new ResponseEntity<>("Diploma deleted", HttpStatus.OK);
+    }
 }
