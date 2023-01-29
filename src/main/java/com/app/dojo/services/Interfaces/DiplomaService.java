@@ -13,4 +13,5 @@ public interface DiplomaService {
     DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception;
     DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma);
     void deleteDiplomaStudent(Long idStudent, Long idDiploma) throws Exception;
+    void deleteDiplomaTeacher(Long idTeacher, Long idDiploma);
 }

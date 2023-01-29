@@ -123,6 +123,13 @@ public class DiplomaServiceImp implements DiplomaService {
         this.diplomaRepository.deleteById(idDiploma);
     }
 
+    @Override
+    public void deleteDiplomaTeacher(Long idTeacher, Long idDiploma) {
+        this.getDiploma(idDiploma);
+        this.getByIdDiplomaTeacher(idTeacher, idDiploma);
+        this.diplomaRepository.deleteById(idDiploma);
+    }
+
     protected void existsDiplomaName(DiplomaDTO diplomaDTO){
         if(this.diplomaRepository.existsByDiplomaName(diplomaDTO.getDiplomaName())){
             throw new BadRequest("This diploma whit name %s already exists".formatted(diplomaDTO.getDiplomaName()));

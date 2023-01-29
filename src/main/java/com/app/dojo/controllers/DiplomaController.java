@@ -81,4 +81,13 @@ public class DiplomaController {
         this.diplomaService.deleteDiplomaStudent(idStudent, idDiploma);
         return new ResponseEntity<>("Diploma deleted", HttpStatus.OK);
     }
+
+    @DeleteMapping(ENDPOINT_DIPLOMAS_TEACHER+ENDPOINT_DIPLOMA)
+    public ResponseEntity<String> deleteDiplomaTeacher(
+            @PathVariable("idTeacher") Long idTeacher,
+            @PathVariable("idDiploma") Long idDiploma
+    ) {
+        this.diplomaService.deleteDiplomaTeacher(idTeacher, idDiploma);
+        return new ResponseEntity<>("Diploma deleted", HttpStatus.OK);
+    }
 }
