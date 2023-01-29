@@ -1,9 +1,11 @@
 package com.app.dojo.services.implementation;
 
 import com.app.dojo.builders.builderDTO.DiplomaResponseBuilder;
+import com.app.dojo.dtos.DiplomaById;
 import com.app.dojo.dtos.DiplomaDTO;
 import com.app.dojo.dtos.DiplomaResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperDiploma;
 import com.app.dojo.models.Diploma;
 import com.app.dojo.models.Student;
@@ -94,9 +96,24 @@ public class DiplomaServiceImp implements DiplomaService {
                 .build();
     }
 
+    @Override
+    public DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception {
+        this.studentService.getStudentById(idStudent);
+
+        DiplomaById diplomaFound = this.diplomaRepository.findOneDiploma(idStudent, idDiploma);
+
+        if(diplomaFound==null) this.diplomaNotFound(idStudent, idDiploma);
+
+        return diplomaFound;
+    }
+
     protected void existsDiplomaName(DiplomaDTO diplomaDTO){
         if(this.diplomaRepository.existsByDiplomaName(diplomaDTO.getDiplomaName())){
             throw new BadRequest("This diploma whit name %s already exists".formatted(diplomaDTO.getDiplomaName()));
         }
+    }
+
+    protected void diplomaNotFound(Long idStudent, Long idDiploma){
+        throw new NotFoundException("Diploma with id %s doesn't belong to user with id %s".formatted(idDiploma, idStudent));
     }
 }

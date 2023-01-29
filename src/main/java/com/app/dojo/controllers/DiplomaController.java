@@ -1,6 +1,7 @@
 package com.app.dojo.controllers;
 
 import com.app.dojo.constants.PaginationRequest;
+import com.app.dojo.dtos.DiplomaById;
 import com.app.dojo.dtos.DiplomaDTO;
 import com.app.dojo.dtos.DiplomaDTOResponse;
 import com.app.dojo.dtos.DiplomaResponse;
@@ -23,20 +24,20 @@ public class DiplomaController {
     MapperDiploma mapperDiploma;
 
     @PostMapping(ENDPOINT_DIPLOMAS_STUDENT)
-    public ResponseEntity<DiplomaDTOResponse> saveDiplomaStudent(@PathVariable("id") Long id, @RequestBody DiplomaDTO diplomaDTO) throws Exception {
+    public ResponseEntity<DiplomaDTOResponse> saveDiplomaStudent(@PathVariable("idStudent") Long id, @RequestBody DiplomaDTO diplomaDTO) throws Exception {
         DiplomaDTOResponse diplomaSaved = this.mapperDiploma.mapDiplomaDTOResponse(this.diplomaService.saveDiplomaStudent(id, diplomaDTO));
         return new ResponseEntity<>(diplomaSaved, HttpStatus.CREATED);
     }
 
     @PostMapping(ENDPOINT_DIPLOMAS_TEACHER)
-    public ResponseEntity<DiplomaDTOResponse> saveDiplomaTeacher(@PathVariable("id") Long id, @RequestBody DiplomaDTO diplomaDTO){
+    public ResponseEntity<DiplomaDTOResponse> saveDiplomaTeacher(@PathVariable("idTeacher") Long id, @RequestBody DiplomaDTO diplomaDTO){
         DiplomaDTOResponse diplomaSaved = this.mapperDiploma.mapDiplomaDTOResponse(this.diplomaService.saveDiplomaTeacher(id, diplomaDTO));
         return new ResponseEntity<>(diplomaSaved, HttpStatus.CREATED);
     }
 
     @GetMapping(ENDPOINT_DIPLOMAS_STUDENT)
     public ResponseEntity<DiplomaResponse> findStudent(
-            @PathVariable("id") Long id,
+            @PathVariable("idStudent") Long id,
             @RequestParam(value = "pageNo", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
             @RequestParam(value = "pageSize", defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = PaginationRequest.DEFAULT_SORT_BY, required = false) String sortBy,
@@ -47,12 +48,20 @@ public class DiplomaController {
 
     @GetMapping(ENDPOINT_DIPLOMAS_TEACHER)
     public ResponseEntity<DiplomaResponse> findTeacher(
-            @PathVariable("id") Long id,
+            @PathVariable("idTeacher") Long id,
             @RequestParam(value = "pageNo", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
             @RequestParam(value = "pageSize", defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = PaginationRequest.DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = PaginationRequest.DEFAULT_SORT_DIR, required = false) String sortDir
     ){
         return new ResponseEntity<>(this.diplomaService.getDiplomasTeacher(id, numberPage, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @GetMapping(ENDPOINT_DIPLOMAS_STUDENT+ENDPOINT_DIPLOMA)
+    public ResponseEntity<DiplomaById> findOneDiplomaStudent(
+            @PathVariable("idStudent") Long idStudent,
+            @PathVariable("idDiploma") Long idDiploma
+    ) throws Exception {
+        return new ResponseEntity<>(this.diplomaService.getByIdDiplomaStudent(idStudent, idDiploma), HttpStatus.OK);
     }
 }
