@@ -44,4 +44,15 @@ public class DiplomaController {
     ) throws Exception {
         return new ResponseEntity<>(this.diplomaService.getDiplomasStudent(id, numberPage, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
+
+    @GetMapping(ENDPOINT_DIPLOMAS_TEACHER)
+    public ResponseEntity<DiplomaResponse> findTeacher(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "pageNo", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int numberPage,
+            @RequestParam(value = "pageSize", defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = PaginationRequest.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = PaginationRequest.DEFAULT_SORT_DIR, required = false) String sortDir
+    ){
+        return new ResponseEntity<>(this.diplomaService.getDiplomasTeacher(id, numberPage, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
 }

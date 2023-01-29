@@ -7,6 +7,7 @@ import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperDiploma;
 import com.app.dojo.models.Diploma;
 import com.app.dojo.models.Student;
+import com.app.dojo.models.Teacher;
 import com.app.dojo.models.User;
 import com.app.dojo.repositories.DiplomaRepository;
 import com.app.dojo.services.Interfaces.DiplomaService;
@@ -18,8 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DiplomaServiceImp implements DiplomaService {
@@ -65,6 +64,25 @@ public class DiplomaServiceImp implements DiplomaService {
         Student studentFound = this.studentService.getStudentById(idStudent);
 
         Page<Diploma> diplomasFound = this.diplomaRepository.findByUser(studentFound, pageable);
+
+        return new DiplomaResponseBuilder()
+                .setContent(diplomasFound.getContent())
+                .setNumberPage(diplomasFound.getNumber())
+                .setSizePage(diplomasFound.getSize())
+                .setTotalElements(diplomasFound.getTotalElements())
+                .setTotalPages(diplomasFound.getTotalPages())
+                .setLastOne(diplomasFound.isLast())
+                .build();
+    }
+
+    @Override
+    public DiplomaResponse getDiplomasTeacher(Long idTeacher, int numberPage, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(numberPage, pageSize, sort);
+
+        Teacher teacherFound= this.teacherService.getById(idTeacher);
+
+        Page<Diploma> diplomasFound = this.diplomaRepository.findByUser(teacherFound, pageable);
 
         return new DiplomaResponseBuilder()
                 .setContent(diplomasFound.getContent())
