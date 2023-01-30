@@ -163,4 +163,18 @@ public class DiplomaServiceTest {
         assertEquals(1, diplomasFound.getTotalElements());
         assertThat(diplomasFound.getContent().size()).isEqualTo(1);
     }
+
+    @DisplayName("Test Service to get diplomas of a teacher")
+    @Test
+    void getAllDiplomasTeacher(){
+        Page<Diploma> diplomas = new PageImpl<>(List.of(diplomaTeacher));
+        given(this.teacherService.getById(anyLong())).willReturn(teacher);
+        given(this.diplomaRepository.findByUser(any(Teacher.class), any(Pageable.class))).willReturn(diplomas);
+
+        DiplomaResponse diplomasFound = this.diplomaService.getDiplomasTeacher(2L, 0, 10, "id", "desc");
+
+        assertEquals(0, diplomasFound.getNumberPage());
+        assertEquals(1, diplomasFound.getTotalElements());
+        assertThat(diplomasFound.getContent().size()).isEqualTo(1);
+    }
 }
