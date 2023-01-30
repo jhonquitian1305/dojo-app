@@ -147,4 +147,19 @@ public class DiplomaRepositoryTest {
 
         assertNotNull(diplomaFound);
     }
+
+    @DisplayName("Test Repository to delete one diploma")
+    @Test
+    void deleteOneDiploma(){
+        User teacherSaved = this.teacherRepository.save(teacher);
+
+        diploma.setUser(teacherSaved);
+        this.diplomaRepository.save(diploma);
+
+        this.diplomaRepository.deleteById(diploma.getId());
+
+        Optional<Diploma> diplomaFound = this.diplomaRepository.findById(diploma.getId());
+
+        assertTrue(diplomaFound.isEmpty());
+    }
 }
