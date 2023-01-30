@@ -40,6 +40,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -234,5 +237,17 @@ public class DiplomaServiceTest {
         });
 
         assertEquals("Diploma with id %s doesn't belong to user with id %s".formatted(1L, 1L), diplomaNotFound.getMessage());
+    }
+
+    @DisplayName("Test Service to delete a diploma of a student")
+    @Test
+    void deleteOneDiplomaStudent() throws Exception {
+        given(this.diplomaRepository.findById(anyLong())).willReturn(Optional.of(this.diplomaStudent));
+        given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(this.diplomaById);
+        willDoNothing().given(this.diplomaRepository).deleteById(anyLong());
+
+        this.diplomaService.deleteDiplomaStudent(1L, 1L);
+
+        verify(this.diplomaRepository, times(1)).deleteById(anyLong());
     }
 }
