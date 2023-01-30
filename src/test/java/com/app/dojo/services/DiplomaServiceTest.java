@@ -4,6 +4,7 @@ import com.app.dojo.builders.builderDTO.DiplomaDTOBuilder;
 import com.app.dojo.builders.builderModels.DiplomaBuilder;
 import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
+import com.app.dojo.dtos.DiplomaById;
 import com.app.dojo.dtos.DiplomaDTO;
 import com.app.dojo.dtos.DiplomaResponse;
 import com.app.dojo.exception.errors.BadRequest;
@@ -11,6 +12,7 @@ import com.app.dojo.mappers.MapperDiploma;
 import com.app.dojo.models.Diploma;
 import com.app.dojo.models.Student;
 import com.app.dojo.models.Teacher;
+import com.app.dojo.models.User;
 import com.app.dojo.repositories.DiplomaRepository;
 import com.app.dojo.services.Interfaces.StudentService;
 import com.app.dojo.services.Interfaces.TeacherService;
@@ -31,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +58,9 @@ public class DiplomaServiceTest {
 
     @Mock
     private MapperDiploma mapperDiploma;
+
+    @Mock
+    private DiplomaById diplomaById;
 
     private Diploma diplomaStudent;
     private Diploma diplomaTeacher;
@@ -102,7 +108,7 @@ public class DiplomaServiceTest {
                 .setPassword("987654321")
                 .build();
         diplomaTeacher = new DiplomaBuilder()
-                .setId(1L)
+                .setId(2L)
                 .setDiplomaName("Certificado cinturón verde")
                 .setUser(teacher)
                 .build();
@@ -176,5 +182,18 @@ public class DiplomaServiceTest {
         assertEquals(0, diplomasFound.getNumberPage());
         assertEquals(1, diplomasFound.getTotalElements());
         assertThat(diplomasFound.getContent().size()).isEqualTo(1);
+    }
+
+    @DisplayName("Test Service to get a diploma of a student")
+    @Test
+    void getOneDiplomaStudent() throws Exception {
+        given(this.studentService.getStudentById(anyLong())).willReturn(student);
+        given(this.diplomaRepository.findById(anyLong())).willReturn(Optional.of(diplomaStudent));
+        given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(diplomaById);
+        given(this.mapperDiploma.mapDiploma(any(DiplomaById.class))).willReturn(diplomaStudent);
+
+        Diploma diplomaFound = this.diplomaService.getByIdDiplomaStudent(1L, 1L);
+
+        assertNotNull(diplomaFound);
     }
 }
