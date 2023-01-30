@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.DiplomaBuilder;
 import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.dtos.DiplomaDTO;
+import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperDiploma;
 import com.app.dojo.models.Diploma;
 import com.app.dojo.models.Student;
@@ -26,7 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
@@ -129,5 +130,17 @@ public class DiplomaServiceTest {
         Diploma diplomaSaved = this.diplomaService.saveDiplomaTeacher(anyLong(), diplomaTeacherDTO);
 
         assertNotNull(diplomaSaved);
+    }
+
+    @DisplayName("Test Service to create a diploma when the name exist")
+    @Test
+    void failSaveDiplomaWhenNameExist(){
+        given(this.diplomaRepository.existsByDiplomaName(anyString())).willReturn(true);
+
+        BadRequest diplomaFound = assertThrows(BadRequest.class, () ->{
+           this.diplomaService.saveDiplomaStudent(anyLong(), diplomaStudentDTO);
+        });
+
+        assertEquals("This diploma whit name %s already exists".formatted(diplomaStudentDTO.getDiplomaName()), diplomaFound.getMessage());
     }
 }
