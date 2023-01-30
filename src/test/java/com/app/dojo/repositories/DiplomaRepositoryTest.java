@@ -20,6 +20,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -94,5 +95,23 @@ public class DiplomaRepositoryTest {
 
         assertNotNull(diplomaSaved);
         assertThat(diplomaSaved.getId()).isGreaterThan(0);
+    }
+
+    @DisplayName("Test Repository to know if there is a diploma by name")
+    @Test
+    void existsByDiplomaName(){
+        User studentSaved = this.studentRepository.save(student);
+        User teacherSaved = this.teacherRepository.save(teacher);
+
+        diploma.setUser(studentSaved);
+        Diploma diplomaSavedStudent = this.diplomaRepository.save(diploma);
+        diploma.setUser(teacherSaved);
+        Diploma diplomaSavedTeacher = this.diplomaRepository.save(diploma);
+
+        boolean existDiplomaStudent = this.diplomaRepository.existsByDiplomaName(diplomaSavedStudent.getDiplomaName());
+        boolean existDiplomaTeacher = this.diplomaRepository.existsByDiplomaName(diplomaSavedTeacher.getDiplomaName());
+
+        assertTrue(existDiplomaStudent);
+        assertTrue(existDiplomaTeacher);
     }
 }
