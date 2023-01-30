@@ -206,8 +206,20 @@ public class DiplomaServiceTest {
         given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(diplomaById);
         given(this.mapperDiploma.mapDiploma(any(DiplomaById.class))).willReturn(diplomaTeacher);
 
-        Diploma diplomaFound = this.diplomaService.getByIdDiplomaTeacher(2L, 2L);
+        DiplomaById diplomaFound = this.diplomaService.getByIdDiplomaTeacher(2L, 2L);
 
         assertNotNull(diplomaFound);
+    }
+
+    @DisplayName("Test Service to get a diploma when doesn't exist")
+    @Test
+    void failGetOneDiploma(){
+        given(this.diplomaRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        NotFoundException diplomaNotFound = assertThrows(NotFoundException.class, () -> {
+            this.diplomaService.getByIdDiplomaStudent(1L, 1L);
+        });
+
+        assertEquals("Diploma with id %s doesn't exist".formatted(1L), diplomaNotFound.getMessage());
     }
 }
