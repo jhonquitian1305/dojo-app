@@ -1,11 +1,23 @@
 package com.app.dojo.repositories;
 
 import com.app.dojo.builders.builderModels.DiplomaBuilder;
+import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.models.Diploma;
+import com.app.dojo.models.Student;
+import com.app.dojo.models.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -14,7 +26,19 @@ public class DiplomaRepositoryTest {
     @Autowired
     DiplomaRepository diplomaRepository;
 
+    @Autowired
+    StudentRepository studentRepository;
+
     private Diploma diploma;
+    private Student student;
+
+    //Formatted date
+    String date = "23/11/2015";
+    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    Date formatDate = format.parse(date);
+
+    public DiplomaRepositoryTest() throws ParseException {
+    }
 
     @BeforeEach
     void begin(){
@@ -22,5 +46,26 @@ public class DiplomaRepositoryTest {
                 .setId(1L)
                 .setDiplomaName("Certificado cinturón verde")
                 .build();
+        student = new StudentBuilder()
+                .setId(1L)
+                .setDni("12345678")
+                .setNames("Jhon")
+                .setLastnames("Quitian")
+                .setBirthday(formatDate)
+                .setEmail("jhonquitian@mail.com")
+                .setPassword("12345678")
+                .build();
+    }
+
+    @DisplayName("Test Repository to create a diploma for a student")
+    @Test
+    void createDiplomaStudent(){
+        User studentSaved = this.studentRepository.save(student);
+
+        diploma.setUser(studentSaved);
+        Diploma diplomaSaved = this.diplomaRepository.save(diploma);
+
+        assertNotNull(diplomaSaved);
+        assertThat(diplomaSaved.getId()).isGreaterThan(0);
     }
 }
