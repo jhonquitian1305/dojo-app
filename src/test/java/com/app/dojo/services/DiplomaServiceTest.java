@@ -222,4 +222,17 @@ public class DiplomaServiceTest {
 
         assertEquals("Diploma with id %s doesn't exist".formatted(1L), diplomaNotFound.getMessage());
     }
+
+    @DisplayName("Test Service to get a diploma when doesn't belong to the user")
+    @Test
+    void failGetOneWhenDoesntBelongUser(){
+        given(this.diplomaRepository.findById(anyLong())).willReturn(Optional.of(diplomaTeacher));
+        given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(null);
+
+        NotFoundException diplomaNotFound = assertThrows(NotFoundException.class, ()-> {
+            this.diplomaService.getByIdDiplomaTeacher(1L, 1L);
+        });
+
+        assertEquals("Diploma with id %s doesn't belong to user with id %s".formatted(1L, 1L), diplomaNotFound.getMessage());
+    }
 }
