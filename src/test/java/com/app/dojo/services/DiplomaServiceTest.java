@@ -5,6 +5,7 @@ import com.app.dojo.builders.builderModels.DiplomaBuilder;
 import com.app.dojo.builders.builderModels.StudentBuilder;
 import com.app.dojo.builders.builderModels.TeacherBuilder;
 import com.app.dojo.dtos.DiplomaDTO;
+import com.app.dojo.dtos.DiplomaResponse;
 import com.app.dojo.exception.errors.BadRequest;
 import com.app.dojo.mappers.MapperDiploma;
 import com.app.dojo.models.Diploma;
@@ -21,12 +22,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -142,5 +148,19 @@ public class DiplomaServiceTest {
         });
 
         assertEquals("This diploma whit name %s already exists".formatted(diplomaStudentDTO.getDiplomaName()), diplomaFound.getMessage());
+    }
+
+    @DisplayName("Test Service to get diplomas of a student")
+    @Test
+    void getAllDiplomasStudent() throws Exception {
+        Page<Diploma> diplomas = new PageImpl<>(List.of(diplomaStudent));
+        given(this.studentService.getStudentById(anyLong())).willReturn(student);
+        given(this.diplomaRepository.findByUser(any(Student.class), any(Pageable.class))).willReturn(diplomas);
+
+        DiplomaResponse diplomasFound = this.diplomaService.getDiplomasStudent(1L, 0, 10, "id", "desc");
+
+        assertEquals(0, diplomasFound.getNumberPage());
+        assertEquals(1, diplomasFound.getTotalElements());
+        assertThat(diplomasFound.getContent().size()).isEqualTo(1);
     }
 }
