@@ -8,6 +8,7 @@ import com.app.dojo.dtos.DiplomaById;
 import com.app.dojo.dtos.DiplomaDTO;
 import com.app.dojo.dtos.DiplomaResponse;
 import com.app.dojo.exception.errors.BadRequest;
+import com.app.dojo.exception.errors.NotFoundException;
 import com.app.dojo.mappers.MapperDiploma;
 import com.app.dojo.models.Diploma;
 import com.app.dojo.models.Student;
@@ -193,6 +194,19 @@ public class DiplomaServiceTest {
         given(this.mapperDiploma.mapDiploma(any(DiplomaById.class))).willReturn(diplomaStudent);
 
         Diploma diplomaFound = this.diplomaService.getByIdDiplomaStudent(1L, 1L);
+
+        assertNotNull(diplomaFound);
+    }
+
+    @DisplayName("Test Service to get a diploma of a teacher")
+    @Test
+    void getOneDiplomaTeacher(){
+        given(this.teacherService.getById(anyLong())).willReturn(teacher);
+        given(this.diplomaRepository.findById(anyLong())).willReturn(Optional.of(diplomaTeacher));
+        given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(diplomaById);
+        given(this.mapperDiploma.mapDiploma(any(DiplomaById.class))).willReturn(diplomaTeacher);
+
+        Diploma diplomaFound = this.diplomaService.getByIdDiplomaTeacher(2L, 2L);
 
         assertNotNull(diplomaFound);
     }
