@@ -209,7 +209,7 @@ public class DiplomaServiceTest {
         given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(diplomaById);
         given(this.mapperDiploma.mapDiploma(any(DiplomaById.class))).willReturn(diplomaTeacher);
 
-        DiplomaById diplomaFound = this.diplomaService.getByIdDiplomaTeacher(2L, 2L);
+        Diploma diplomaFound = this.diplomaService.getByIdDiplomaTeacher(2L, 2L);
 
         assertNotNull(diplomaFound);
     }
@@ -248,6 +248,17 @@ public class DiplomaServiceTest {
 
         this.diplomaService.deleteDiplomaStudent(1L, 1L);
 
+        verify(this.diplomaRepository, times(1)).deleteById(anyLong());
+    }
+
+    @DisplayName("Test Service to delete a diploma of a teacher")
+    @Test
+    void deleteOneDiplomaTeacher(){
+        given(this.diplomaRepository.findById(anyLong())).willReturn(Optional.of(this.diplomaTeacher));
+        given(this.diplomaRepository.findOneDiploma(anyLong(), anyLong())).willReturn(this.diplomaById);
+        willDoNothing().given(this.diplomaRepository).deleteById(anyLong());
+
+        this.diplomaService.deleteDiplomaTeacher(2L, 2L);
         verify(this.diplomaRepository, times(1)).deleteById(anyLong());
     }
 }
