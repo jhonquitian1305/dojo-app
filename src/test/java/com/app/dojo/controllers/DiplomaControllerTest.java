@@ -29,7 +29,7 @@ public class DiplomaControllerTest {
     private String urlStudent = "http://localhost:8080/api/dojo-app/students";
 
 
-    private String urlDiplomaTeacher = "http://localhost:8080/api/dojo-app/diplomas/teachers/2";
+    private String urlDiplomaTeacher = "http://localhost:8080/api/dojo-app/diplomas/teachers";
     private String urlTeacher = "http://localhost:8080/api/dojo-app/teachers";
 
     private DiplomaDTO diplomaDTO;
@@ -115,6 +115,18 @@ public class DiplomaControllerTest {
 
         diplomaDTO.setDiplomaName("Cinturón verde");
         ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaStudent+"/1", diplomaDTO, DiplomaDTOResponse.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @DisplayName("Test controller to create diploma when teacher doesn't exist")
+    @Test
+    @Order(5)
+    void failCreateDiplomaWhenTeacherDoesntExist(){
+        ResponseEntity<TeacherDTO> responseTeacher = this.testRestTemplate.postForEntity(urlTeacher, teacherDTO, TeacherDTO.class);
+
+        diplomaDTO.setDiplomaName("Cinturón rojo");
+        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaTeacher+"/2", diplomaDTO, DiplomaDTOResponse.class);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
