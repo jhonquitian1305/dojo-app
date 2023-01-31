@@ -173,4 +173,15 @@ public class DiplomaControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    @DisplayName("Test controller to get a diploma of a student")
+    @Test
+    @Order(9)
+    void getOneDiplomaStudent(){
+        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.getForEntity(urlDiplomaStudent+"/1/2", DiplomaDTOResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    }
 }
