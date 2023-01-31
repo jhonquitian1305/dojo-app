@@ -95,4 +95,15 @@ public class DiplomaControllerTest {
         assertNotNull(response.getBody());
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     }
+
+    @DisplayName("Test controller to create diploma when name exist")
+    @Test
+    @Order(3)
+    void failCreateDiplomaWhenNameExists(){
+        diplomaDTO.setDiplomaName("Certificado cinturón verde");
+
+        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaTeacher, diplomaDTO, DiplomaDTOResponse.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 }
