@@ -184,4 +184,15 @@ public class DiplomaControllerTest {
         assertTrue(response.hasBody());
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
     }
+
+    @DisplayName("Test controller to get a diploma of a teacher")
+    @Test
+    @Order(10)
+    void getOneDiplomaTeacher(){
+        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.getForEntity(urlDiplomaTeacher+"/1/2", DiplomaDTOResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    }
 }
