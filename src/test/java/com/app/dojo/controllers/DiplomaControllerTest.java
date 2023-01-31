@@ -14,6 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -194,5 +196,16 @@ public class DiplomaControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.hasBody());
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+    }
+
+    @DisplayName("Test controller to delete a diploma of a student")
+    @Test
+    @Order(11)
+    void deleteDiplomaStudent(){
+        Map<String,Long> pathVariables= new HashMap<>();
+
+        pathVariables.put("id",2L);
+        ResponseEntity<Void> exchange=this.testRestTemplate.exchange(urlDiplomaStudent+"/1/{id}", HttpMethod.DELETE,null, Void.class, pathVariables);
+        assertEquals(HttpStatus.OK,exchange.getStatusCode());
     }
 }
