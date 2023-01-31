@@ -230,4 +230,15 @@ public class DiplomaControllerTest {
         ResponseEntity<Void> exchange=this.testRestTemplate.exchange(urlDiplomaTeacher+"/2/{id}", HttpMethod.DELETE,null, Void.class, pathVariables);
         assertEquals(HttpStatus.OK,exchange.getStatusCode());
     }
+
+    @DisplayName("Test controller to delete a diploma of a teacher when none exists")
+    @Test
+    @Order(14)
+    void deleteDiplomaTeacherWhenNoneExist(){
+        Map<String,Long> pathVariables= new HashMap<>();
+
+        pathVariables.put("id", 1000L);
+        ResponseEntity<Void> exchange=this.testRestTemplate.exchange(urlDiplomaTeacher+"/100/{id}", HttpMethod.DELETE,null, Void.class, pathVariables);
+        assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode());
+    }
 }
