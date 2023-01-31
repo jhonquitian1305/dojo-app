@@ -25,7 +25,7 @@ public class DiplomaControllerTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    private String urlDiplomaStudent = "http://localhost:8080/api/dojo-app/diplomas/students/1";
+    private String urlDiplomaStudent = "http://localhost:8080/api/dojo-app/diplomas/students";
     private String urlStudent = "http://localhost:8080/api/dojo-app/students";
 
 
@@ -75,7 +75,7 @@ public class DiplomaControllerTest {
     void createDiplomaStudent(){
         ResponseEntity<StudentDTO> studentSaved = this.testRestTemplate.postForEntity(urlStudent, studentDTO, StudentDTO.class);
 
-        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaStudent, diplomaDTO, DiplomaDTOResponse.class);
+        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaStudent+"/1", diplomaDTO, DiplomaDTOResponse.class);
 
         assertEquals(HttpStatus.CREATED,response.getStatusCode());
         assertNotNull(response.getBody());
@@ -105,5 +105,17 @@ public class DiplomaControllerTest {
         ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaTeacher, diplomaDTO, DiplomaDTOResponse.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @DisplayName("Test controller to create diploma when student doesn't exist")
+    @Test
+    @Order(4)
+    void failCreateDiplomaWhenStudentDoesntExist(){
+        ResponseEntity<StudentDTO> responseStudent = this.testRestTemplate.postForEntity(urlStudent, studentDTO, StudentDTO.class);
+
+        diplomaDTO.setDiplomaName("Cinturón verde");
+        ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaStudent+"/1", diplomaDTO, DiplomaDTOResponse.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }
