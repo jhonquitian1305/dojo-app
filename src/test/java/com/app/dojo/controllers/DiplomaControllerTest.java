@@ -143,4 +143,13 @@ public class DiplomaControllerTest {
         assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
         assertThat(Objects.requireNonNull(response.getBody()).getContent().size()).isGreaterThan(0);
     }
+
+    @DisplayName("Test controller to get diplomas of a student when doesn't exist")
+    @Test
+    @Order(7)
+    void failGetDiplomasWhenStudentDoesntExist(){
+        ResponseEntity<DiplomaResponse> response = this.testRestTemplate.getForEntity(urlDiplomaStudent+"/1000", DiplomaResponse.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
