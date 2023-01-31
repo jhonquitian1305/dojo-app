@@ -14,9 +14,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -129,5 +130,17 @@ public class DiplomaControllerTest {
         ResponseEntity<DiplomaDTOResponse> response = this.testRestTemplate.postForEntity(urlDiplomaTeacher+"/2", diplomaDTO, DiplomaDTOResponse.class);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @DisplayName("Test controller to get diplomas of a student")
+    @Test
+    @Order(6)
+    void getDiplomasStudent(){
+        ResponseEntity<DiplomaResponse> response = this.testRestTemplate.getForEntity(urlDiplomaStudent+"/1", DiplomaResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+        assertEquals(MediaType.APPLICATION_JSON,response.getHeaders().getContentType());
+        assertThat(Objects.requireNonNull(response.getBody()).getContent().size()).isGreaterThan(0);
     }
 }
