@@ -10,8 +10,8 @@ public interface DiplomaService {
     Diploma saveDiplomaTeacher(Long id, DiplomaDTO diplomaDTO);
     DiplomaResponse getDiplomasStudent(Long idStudent, int numberPage, int pageSize, String sortBy, String sortDir) throws Exception;
     DiplomaResponse getDiplomasTeacher(Long idTeacher, int numberPage, int pageSize, String sortBy, String sortDir);
-    DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception;
-    DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma);
+    Diploma getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception;
+    Diploma getByIdDiplomaTeacher(Long idTeacher, Long idDiploma);
     void deleteDiplomaStudent(Long idStudent, Long idDiploma) throws Exception;
     void deleteDiplomaTeacher(Long idTeacher, Long idDiploma);
 }
