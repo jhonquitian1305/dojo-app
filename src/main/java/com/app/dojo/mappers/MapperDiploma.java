@@ -2,6 +2,7 @@ package com.app.dojo.mappers;
 
 import com.app.dojo.builders.builderDTO.DiplomaDTOResponseBuilder;
 import com.app.dojo.builders.builderModels.DiplomaBuilder;
+import com.app.dojo.dtos.DiplomaById;
 import com.app.dojo.dtos.DiplomaDTO;
 import com.app.dojo.dtos.DiplomaDTOResponse;
 import com.app.dojo.models.Diploma;
@@ -23,6 +24,14 @@ public class MapperDiploma {
                 .setId(diplomaDTO.getId())
                 .setDiplomaName(diplomaDTO.getDiplomaName())
                 .setUser(user)
+                .build();
+    }
+
+    public Diploma mapDiploma(DiplomaById diplomaById){
+        return new DiplomaBuilder()
+                .setId(diplomaById.getId())
+                .setDiplomaName(diplomaById.getDiplomaName())
+                .setUser(diplomaById.getUser())
                 .build();
     }
 }

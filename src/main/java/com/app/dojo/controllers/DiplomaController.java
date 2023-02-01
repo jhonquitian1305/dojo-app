@@ -58,19 +58,21 @@ public class DiplomaController {
     }
 
     @GetMapping(ENDPOINT_DIPLOMAS_STUDENT+ENDPOINT_DIPLOMA)
-    public ResponseEntity<DiplomaById> findOneDiplomaStudent(
+    public ResponseEntity<DiplomaDTOResponse> findOneDiplomaStudent(
             @PathVariable("idStudent") Long idStudent,
             @PathVariable("idDiploma") Long idDiploma
     ) throws Exception {
-        return new ResponseEntity<>(this.diplomaService.getByIdDiplomaStudent(idStudent, idDiploma), HttpStatus.OK);
+        DiplomaDTOResponse diplomaFound = this.mapperDiploma.mapDiplomaDTOResponse(this.diplomaService.getByIdDiplomaStudent(idStudent, idDiploma));
+        return new ResponseEntity<>(diplomaFound, HttpStatus.OK);
     }
 
     @GetMapping(ENDPOINT_DIPLOMAS_TEACHER+ENDPOINT_DIPLOMA)
-    public ResponseEntity<DiplomaById> findOneDiplomaTeacher(
+    public ResponseEntity<DiplomaDTOResponse> findOneDiplomaTeacher(
             @PathVariable("idTeacher") Long idTeacher,
             @PathVariable("idDiploma") Long idDiploma
     ){
-        return new ResponseEntity<>(this.diplomaService.getByIdDiplomaTeacher(idTeacher, idDiploma), HttpStatus.OK);
+        DiplomaDTOResponse diplomaFound = this.mapperDiploma.mapDiplomaDTOResponse(this.diplomaService.getByIdDiplomaTeacher(idTeacher, idDiploma));
+        return new ResponseEntity<>(diplomaFound, HttpStatus.OK);
     }
 
     @DeleteMapping(ENDPOINT_DIPLOMAS_STUDENT+ENDPOINT_DIPLOMA)

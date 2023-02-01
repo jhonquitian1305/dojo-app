@@ -99,21 +99,25 @@ public class DiplomaServiceImp implements DiplomaService {
     }
 
     @Override
-    public DiplomaById getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception {
+    public Diploma getByIdDiplomaStudent(Long idStudent, Long idDiploma) throws Exception {
         this.studentService.getStudentById(idStudent);
 
         this.getDiploma(idDiploma);
 
-        return this.searchDiploma(idStudent, idDiploma);
+        DiplomaById diplomaFound = this.searchDiploma(idStudent, idDiploma);
+
+        return this.mapperDiploma.mapDiploma(diplomaFound);
     }
 
     @Override
-    public DiplomaById getByIdDiplomaTeacher(Long idTeacher, Long idDiploma) {
+    public Diploma getByIdDiplomaTeacher(Long idTeacher, Long idDiploma) {
         this.teacherService.getById(idTeacher);
 
         this.getDiploma(idDiploma);
 
-        return this.searchDiploma(idTeacher, idDiploma);
+        DiplomaById diplomaFound = this.searchDiploma(idTeacher, idDiploma);
+
+        return this.mapperDiploma.mapDiploma(diplomaFound);
     }
 
     @Override
