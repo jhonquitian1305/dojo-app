@@ -161,7 +161,7 @@ public class StudentServiceTest {
 
         Student studentGetByDni = this.studentService.getStudentByDni(studentDTO.getDni());
 
-        Student studentGetByEmail = this.studentService.getStudentByEmail(studentDTO);
+        Student studentGetByEmail = this.studentService.getStudentByEmail(studentDTO.getEmail());
 
         assertNotNull(studentGetById);
         assertNotNull(studentGetByDni);
@@ -187,7 +187,7 @@ public class StudentServiceTest {
         });
 
         NotFoundException studentNotFoundByEmail = assertThrows(NotFoundException.class, () -> {
-            this.studentService.getStudentByEmail(studentDTO);
+            this.studentService.getStudentByEmail(studentDTO.getEmail());
         });
 
         assertEquals("Student with id %s doesn't exists".formatted(1L), studentNotFoundById.getMessage());

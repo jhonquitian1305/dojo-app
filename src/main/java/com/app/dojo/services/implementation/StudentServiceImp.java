@@ -84,10 +84,10 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public Student getStudentByEmail(StudentDTO studentDTO) {
-        Student studentFound = this.studentRepository.findStudentByEmail(studentDTO.getEmail());
+    public Student getStudentByEmail(String email) {
+        Student studentFound = this.studentRepository.findStudentByEmail(email);
         if(studentFound == null){
-            throw new NotFoundException(String.format("Student with email %s doesn't exists", studentDTO.getEmail()));
+            throw new NotFoundException(String.format("Student with email %s doesn't exists", email));
         }
         return studentFound;
     }

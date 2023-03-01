@@ -50,8 +50,8 @@ public class StudentController {
     }
 
     @GetMapping(ENDPOINT_EMAIL)
-    public ResponseEntity<StudentDTO> getStudentByEmail(@RequestBody StudentDTO studentDTO){
-        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByEmail(studentDTO));
+    public ResponseEntity<StudentDTO> getStudentByEmail(@RequestParam String email){
+        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByEmail(email));
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 
