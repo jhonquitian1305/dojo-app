@@ -48,8 +48,8 @@ public class TeacherController {
     }
 
     @GetMapping(ENDPOINT_DNI)
-    public ResponseEntity<TeacherDTO> getByDni(@RequestBody TeacherDTO teacherDTO){
-        TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getByDni(teacherDTO));
+    public ResponseEntity<TeacherDTO> getByDni(@RequestParam String dni){
+        TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getByDni(dni));
         return new ResponseEntity<>(teacherFound, HttpStatus.OK);
     }
 

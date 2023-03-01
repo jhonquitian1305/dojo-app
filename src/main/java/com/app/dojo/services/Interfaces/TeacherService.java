@@ -8,7 +8,7 @@ public interface TeacherService {
     Teacher save(TeacherDTO teacherDTO);
     TeacherResponse getAll(int numberPage, int pageSize, String sortBy, String sortDir);
     Teacher getById(Long id);
-    Teacher getByDni(TeacherDTO teacherDTO);
+    Teacher getByDni(String dni);
     Teacher getByEmail(TeacherDTO teacherDTO);
     Teacher updateOne(Long id, TeacherDTO teacherDTO);
     void deleteOne(Long id);
