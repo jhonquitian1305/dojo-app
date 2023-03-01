@@ -54,8 +54,8 @@ public class TeacherController {
     }
 
     @GetMapping(ENDPOINT_EMAIL)
-    public ResponseEntity<TeacherDTO> getByEmail(@RequestBody TeacherDTO teacherDTO){
-        TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getByEmail(teacherDTO));
+    public ResponseEntity<TeacherDTO> getByEmail(@RequestParam String email){
+        TeacherDTO teacherFound = this.mapperTeacher.mapTeacherDTO(this.teacherService.getByEmail(email));
         return new ResponseEntity<>(teacherFound, HttpStatus.OK);
     }
 

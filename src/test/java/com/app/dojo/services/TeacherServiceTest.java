@@ -161,7 +161,7 @@ public class TeacherServiceTest {
 
         Teacher teacherFoundByDni = this.teacherService.getByDni(teacherDTO.getDni());
 
-        Teacher teacherFoundByEmail = this.teacherService.getByEmail(teacherDTO);
+        Teacher teacherFoundByEmail = this.teacherService.getByEmail(teacherDTO.getEmail());
 
         assertNotNull(teacherFoundById);
         assertNotNull(teacherFoundByDni);
@@ -187,7 +187,7 @@ public class TeacherServiceTest {
         });
 
         NotFoundException teacherNotFoundByEmail = assertThrows(NotFoundException.class, () -> {
-            this.teacherService.getByEmail(this.teacherDTO);
+            this.teacherService.getByEmail(this.teacherDTO.getEmail());
         });
 
         assertEquals("Teacher with id %s doesn't exists".formatted( 1L), teacherNotFoundById.getMessage());
