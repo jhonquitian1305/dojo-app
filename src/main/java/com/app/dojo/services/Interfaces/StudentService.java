@@ -12,7 +12,7 @@ public interface StudentService {
     Student saveStudent(StudentDTO studentDTO);
     StudentResponse getAllStudents(int numberPage, int pageSize, String sortBy, String sortDir);
     Student getStudentById(Long id) throws Exception;
-    Student getStudentByDni(StudentDTO studentDTO);
+    Student getStudentByDni(String dni);
     Student getStudentByEmail(StudentDTO studentDTO);
     Student updateOne(Long id, StudentDTO studentDTO);
     void deleteStudent(Long id) throws Exception;

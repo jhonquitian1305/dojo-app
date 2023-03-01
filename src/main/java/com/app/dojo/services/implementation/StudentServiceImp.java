@@ -75,10 +75,10 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public Student getStudentByDni(StudentDTO studentDTO) {
-        Student studentFound = studentRepository.findStudentByDni(studentDTO.getDni());
+    public Student getStudentByDni(String dni) {
+        Student studentFound = studentRepository.findStudentByDni(dni);
         if(studentFound == null){
-            throw new NotFoundException(String.format("Student with dni %s doesn't exists", studentDTO.getDni()));
+            throw new NotFoundException(String.format("Student with dni %s doesn't exists", dni));
         }
         return studentFound;
     }

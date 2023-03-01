@@ -44,8 +44,8 @@ public class StudentController {
     }
 
     @GetMapping(ENDPOINT_DNI)
-    public ResponseEntity<StudentDTO> getStudentByDni(@RequestBody StudentDTO studentDTO) throws Exception {
-        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByDni(studentDTO));
+    public ResponseEntity<StudentDTO> getStudentByDni(@RequestParam String dni) throws Exception {
+        StudentDTO studentFound = mapperStudent.mapStudentDTO(studentService.getStudentByDni(dni));
         return new ResponseEntity<>(studentFound, HttpStatus.OK);
     }
 

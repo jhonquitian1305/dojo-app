@@ -159,7 +159,7 @@ public class StudentServiceTest {
 
         Student studentGetById = this.studentService.getStudentById(1L);
 
-        Student studentGetByDni = this.studentService.getStudentByDni(studentDTO);
+        Student studentGetByDni = this.studentService.getStudentByDni(studentDTO.getDni());
 
         Student studentGetByEmail = this.studentService.getStudentByEmail(studentDTO);
 
@@ -183,7 +183,7 @@ public class StudentServiceTest {
         });
 
         NotFoundException studentNotFoundByDni = assertThrows(NotFoundException.class, () -> {
-            this.studentService.getStudentByDni(studentDTO);
+            this.studentService.getStudentByDni(studentDTO.getDni());
         });
 
         NotFoundException studentNotFoundByEmail = assertThrows(NotFoundException.class, () -> {
