@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "${URL_DOCUMENTATION}",
+      "url": "",
       "description": "Generated server url"
     }
   ],
