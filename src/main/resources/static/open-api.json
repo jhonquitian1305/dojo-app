@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://dojo-app-production.up.railway.app/",
+      "url": "${URL_DOCUMENTATION}",
       "description": "Generated server url"
     }
   ],
